@@ -4,6 +4,7 @@ import '@fontsource-variable/newsreader/opsz-italic.css';
 import '@fontsource-variable/figtree/wght.css';
 import '../styles/global.css';
 import { site } from '../data/site';
+import Wave from '../components/Wave.astro';
 
 interface Props {
   title: string;
@@ -12,9 +13,11 @@ interface Props {
   schema?: object[];
   image?: string;
   noindex?: boolean;
+  /** Header floats over a full bleed hero and turns solid on scroll. */
+  overlay?: boolean;
 }
 
-const { title, description, schema = [], image = '/og-default.svg', noindex = false } = Astro.props;
+const { title, description, schema = [], image = '/og-default.svg', noindex = false, overlay = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
 const ogImage = new URL(image, site.url).toString();
 const nav = [
@@ -47,15 +50,15 @@ const path = Astro.url.pathname;
     {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
   <body>
-    <header class="site-header">
+    <header class:list={['site-header', { overlay }]} data-header>
       <div class="wrap bar">
         <a href="/" class="logo" aria-label={`${site.name} home`}>
           <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-            <circle cx="16" cy="16" r="15" fill="var(--ocean-700)"></circle>
-            <path d="M4 19c4-3 8-3 12 0s8 3 12 0v6H4z" fill="var(--sand-300)"></path>
-            <circle cx="21" cy="11" r="4" fill="var(--coral)"></circle>
+            <circle cx="16" cy="16" r="15" fill="var(--lagoon)"></circle>
+            <path d="M3 18c4.3-3 8.7-3 13 0s8.7 3 13 0v5a13 13 0 0 1-26 0z" fill="var(--ocean-900)"></path>
+            <circle cx="21.5" cy="10.5" r="3.6" fill="#fff4d6"></circle>
           </svg>
-          <span>Hiriketiya<b>Stays</b></span>
+          <span><i>Hiriketiya</i> Stays</span>
         </a>
         <nav aria-label="Main">
           {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
@@ -65,10 +68,11 @@ const path = Astro.url.pathname;
     <main>
       <slot />
     </main>
+    <Wave color="var(--deep)" />
     <footer class="site-footer">
       <div class="wrap cols">
         <div>
-          <p class="logo-foot">Hiriketiya<b>Stays</b></p>
+          <p class="logo-foot"><i>Hiriketiya</i> Stays</p>
           <p class="muted">{site.tagline}</p>
           <p><a href="/list-your-property/">List your property →</a></p>
         </div>
@@ -95,6 +99,14 @@ const path = Astro.url.pathname;
         Some booking links are affiliate links: we may earn a commission at no extra cost to you. © {new Date().getFullYear()} {site.name}
       </div>
     </footer>
+    <script>
+      const header = document.querySelector<HTMLElement>('[data-header].overlay');
+      if (header) {
+        const update = () => header.classList.toggle('solid', window.scrollY > 40);
+        update();
+        window.addEventListener('scroll', update, { passive: true });
+      }
+    </script>
   </body>
 </html>
 
@@ -103,94 +115,117 @@ const path = Astro.url.pathname;
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgb(251 248 242 / 0.92);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
+    background: rgb(3 24 42 / 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+    transition:
+      background 0.25s,
+      border-color 0.25s;
+  }
+  .site-header.overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: transparent;
+    border-color: transparent;
+    backdrop-filter: none;
+  }
+  .site-header.overlay.solid {
+    background: rgb(3 24 42 / 0.92);
+    backdrop-filter: blur(12px);
+    border-color: rgb(255 255 255 / 0.08);
   }
   .bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    min-height: 60px;
+    min-height: 68px;
   }
   .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-decoration: none;
-    color: var(--ink);
-    font-weight: 500;
-    font-size: 1.05rem;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
   }
-  .logo b,
-  .logo-foot b {
-    color: var(--ocean-700);
+  .logo i,
+  .logo-foot i {
+    color: var(--lagoon-soft);
   }
   nav {
     display: flex;
-    gap: 4px;
+    gap: 2px;
     overflow-x: auto;
     scrollbar-width: none;
   }
   nav a {
-    padding: 8px 10px;
+    padding: 8px 14px;
     border-radius: 999px;
     text-decoration: none;
-    color: var(--ink);
+    color: rgb(255 255 255 / 0.85);
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.97rem;
     white-space: nowrap;
+    transition: background 0.15s;
   }
   nav a:hover,
   nav a[aria-current='page'] {
-    background: var(--sand-100);
+    background: rgb(255 255 255 / 0.12);
+    color: #fff;
   }
-  @media (max-width: 560px) {
+  @media (max-width: 600px) {
     .logo span {
       display: none;
     }
     nav a {
-      padding: 8px 8px;
-      font-size: 0.9rem;
+      padding: 8px 9px;
+      font-size: 0.92rem;
     }
   }
   .site-footer {
-    margin-top: 64px;
-    background: var(--ocean-900);
-    color: #d8e7e8;
-    padding: 48px 0 24px;
+    background: var(--deep);
+    color: var(--on-dark);
+    padding: 40px 0 28px;
   }
   .site-footer a {
     color: #fff;
     text-decoration: none;
     display: block;
-    padding: 3px 0;
+    padding: 4px 0;
+    opacity: 0.85;
+  }
+  .site-footer a:hover {
+    opacity: 1;
+    color: var(--lagoon-soft);
   }
   .site-footer .muted {
-    color: #9fbfc3;
+    color: var(--on-dark-muted);
   }
   .cols {
     display: grid;
-    gap: 32px;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 36px;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   }
   .logo-foot {
-    font-size: 1.2rem;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
     margin: 0 0 8px;
-  }
-  .logo-foot b {
-    color: var(--sand-300);
   }
   h4 {
-    margin: 0 0 8px;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
+    margin: 0 0 10px;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #9fbfc3;
+    color: var(--lagoon);
   }
   .fine {
-    margin-top: 32px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgb(255 255 255 / 0.08);
     font-size: 0.85rem;
   }
 </style>

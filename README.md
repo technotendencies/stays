@@ -38,7 +38,22 @@ Guide → "Going in January? See the best surf stays →" → collection page �
 3. **Guide facts are drafts** (travel times, seasons, sights). Have someone local review them. The restaurant guide has a TODO for real venues.
 4. **Affiliate IDs**: add your Booking.com `aid` / Agoda `cid` in `src/data/site.ts` once approved. Affiliate links get `rel="sponsored"`.
 5. **Map tiles** use the public OpenStreetMap server, which is fine for development but not for production traffic. Switch to a tile provider (MapTiler, Stadia, Mapbox …) in `StayMap.astro`.
-6. **Hero image**: the home page uses an illustration; swap in a real Hiriketiya photo/video when you have one.
+6. **Photos**: every image slot shows an illustrated ocean scene until a photo is added. See *Adding photos* below.
+
+## Adding photos
+
+Drop JPGs into `public/images/` with these names and rebuild. No code changes are needed; each slot switches from the illustration to the photo automatically (`src/lib/photos.ts`).
+
+| Slot | File | Size |
+| --- | --- | --- |
+| Home hero | `images/hero.jpg` (also used behind the Stays page header) | 2400×1400, landscape |
+| Area cards | `images/areas/bay.jpg`, `hill.jpg`, `dikwella.jpg` | 1200×1400, portrait |
+| Guides page header | `images/sunset.jpg` | 2400×1000 |
+| Stay | `images/stays/<stay slug>.jpg` | 1600×1066 |
+| Guide | `images/guides/<guide slug>.jpg` | 1600×900 |
+| Collection page header | `images/collections/<collection slug>.jpg` | 2400×1000 |
+
+Only use photos you have the rights to (your own, the property's with permission, or a licence such as Unsplash/Pexels). Keep each file under about 400 KB.
 
 ## Adding a stay
 

@@ -1,63 +1,29 @@
 ---
 import type { Stay } from '../data/types';
+import OceanArt from './OceanArt.astro';
+import { stayPhoto } from '../lib/photos';
 
 interface Props {
   stay: Stay;
   eager?: boolean;
+  sizes?: string;
 }
 const { stay, eager = false } = Astro.props;
-const h = stay.hue;
-const id = `g-${stay.slug}`;
-const hasPool = stay.amenities.includes('pool');
+const src = stayPhoto(stay.slug, stay.image);
+// Keep placeholder water in ocean hues so every card still reads as "beach".
+const hue = 170 + (stay.hue % 45);
+const dusk = stay.categories.includes('luxury') || stay.type === 'boutique';
 ---
 
 {
-  stay.image ? (
-    <img src={stay.image} alt={`${stay.name}, Hiriketiya`} loading={eager ? 'eager' : 'lazy'} width="800" height="560" />
+  src ? (
+    <img src={src} alt={`${stay.name}, Hiriketiya`} loading={eager ? 'eager' : 'lazy'} decoding="async" width="1200" height="800" />
   ) : (
-    <svg viewBox="0 0 400 280" role="img" aria-label={`Illustration of ${stay.name}`} preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color={`hsl(${h} 70% 88%)`} />
-          <stop offset="1" stop-color={`hsl(${h} 55% 70%)`} />
-        </linearGradient>
-      </defs>
-      <rect width="400" height="280" fill={`url(#${id})`} />
-      <circle cx="300" cy="80" r="30" fill="hsl(18 85% 64%)" opacity="0.9" />
-      <path d="M0 170c60-18 120-18 200 0s140 18 200 0v110H0z" fill={`hsl(${(h + 10) % 360} 55% 38%)`} />
-      <path d="M0 205c60-12 130-12 200 0s140 12 200 0v75H0z" fill="hsl(40 45% 82%)" />
-      {(stay.type === 'villa' || stay.type === 'boutique' || stay.type === 'hotel') && (
-        <g>
-          <rect x="120" y="120" width="110" height="62" fill="hsl(40 40% 96%)" />
-          <path d="M110 122l65-34 65 34z" fill={`hsl(${h} 30% 30%)`} />
-          <rect x="140" y="140" width="22" height="22" fill={`hsl(${h} 40% 45%)`} />
-          <rect x="188" y="140" width="22" height="42" fill={`hsl(${h} 40% 45%)`} />
-          {hasPool && <rect x="110" y="190" width="130" height="14" rx="4" fill="hsl(188 70% 58%)" />}
-        </g>
-      )}
-      {(stay.type === 'guesthouse' || stay.type === 'hostel' || stay.type === 'apartment') && (
-        <g>
-          <rect x="130" y="112" width="90" height="72" fill="hsl(40 40% 96%)" />
-          <rect x="126" y="106" width="98" height="8" fill={`hsl(${h} 30% 30%)`} />
-          <rect x="144" y="126" width="16" height="16" fill={`hsl(${h} 40% 45%)`} />
-          <rect x="176" y="126" width="16" height="16" fill={`hsl(${h} 40% 45%)`} />
-          <rect x="144" y="154" width="16" height="16" fill={`hsl(${h} 40% 45%)`} />
-          <rect x="176" y="154" width="16" height="30" fill={`hsl(${h} 40% 45%)`} />
-          {stay.amenities.includes('surfboards') && <rect x="228" y="130" width="9" height="56" rx="4.5" fill="hsl(18 85% 60%)" />}
-        </g>
-      )}
-      <g fill="hsl(145 40% 28%)">
-        <rect x="58" y="92" width="6" height="110" rx="3" transform="rotate(-6 61 200)" />
-        <path d="M60 94c-20-12-40-8-52 4 16-4 34-2 52-4zm0 0c16-18 38-20 56-10-18 0-38 4-56 10zm0 0c-4-20 6-36 20-44-8 14-14 28-20 44zm0 0c-14-14-32-18-46-12 16 2 32 6 46 12z" />
-        <rect x="318" y="110" width="5" height="90" rx="2.5" transform="rotate(5 320 200)" />
-        <path d="M322 112c-16-10-32-6-42 4 13-3 28-2 42-4zm0 0c13-14 30-16 44-8-14 0-30 3-44 8zm0 0c-3-16 5-28 16-34-6 11-11 22-16 34z" />
-      </g>
-    </svg>
+    <OceanArt hue={hue} time={dusk ? 'dusk' : 'day'} label={`${stay.name} (photo coming soon)`} />
   )
 }
 
 <style>
-  svg,
   img {
     width: 100%;
     height: 100%;

@@ -1,0 +1,75 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import OceanArt from './OceanArt.astro';
+import Wave from './Wave.astro';
+import { photo } from '../lib/photos';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  lead?: string;
+  crumbs: { name: string; href: string }[];
+  /** Optional background photo in /public. Shows faint ocean artwork without one. */
+  image?: string;
+  hue?: number;
+}
+const { title, eyebrow, lead, crumbs, image, hue = 190 } = Astro.props;
+const src = photo(image);
+---
+
+<header class="page-hero dark">
+  <div class="bg" aria-hidden="true">
+    {src ? <img src={src} alt="" /> : <OceanArt hue={hue} time="dusk" palms={false} />}
+  </div>
+  <div class="wrap inner">
+    <Breadcrumbs items={crumbs} />
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1 set:html={title} />
+    {lead && <p class="lead" set:html={lead} />}
+    <slot />
+  </div>
+</header>
+<Wave color="var(--sand-50)" bg="var(--deep)" />
+
+<style>
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--deep);
+  }
+  .bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+  }
+  .bg :global(img),
+  .bg :global(svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .page-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(3 24 42 / 0.9) 0%, rgb(3 24 42 / 0.55) 60%, rgb(3 24 42 / 0.3) 100%),
+      linear-gradient(180deg, rgb(3 24 42 / 0) 50%, var(--deep) 100%);
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    padding-top: 8px;
+    padding-bottom: 36px;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    max-width: 20ch;
+    margin: 4px 0 14px;
+  }
+  .lead {
+    margin: 0 0 8px;
+  }
+  .lead :global(b) {
+    color: #fff;
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+/**
+ * Soft wave edge between two sections: `bg` is the section above, `color` the one below.
+ * A lagoon coloured back wave gives the edge a line of surf.
+ */
+interface Props {
+  color: string;
+  bg?: string;
+  class?: string;
+}
+const { color, bg = 'transparent', class: cls } = Astro.props;
+---
+
+<div class:list={['wave-edge', cls]} style={`background:${bg}`} aria-hidden="true">
+  <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+    <path d="M0 50 C 180 90, 360 90, 540 60 S 900 0, 1080 30 S 1340 80, 1440 60 V96 H0 Z" fill="var(--lagoon)" opacity="0.55"></path>
+    <path d="M0 62 C 240 30, 420 30, 640 58 S 1040 96, 1240 62 S 1400 40, 1440 48 V96 H0 Z" fill={color}></path>
+  </svg>
+</div>
+
+<style>
+  .wave-edge {
+    position: relative;
+    z-index: 1;
+    line-height: 0;
+    margin: -1px 0 -2px;
+  }
+  .wave-edge svg {
+    overflow: visible;
+    width: 100%;
+    height: clamp(40px, 6vw, 90px);
+  }
+</style>

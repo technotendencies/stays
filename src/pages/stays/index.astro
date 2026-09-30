@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SearchBar from '../../components/SearchBar.astro';
 import StayCard from '../../components/StayCard.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import { allStays, categoryLabels } from '../../lib/stays';
 import { months } from '../../data/seasons';
 import { breadcrumbSchema } from '../../lib/schema';
@@ -18,10 +18,10 @@ const crumbs = [{ name: 'Stays', href: '/stays/' }];
   description="Every place to stay in Hiriketiya, Sri Lanka, in one list: filter by villas, beachfront, surf, budget or long stays and compare prices."
   schema={[breadcrumbSchema(crumbs)]}
 >
-  <div class="wrap">
-    <Breadcrumbs items={crumbs} />
-    <h1>Stays in Hiriketiya</h1>
+  <PageHero crumbs={crumbs} eyebrow="Every place to stay" title="Stays in <em>Hiriketiya</em>" image="/images/hero.jpg">
     <SearchBar compact />
+  </PageHero>
+  <div class="wrap">
     <p class="season" data-season hidden></p>
     <div class="chips filters" role="group" aria-label="Filter stays">
       <button type="button" class="chip" data-cat="" aria-pressed="true">All</button>
@@ -81,9 +81,6 @@ const crumbs = [{ name: 'Stays', href: '/stays/' }];
 </script>
 
 <style>
-  h1 {
-    margin: 8px 0 20px;
-  }
   .season {
     background: var(--ocean-100);
     padding: 12px 16px;

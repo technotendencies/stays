@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
 import FunnelCta from '../../components/FunnelCta.astro';
 import MonthFunnel from '../../components/MonthFunnel.astro';
 import Faq from '../../components/Faq.astro';
@@ -50,17 +51,19 @@ const toc = headings.filter((h) => h.depth === 2);
 ---
 
 <Layout title={guide.data.metaTitle} description={guide.data.description} schema={schema}>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow={`Hiriketiya guide · Updated ${updated.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}`}
+    title={guide.data.title}
+    lead={guide.data.description}
+    image={`/images/guides/${guide.id}.jpg`}
+    hue={175 + guide.data.order * 4}
+  />
   <div class="wrap">
-    <Breadcrumbs items={crumbs} />
     <article>
-      <header>
-        <p class="eyebrow">Hiriketiya guide · Updated {updated.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</p>
-        <h1>{guide.data.title}</h1>
-        <p class="lead">{guide.data.description}</p>
-      </header>
 
       <a class="quick" href={`/${target.slug}/`}>
-        <span aria-hidden="true">🏝️</span>
+        <Icon name="palmtree" size={22} />
         <span>{f.headline} <b>{f.cta}</b></span>
       </a>
 
@@ -97,7 +100,7 @@ const toc = headings.filter((h) => h.depth === 2);
           others.map((g) => (
             <li>
               <a href={`/guides/${g.id}/`}>
-                {g.data.emoji} {g.data.title}
+                {g.data.title}
               </a>
             </li>
           ))
@@ -108,10 +111,6 @@ const toc = headings.filter((h) => h.depth === 2);
 </Layout>
 
 <style>
-  header h1 {
-    margin: 8px 0 12px;
-    max-width: 20ch;
-  }
   .quick {
     display: flex;
     gap: 12px;
@@ -125,6 +124,10 @@ const toc = headings.filter((h) => h.depth === 2);
     text-decoration: none;
     color: var(--ink);
     max-width: 70ch;
+  }
+  .quick :global(svg) {
+    color: var(--ocean-500);
+    flex: none;
   }
   .quick b {
     color: var(--coral);

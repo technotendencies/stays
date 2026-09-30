@@ -1,7 +1,8 @@
 ---
 import type { Stay } from '../data/types';
 import StayImage from './StayImage.astro';
-import { amenityLabels, beachDistance, formatDistance, priceSymbols, typeLabels } from '../lib/stays';
+import Icon from './Icon.astro';
+import { beachDistance, formatDistance, priceSymbols, typeLabels } from '../lib/stays';
 
 interface Props {
   stay: Stay;
@@ -10,37 +11,46 @@ interface Props {
 }
 const { stay, rank, showMonthly = false } = Astro.props;
 const d = beachDistance(stay);
-const keyAmenities = stay.amenities.filter((a) => ['pool', 'ac', 'surfboards', 'kitchen', 'sea-view', 'workspace'].includes(a)).slice(0, 3);
+const href = `/stays/${stay.slug}/`;
 ---
 
 <article class="card" data-sleeps={stay.type === 'hostel' ? 99 : stay.sleeps} data-categories={stay.categories.join(' ')} data-price={stay.priceFrom}>
-  <a href={`/stays/${stay.slug}/`} class="media" tabindex="-1" aria-hidden="true">
+  <a href={href} class="media" tabindex="-1" aria-hidden="true">
     <StayImage stay={stay} />
+    {rank && <span class="rank">{String(rank).padStart(2, '0')}</span>}
     <span class="best">{stay.bestFor[0]}</span>
-    {rank && <span class="rank">#{rank}</span>}
+    {stay.rating && (
+      <span class="rating">
+        <Icon name="star" size={14} /> {stay.rating.toFixed(1)}
+      </span>
+    )}
   </a>
   <div class="body">
-    <div class="meta">
-      <span>{typeLabels[stay.type]} · {stay.area}</span>
-      {stay.rating && <span class="rating">★ {stay.rating.toFixed(1)}</span>}
-    </div>
-    <h3><a href={`/stays/${stay.slug}/`}>{stay.name}</a></h3>
-    <p class="dist">{formatDistance(d.meters)}</p>
+    <h3><a href={href}>{stay.name}</a></h3>
+    <p class="loc">
+      <Icon name="mapPin" size={15} />
+      <span>{stay.area} · {formatDistance(d.meters)}</span>
+    </p>
     <p class="summary">{stay.summary}</p>
-    <ul class="amen">{keyAmenities.map((a) => <li>{amenityLabels[a]}</li>)}</ul>
+    <p class="callout">{stay.highlights.join(' · ')}</p>
     <div class="foot">
       <span class="price">
         {showMonthly && stay.monthlyFrom ? (
-          <>
-            <b>${stay.monthlyFrom.toLocaleString('en-US')}</b>/month
-          </>
+          <span>
+            <b>${stay.monthlyFrom.toLocaleString('en-US')}</b> / month
+          </span>
         ) : (
-          <>
-            from <b>${stay.priceFrom}</b>/night <span class="lvl">{priceSymbols(stay.priceFrom)}</span>
-          </>
+          <span>
+            from <b>${stay.priceFrom}</b> / night
+          </span>
         )}
+        <span class="type">
+          {typeLabels[stay.type]} · {priceSymbols(stay.priceFrom)}
+        </span>
       </span>
-      <a class="link-arrow" href={`/stays/${stay.slug}/`}>View stay →</a>
+      <a class="link-arrow" href={href}>
+        View stay <Icon name="arrowRight" size={16} />
+      </a>
     </div>
     {!stay.verified && <span class="badge demo" title="Demo listing: details not yet verified">Demo listing</span>}
   </div>
@@ -48,109 +58,159 @@ const keyAmenities = stay.amenities.filter((a) => ['pool', 'ac', 'surfboards', '
 
 <style>
   .card {
-    background: var(--card);
+    --c-bg: var(--card);
+    --c-ink: var(--ink);
+    --c-muted: var(--muted);
+    --c-line: var(--line);
+    --c-callout: var(--ocean-100);
+    --c-accent: var(--ocean-500);
+    background: var(--c-bg);
+    color: var(--c-ink);
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  :global(.dark) .card {
+    --c-bg: linear-gradient(180deg, #0c3d60 0%, #08304d 100%);
+    --c-ink: #f1f8fa;
+    --c-muted: #a9c6d3;
+    --c-line: rgb(255 255 255 / 0.12);
+    --c-callout: rgb(69 201 198 / 0.1);
+    --c-accent: var(--lagoon);
+    border: 1px solid rgb(69 201 198 / 0.22);
+    box-shadow: 0 20px 50px rgb(0 0 0 / 0.3);
   }
   .media {
     position: relative;
-    aspect-ratio: 10 / 7;
+    aspect-ratio: 3 / 2;
     display: block;
     overflow: hidden;
   }
-  .best,
+  .media :global(img),
+  .media :global(svg) {
+    transition: transform 0.5s ease;
+  }
+  .card:hover .media :global(img),
+  .card:hover .media :global(.ocean-art) {
+    transform: scale(1.04);
+  }
   .rank {
     position: absolute;
-    top: 12px;
-    left: 12px;
-    background: rgb(255 255 255 / 0.92);
+    top: 14px;
+    left: 14px;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgb(3 24 42 / 0.82);
+    border: 2px solid rgb(255 255 255 / 0.25);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .best,
+  .rating {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgb(255 255 255 / 0.9);
+    backdrop-filter: blur(6px);
     color: var(--ink);
     font-size: 0.8rem;
     font-weight: 600;
-    padding: 5px 10px;
+    padding: 6px 12px;
     border-radius: 999px;
   }
-  .rank {
-    left: auto;
-    right: 12px;
-    background: var(--ocean-900);
-    color: #fff;
+  .rating {
+    top: auto;
+    bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .rating :global(svg) {
+    color: #f2a33a;
+    fill: #f2a33a;
   }
   .body {
-    padding: 16px 18px 18px;
+    padding: 22px 24px 22px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
     flex: 1;
-  }
-  .meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-  .rating {
-    color: var(--ink);
-    font-weight: 600;
   }
   h3 {
     margin: 0;
+    font-size: 1.55rem;
   }
-  h3 a {
-    color: var(--ink);
+  h3 a,
+  :global(.dark) .card h3 a {
+    color: var(--c-ink);
     text-decoration: none;
   }
-  h3 a:hover {
-    color: var(--ocean-700);
-  }
-  .dist {
+  .loc {
+    display: flex;
+    align-items: center;
+    gap: 7px;
     margin: 0;
-    font-weight: 500;
-    color: var(--ocean-700);
-    font-size: 0.95rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+  .loc :global(svg) {
+    color: var(--c-accent);
+    flex: none;
   }
   .summary {
     margin: 0;
-    color: var(--muted);
-    font-size: 0.95rem;
+    color: var(--c-muted);
+    font-size: 1rem;
   }
-  .amen {
-    list-style: none;
-    padding: 0;
+  .callout {
     margin: 4px 0 0;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .amen li {
-    font-size: 0.8rem;
-    background: var(--sand-100);
-    padding: 3px 9px;
-    border-radius: 999px;
+    padding: 12px 16px;
+    border-left: 3px solid var(--c-accent);
+    border-radius: 0 12px 12px 0;
+    background: var(--c-callout);
+    font-size: 0.92rem;
   }
   .foot {
     margin-top: auto;
-    padding-top: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--c-line);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
   }
   .price {
-    font-size: 0.9rem;
-    color: var(--muted);
+    display: grid;
+    font-size: 0.88rem;
+    color: var(--c-muted);
+    line-height: 1.3;
   }
   .price b {
-    color: var(--ink);
-    font-size: 1.15rem;
+    color: var(--c-ink);
+    font-size: 1.25rem;
   }
-  .lvl {
-    color: var(--palm);
-    font-weight: 600;
-    margin-left: 2px;
+  .type {
+    font-size: 0.8rem;
+  }
+  .foot .link-arrow,
+  :global(.dark) .card .foot .link-arrow {
+    color: var(--c-ink);
   }
   .badge {
     align-self: flex-start;

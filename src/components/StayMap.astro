@@ -3,6 +3,7 @@ import { places } from '../data/places';
 import { site } from '../data/site';
 import { allStays, stayForClient } from '../lib/stays';
 import type { Stay } from '../data/types';
+import Icon from './Icon.astro';
 
 interface Props {
   /** Stays to show. Defaults to every stay. */
@@ -24,9 +25,9 @@ const data = {
   focus: focus ?? null,
 };
 const placeFilters = [
-  { key: 'beach', label: 'Beach', icon: '🏖️', on: true },
-  { key: 'surf', label: 'Surf', icon: '🏄', on: true },
-  { key: 'restaurant', label: 'Restaurants', icon: '🍽️', on: false },
+  { key: 'beach', label: 'Beach', icon: 'umbrella' as const, on: true },
+  { key: 'surf', label: 'Surf', icon: 'waves' as const, on: true },
+  { key: 'restaurant', label: 'Restaurants', icon: 'utensils' as const, on: false },
 ];
 const stayFilters = [
   { key: 'villas', label: 'Villas' },
@@ -42,7 +43,7 @@ const stayFilters = [
       <div class="filters chips" role="group" aria-label="Map filters">
         {placeFilters.map((f) => (
           <button type="button" class="chip" data-place-filter={f.key} aria-pressed={f.on ? "true" : "false"}>
-            <span aria-hidden="true">{f.icon}</span> {f.label}
+            <Icon name={f.icon} size={16} /> {f.label}
           </button>
         ))}
         <span class="sep" aria-hidden="true" />
@@ -81,6 +82,7 @@ const stayFilters = [
   import L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
   import type { ClientStay } from '../lib/stays';
+  import { icon } from '../lib/icons';
 
   interface MapData {
     stays: ClientStay[];
@@ -90,7 +92,12 @@ const stayFilters = [
     focus: string | null;
   }
 
-  const placeIcons: Record<string, string> = { beach: '🏖️', surf: '🏄', restaurant: '🍽️', sight: '📍' };
+  const placeIcons: Record<string, string> = {
+    beach: icon('umbrella', 15),
+    surf: icon('waves', 15),
+    restaurant: icon('utensils', 15),
+    sight: icon('mapPin', 15),
+  };
   const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
   function stayPopup(s: ClientStay) {
@@ -137,7 +144,7 @@ const stayFilters = [
     for (const p of data.places) {
       placeLayers[p.kind] ??= L.layerGroup();
       L.marker(p.coords, {
-        icon: L.divIcon({ className: `poi poi-${p.kind}`, html: placeIcons[p.kind] ?? '📍', iconSize: [30, 30] }),
+        icon: L.divIcon({ className: `poi poi-${p.kind}`, html: placeIcons[p.kind] ?? placeIcons.sight, iconSize: [30, 30] }),
         title: p.name,
         keyboard: true,
       })
@@ -310,16 +317,28 @@ const stayFilters = [
   }
   :global(.price-pin:hover),
   :global(.price-pin.focused) {
-    background: var(--ocean-900);
+    background: var(--deep);
     color: #fff;
   }
   :global(.poi) {
     display: grid;
     place-items: center;
-    background: #fff;
     border-radius: 50%;
-    box-shadow: 0 1px 6px rgb(0 0 0 / 0.25);
-    font-size: 16px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgb(3 24 42 / 0.35);
+    color: #fff;
+  }
+  :global(.poi-beach) {
+    background: #d9a54a;
+  }
+  :global(.poi-surf) {
+    background: var(--ocean-500);
+  }
+  :global(.poi-restaurant) {
+    background: var(--coral);
+  }
+  :global(.poi-sight) {
+    background: var(--palm);
   }
   :global(.pop) {
     font-family: var(--font-body);

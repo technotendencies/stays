@@ -29,4 +29,8 @@ const { items } = Astro.props;
   .crumbs a {
     color: var(--muted);
   }
+  :global(.dark) .crumbs,
+  :global(.dark) .crumbs a {
+    color: var(--on-dark-muted);
+  }
 </style>

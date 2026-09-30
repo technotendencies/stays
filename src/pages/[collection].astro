@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { photo } from '../lib/photos';
 import CategoryChips from '../components/CategoryChips.astro';
 import StayCard from '../components/StayCard.astro';
 import StayMap from '../components/StayMap.astro';
@@ -39,19 +41,16 @@ const schema = [
 ---
 
 <Layout title={c.metaTitle} description={c.metaDescription} schema={schema}>
+  <PageHero crumbs={crumbs} eyebrow={`Updated ${year}`} title={c.h1} image={`/images/collections/${c.slug}.jpg`}>
+    {c.intro.map((p) => <p class="lead" set:html={inline(p)} />)}
+    <div class="hero-chips"><CategoryChips current={c.category} glass /></div>
+  </PageHero>
   <div class="wrap">
-    <Breadcrumbs items={crumbs} />
-    <header class="intro">
-      <p class="eyebrow">Updated {year}</p>
-      <h1>{c.h1}</h1>
-      {c.intro.map((p) => <p class="lead" set:html={inline(p)} />)}
-    </header>
-    <CategoryChips current={c.category} />
 
     <section class="section">
       <div class="section-head">
         <h2>{list.length} {c.label.toLowerCase() === 'where to stay' ? 'stays' : c.label.toLowerCase()} on the map</h2>
-        <a class="link-arrow" href="/map/">Open full map →</a>
+        <a class="link-arrow" href="/map/">Open full map <Icon name="arrowRight" size={16} /></a>
       </div>
       <StayMap stays={list} height="380px" />
     </section>
@@ -95,14 +94,11 @@ const schema = [
 </Layout>
 
 <style>
-  .intro {
-    margin-bottom: 24px;
+  .hero-chips {
+    margin-top: 20px;
   }
-  .intro h1 {
-    margin-bottom: 16px;
-  }
-  .intro .lead {
-    margin: 0 0 12px;
+  .section {
+    padding-top: 32px;
   }
   .related ul {
     padding-left: 20px;

@@ -2,29 +2,48 @@
 import { categoryCollection } from '../data/collections';
 import { categoryLabels } from '../lib/stays';
 import type { Category } from '../data/types';
+import type { IconName } from '../lib/icons';
+import Icon from './Icon.astro';
 
 interface Props {
   current?: Category;
+  glass?: boolean;
 }
-const { current } = Astro.props;
+const { current, glass = false } = Astro.props;
 const order: Category[] = ['beachfront', 'villas', 'boutique', 'budget', 'surf', 'long-stays'];
-const icons: Record<string, string> = {
-  beachfront: '🏖️',
-  villas: '🏡',
-  boutique: '✨',
-  budget: '🎒',
-  surf: '🏄',
-  'long-stays': '🗓️',
+const icons: Record<string, IconName> = {
+  beachfront: 'umbrella',
+  villas: 'house',
+  boutique: 'sparkles',
+  budget: 'wallet',
+  surf: 'waves',
+  'long-stays': 'calendar',
 };
 ---
 
-<nav class="chips" aria-label="Stay types">
+<nav class:list={['chips', { glass }]} aria-label="Stay types">
   {
     order.map((c) => (
       <a class:list={['chip', { active: c === current }]} href={`/${categoryCollection[c]}/`}>
-        <span aria-hidden="true">{icons[c]}</span>
+        <Icon name={icons[c]} size={17} />
         {categoryLabels[c]}
       </a>
     ))
   }
 </nav>
+
+<style>
+  .glass .chip {
+    background: rgb(255 255 255 / 0.12);
+    border-color: rgb(255 255 255 / 0.28);
+    color: #fff;
+    backdrop-filter: blur(10px);
+  }
+  .glass .chip :global(svg) {
+    color: var(--lagoon-soft);
+  }
+  .glass .chip:hover {
+    background: rgb(255 255 255 / 0.22);
+    border-color: rgb(255 255 255 / 0.6);
+  }
+</style>

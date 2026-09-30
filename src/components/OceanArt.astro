@@ -1,0 +1,64 @@
+---
+/**
+ * Illustrated ocean scene used wherever a photo is missing. `hue` shifts the water
+ * colour so repeated placeholders do not look identical; `time` picks day or dusk.
+ */
+interface Props {
+  hue?: number;
+  time?: 'day' | 'dusk';
+  label?: string;
+  palms?: boolean;
+}
+const { hue = 190, time = 'day', label, palms = true } = Astro.props;
+const id = `oa${Math.round(Math.random() * 1e8)}`;
+const sky = time === 'dusk' ? ['#1b2f5a', '#f2a07b', '#ffd6a8'] : ['#7fc8e8', '#bfe6f0', '#eaf7f5'];
+---
+
+<svg class="ocean-art" viewBox="0 0 800 520" preserveAspectRatio="xMidYMid slice" role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'}>
+  <defs>
+    <linearGradient id={`${id}s`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color={sky[0]}></stop>
+      <stop offset="0.6" stop-color={sky[1]}></stop>
+      <stop offset="1" stop-color={sky[2]}></stop>
+    </linearGradient>
+    <linearGradient id={`${id}w`} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color={`hsl(${hue} 70% 32%)`}></stop>
+      <stop offset="0.5" stop-color={`hsl(${hue - 8} 62% 46%)`}></stop>
+      <stop offset="1" stop-color={`hsl(${hue - 18} 60% 62%)`}></stop>
+    </linearGradient>
+    <radialGradient id={`${id}g`} cx="0.72" cy="0.3" r="0.35">
+      <stop offset="0" stop-color="#fff4d6" stop-opacity="0.95"></stop>
+      <stop offset="1" stop-color="#fff4d6" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="520" fill={`url(#${id}s)`}></rect>
+  <rect width="800" height="520" fill={`url(#${id}g)`}></rect>
+  <circle cx="575" cy="160" r="38" fill={time === 'dusk' ? '#ffb27a' : '#fff6de'}></circle>
+  <path d="M0 290 C 160 272, 320 270, 480 282 S 700 296, 800 286 V520 H0 Z" fill={`url(#${id}w)`}></path>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" opacity="0.5">
+    <path d="M60 330 q 30 -8 60 0 t 60 0" stroke-width="2"></path>
+    <path d="M420 318 q 26 -7 52 0 t 52 0" stroke-width="2"></path>
+    <path d="M250 368 q 34 -9 68 0 t 68 0" stroke-width="2.5"></path>
+    <path d="M560 360 q 30 -8 60 0 t 60 0" stroke-width="2.5"></path>
+  </g>
+  <path d="M0 410 C 140 386, 300 384, 430 400 S 690 432, 800 404 V520 H0 Z" fill="#ffffff" opacity="0.55"></path>
+  <path d="M0 426 C 150 404, 300 404, 440 418 S 700 446, 800 420 V520 H0 Z" fill="#efe1c3"></path>
+  <path d="M0 462 C 180 446, 360 450, 520 460 S 720 476, 800 466 V520 H0 Z" fill="#e6d2ab"></path>
+  {
+    palms && (
+      <g fill={`hsl(150 45% ${time === 'dusk' ? 14 : 24}%)`}>
+        <path d="M92 440 C 96 360, 110 280, 132 200" stroke={`hsl(150 30% ${time === 'dusk' ? 12 : 22}%)`} stroke-width="9" fill="none" stroke-linecap="round"></path>
+        <path d="M132 200 c -40 -26 -92 -22 -128 8 40 -8 88 -8 128 -8z m0 0 c 36 -44 96 -52 140 -28 -46 -2 -98 10 -140 28z m0 0 c -14 -48 6 -92 42 -114 -20 36 -34 72 -42 114z m0 0 c -30 -34 -78 -44 -114 -30 40 4 80 14 114 30z m0 0 c 44 -16 96 -6 126 26 -40 -14 -84 -22 -126 -26z"></path>
+        <path d="M730 450 C 726 390, 716 330, 700 270" stroke={`hsl(150 30% ${time === 'dusk' ? 12 : 22}%)`} stroke-width="7" fill="none" stroke-linecap="round"></path>
+        <path d="M700 270 c 32 -22 74 -18 104 6 -32 -6 -70 -6 -104 -6z m0 0 c -30 -36 -78 -42 -114 -22 38 0 80 8 114 22z m0 0 c 10 -40 -6 -76 -34 -94 16 30 28 60 34 94z"></path>
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .ocean-art {
+    width: 100%;
+    height: 100%;
+  }
+</style>

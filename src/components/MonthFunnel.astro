@@ -1,5 +1,6 @@
 ---
 import { months } from '../data/seasons';
+import Icon from './Icon.astro';
 
 interface Props {
   /** Which angle to lead with in each month card. */
@@ -23,9 +24,9 @@ const tone = { Best: 'good', Good: 'good', Fair: 'mid', 'Off season': 'low', 'Dr
       <div class="m" id={m.slug}>
         <h3>{m.name}</h3>
         <p class="tags">
-          <span class={`t ${tone[m.weather]}`}>☀️ {m.weather}</span>
-          <span class={`t ${tone[m.surf]}`}>🏄 {m.surf}</span>
-          <span class="t">👥 {m.crowds} crowds</span>
+          <span class={`t ${tone[m.weather]}`}><Icon name="sun" size={13} /> {m.weather}</span>
+          <span class={`t ${tone[m.surf]}`}><Icon name="waves" size={13} /> {m.surf}</span>
+          <span class="t"><Icon name="users" size={13} /> {m.crowds} crowds</span>
         </p>
         <p class="note">{m.note}</p>
         <a class="link-arrow" href={cta(m).href}>
@@ -63,6 +64,9 @@ const tone = { Best: 'good', Good: 'good', Fair: 'mid', 'Off season': 'low', 'Dr
     margin: 0;
   }
   .t {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     font-size: 0.75rem;
     padding: 2px 8px;
     border-radius: 999px;
