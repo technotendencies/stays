@@ -15,8 +15,6 @@ export function photo(p?: string): string | undefined {
 export interface PhotoCredit {
   /** What the photo actually shows, used as alt text. */
   alt: string;
-  title: string;
-  creator: string;
   license: string;
   licenseUrl: string;
   sourceUrl: string;
@@ -24,7 +22,7 @@ export interface PhotoCredit {
 
 const creditMap = credits as Record<string, PhotoCredit>;
 
-/** Credit and description for a photo in /public/images, if it came from an openly licensed source. */
+/** Description, licence and source for a photo in /public/images, if it came from an open source. */
 export const photoCredit = (p?: string): PhotoCredit | undefined => (p ? creditMap[p] : undefined);
 
 export const allPhotoCredits = () => Object.entries(creditMap).map(([src, c]) => ({ src, ...c }));

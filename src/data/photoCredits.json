@@ -1,290 +1,218 @@
 {
   "/images/hero.jpg": {
-    "alt": "Turquoise cove with coconut palms, Secret Beach, Mirissa",
-    "title": "Secret beach - Mirissa Sri Lanka",
-    "creator": "Praveenshashika",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90022468"
+    "alt": "Stilt fishermen at sunrise near Hikkaduwa, Sri Lanka",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61852017"
   },
   "/images/sunset.jpg": {
-    "alt": "Sunset through palm trees on the beach at Ambalangoda",
-    "title": "Beach Sunset Ambalangoda",
-    "creator": "Anuksanjay",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79422983"
+    "alt": "Sunset over a quiet beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61761844"
   },
   "/images/areas/bay.jpg": {
-    "alt": "Outrigger boat and swimmers in the bay at Dickwella",
-    "title": "Baydickwella",
-    "creator": "Nilan.iro",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79391054"
+    "alt": "Boat on a turquoise sea framed by palm trees",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62199766"
   },
   "/images/areas/hill.jpg": {
-    "alt": "Coconut palms over a blue sea near Mirissa",
-    "title": "Blue Sea Mirissa Sri Lanka 01",
-    "creator": "Tharakaliyanage",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90085632"
+    "alt": "Looking up into a forest of coconut palms",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61915281"
   },
   "/images/areas/dikwella.jpg": {
-    "alt": "Rocks and pandanus on Blue Beach Island, Nilwella, near Dikwella",
-    "title": "Blue beach island land area",
-    "creator": "Weranga Rajapaksha",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79618166"
-  },
-  "/images/guides/hiriketiya-sri-lanka.jpg": {
-    "alt": "Pink sunrise over the sea at Blue Beach Island, near Dikwella",
-    "title": "Blue beach island sun rise",
-    "creator": "Weranga Rajapaksha",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79618165"
-  },
-  "/images/guides/best-time-to-visit-hiriketiya.jpg": {
-    "alt": "Dawn over the ocean at Tangalle beach",
-    "title": "Dawn in Tangalle beach",
-    "creator": "Gehanushka",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79730255"
-  },
-  "/images/guides/hiriketiya-weather.jpg": {
-    "alt": "Golden clouds over the sea at Tangalle beach",
-    "title": "Tangalle Beach Sri Lanka",
-    "creator": "Anjitha Senarath",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=71366471"
-  },
-  "/images/guides/hiriketiya-surf-season.jpg": {
-    "alt": "Aerial view of surf lines and palm lined coast at Mirissa",
-    "title": "Mirissa beach aerial (29448581263)",
-    "creator": "dronepicr",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=52016343"
-  },
-  "/images/guides/hiriketiya-restaurants.jpg": {
-    "alt": "Sri Lankan rice and curry served on a banana leaf",
-    "title": "Traditional Jaffna Rice and Curry",
-    "creator": "Mayooresan",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=30441923"
-  },
-  "/images/guides/things-to-do-in-hiriketiya.jpg": {
-    "alt": "The Hummanaya blowhole spraying between rocks near Dikwella",
-    "title": "Hummanaya",
-    "creator": "Thilanka Kasunjith",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90645564"
-  },
-  "/images/guides/how-to-get-to-hiriketiya.jpg": {
-    "alt": "A row of tuk tuks waiting for passengers in Sri Lanka",
-    "title": "Sri Lanka - 077 - Tuk-tuks waiting for fares in Kandy (1685043688)",
-    "creator": "McKay Savage from London, UK",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=23468315"
-  },
-  "/images/guides/hiriketiya-vs-mirissa.jpg": {
-    "alt": "Aerial view of the bay at Mirissa",
-    "title": "Aerial view of Mirissa beach, Srilanka",
-    "creator": "Abishek Palraj",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90789028"
-  },
-  "/images/guides/hiriketiya-vs-weligama.jpg": {
-    "alt": "Traditional outrigger fishing boat on the beach at Weligama",
-    "title": "Weligama-Pirogues à balancier (2)",
-    "creator": "Ji-Elle",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=24442608"
-  },
-  "/images/collections/where-to-stay-in-hiriketiya.jpg": {
-    "alt": "Rocks and pandanus on Blue Beach Island, Nilwella, near Dikwella",
-    "title": "Blue beach island land area",
-    "creator": "Weranga Rajapaksha",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79618166"
-  },
-  "/images/collections/hiriketiya-hotels.jpg": {
-    "alt": "Palm fringed Goyambokka beach near Tangalle",
-    "title": "Goyambokka Beach, Tangalle, Sri Lanka",
-    "creator": "Satdeep Gill",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=168436236"
-  },
-  "/images/collections/best-hotels-in-hiriketiya.jpg": {
-    "alt": "Palm lined beach and bay at Unawatuna",
-    "title": "Unawatuna",
-    "creator": "Bernard Gagnon",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=3770351"
-  },
-  "/images/collections/hiriketiya-villas.jpg": {
-    "alt": "Coconut palms along Tangalle beach",
-    "title": "Tangalle beach scenery - panoramio",
-    "creator": "Tuderna",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=59182467"
-  },
-  "/images/collections/hiriketiya-beachfront-hotels.jpg": {
-    "alt": "Quiet sandy beach at Tangalle",
-    "title": "TangalleBeach",
-    "creator": "Shaakunthala",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=9589027"
-  },
-  "/images/collections/cheap-accommodation-hiriketiya.jpg": {
-    "alt": "Fishing boat resting under a palm on Tangalle beach",
-    "title": "Tangalle Beach and Fishing Baot on Sand",
-    "creator": "Dilantha Lokugeeganage",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=167195772"
-  },
-  "/images/collections/luxury-hotels-hiriketiya.jpg": {
-    "alt": "Leaning palm at sunset on Tangalle beach",
-    "title": "Tangalle Beach, Sri Lanka (40081697721)",
-    "creator": "Peter Addor from underway; mailnly Switzerland, Italy and Sri Lanka, world",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=121432868"
-  },
-  "/images/collections/hiriketiya-surf-accommodation.jpg": {
-    "alt": "Jungle headland and cove at Secret Beach, Mirissa",
-    "title": "Secret Beach, Mirissa 2023-03-09-4",
-    "creator": "Alexey Komarov",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=129524209"
-  },
-  "/images/collections/hiriketiya-long-term-rental.jpg": {
-    "alt": "Silhouetted coconut palms in the evening at Mirissa",
-    "title": "IN THE EVENING AT MIRISSA BEACH",
-    "creator": "H.G.Sandun S Wijesooriya",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90114815"
-  },
-  "/images/collections/hiriketiya-boutique-hotels.jpg": {
-    "alt": "Rocky cove and palms at Secret Beach, Mirissa",
-    "title": "Secret Beach View Mirissa",
-    "creator": "ShakiAbey",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=89989387"
-  },
-  "/images/stays/bayfront-surf-house.jpg": {
-    "alt": "Boulders and soft sand at Secret Beach, Mirissa",
-    "title": "Secret Beach, Mirissa 2023-03-09-3",
-    "creator": "Alexey Komarov",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=129524204"
-  },
-  "/images/stays/palm-hollow-villa.jpg": {
-    "alt": "Leaning palm over a quiet beach at Secret Beach, Mirissa",
-    "title": "Secret Beach, Mirissa 2023-03-09-1",
-    "creator": "Alexey Komarov",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=129524203"
-  },
-  "/images/stays/coral-cove-boutique.jpg": {
-    "alt": "Aerial view of waves and palms at Coconut Tree Hill, Mirissa",
-    "title": "Mirissa Beach Coconut Tree hills",
-    "creator": "Rovin Shanila",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=79433121"
-  },
-  "/images/stays/jungle-loft-studios.jpg": {
-    "alt": "People walking along Jungle Beach near Unawatuna",
-    "title": "Jungle Beach, Unawatuna, Sri Lanka",
-    "creator": "Hirushini Dematagoda",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90173282"
-  },
-  "/images/stays/reef-view-rooms.jpg": {
-    "alt": "Waves breaking on rocks at Tangalle",
-    "title": "Beautiful Scenery of Tangalle Beach",
-    "creator": "Aysha Banu",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90725937"
-  },
-  "/images/stays/sandbar-hostel.jpg": {
-    "alt": "Fishing boat among the rocks at Secret Beach, Mirissa",
-    "title": "Secret Beach, Mirissa 2023-03-09-2",
-    "creator": "Alexey Komarov",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=129524214"
-  },
-  "/images/stays/tidehouse-villa.jpg": {
-    "alt": "Long white sand beach at Thiranagama",
-    "title": "Thiranagama beach - Sri Lanka",
-    "creator": "Xandrium",
-    "license": "CC0 1.0",
+    "alt": "Long white sand beach at Thiranagama, Sri Lanka",
+    "license": "CC0 1.0 (public domain)",
     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
     "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=142180535"
   },
+  "/images/guides/hiriketiya-sri-lanka.jpg": {
+    "alt": "Turquoise sea off Unawatuna on Sri Lanka's south coast",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61823702"
+  },
+  "/images/guides/best-time-to-visit-hiriketiya.jpg": {
+    "alt": "Colourful sky and palms at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61893311"
+  },
+  "/images/guides/hiriketiya-weather.jpg": {
+    "alt": "Palm trees on a sunny beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61893359"
+  },
+  "/images/guides/hiriketiya-surf-season.jpg": {
+    "alt": "Surfer with her board on the beach at Weligama, Sri Lanka",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61835716"
+  },
+  "/images/guides/hiriketiya-restaurants.jpg": {
+    "alt": "Fresh vegetables at a market stall in Hikkaduwa, Sri Lanka",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62052616"
+  },
+  "/images/guides/things-to-do-in-hiriketiya.jpg": {
+    "alt": "Fisherman casting a line at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=60979498"
+  },
+  "/images/guides/how-to-get-to-hiriketiya.jpg": {
+    "alt": "Aerial view of fishing boats on the beach at Arugam Bay, Sri Lanka",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=154707981"
+  },
+  "/images/guides/hiriketiya-vs-mirissa.jpg": {
+    "alt": "Boat on a turquoise sea framed by palm trees",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62199766"
+  },
+  "/images/guides/hiriketiya-vs-weligama.jpg": {
+    "alt": "Surfer by a beach hut",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62062445"
+  },
+  "/images/collections/where-to-stay-in-hiriketiya.jpg": {
+    "alt": "Turquoise sea off Unawatuna on Sri Lanka's south coast",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61823702"
+  },
+  "/images/collections/hiriketiya-hotels.jpg": {
+    "alt": "Palm trees on a white sand beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61881558"
+  },
+  "/images/collections/best-hotels-in-hiriketiya.jpg": {
+    "alt": "Infinity pool looking out over the ocean",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62067954"
+  },
+  "/images/collections/hiriketiya-villas.jpg": {
+    "alt": "Swimming pool and palms at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61710043"
+  },
+  "/images/collections/hiriketiya-beachfront-hotels.jpg": {
+    "alt": "Palm trees on a sunny beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61893359"
+  },
+  "/images/collections/cheap-accommodation-hiriketiya.jpg": {
+    "alt": "Coconut palm against a blue sky",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61824188"
+  },
+  "/images/collections/luxury-hotels-hiriketiya.jpg": {
+    "alt": "Resort pool and palms at dusk in Negombo, Sri Lanka",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61857309"
+  },
+  "/images/collections/hiriketiya-surf-accommodation.jpg": {
+    "alt": "Surfer riding a turquoise wave",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=58831834"
+  },
+  "/images/collections/hiriketiya-long-term-rental.jpg": {
+    "alt": "Tropical palm leaves against a blue sky",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61859913"
+  },
+  "/images/collections/hiriketiya-boutique-hotels.jpg": {
+    "alt": "Palm tree and sandy beach at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61881461"
+  },
+  "/images/stays/bayfront-surf-house.jpg": {
+    "alt": "Surfer by a beach hut",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62062445"
+  },
+  "/images/stays/palm-hollow-villa.jpg": {
+    "alt": "Swimming pool and palms at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61710043"
+  },
+  "/images/stays/coral-cove-boutique.jpg": {
+    "alt": "Palm tree and sandy beach at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61881461"
+  },
+  "/images/stays/jungle-loft-studios.jpg": {
+    "alt": "Looking up into a forest of coconut palms",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61915281"
+  },
+  "/images/stays/reef-view-rooms.jpg": {
+    "alt": "Sunrise reflecting over the ocean",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61764740"
+  },
+  "/images/stays/sandbar-hostel.jpg": {
+    "alt": "Surfer crouching low on a wave",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62347174"
+  },
+  "/images/stays/tidehouse-villa.jpg": {
+    "alt": "Aerial view of a boat on a sandy beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62085990"
+  },
   "/images/stays/the-quiet-hill.jpg": {
-    "alt": "Panorama of the bay at Mirissa",
-    "title": "Panorama Mirissa",
-    "creator": "T-deo",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=26011050"
+    "alt": "Tropical palm leaves against a blue sky",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61859913"
   },
   "/images/stays/lagoon-edge-cabanas.jpg": {
-    "alt": "Wide sandy beach at Weligama",
-    "title": "Weligama Beach in Sri Lanka",
-    "creator": "Honeplus",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=25796768"
+    "alt": "Fisherman casting a line at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=60979498"
   },
   "/images/stays/swell-and-salt-apartments.jpg": {
-    "alt": "Rocky point and turquoise sea at Mirissa",
-    "title": "Mirissa beach, Srilanka",
-    "creator": "Abishek Palraj",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90789030"
+    "alt": "Surfer riding a wave",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62058664"
   },
   "/images/stays/casa-kokos.jpg": {
-    "alt": "Rocky shoreline at Tangalle",
-    "title": "Attractive Scenery of Tangalle Beach",
-    "creator": "Aysha Banu",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=90725935"
+    "alt": "Coconut palm against a blue sky",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61824188"
   },
   "/images/stays/blue-horizon-hotel.jpg": {
-    "alt": "Quiet sandy beach at Tangalle",
-    "title": "TangalleBeach",
-    "creator": "Shaakunthala",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=9589027"
+    "alt": "Palm trees on a sunny beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61893359"
   }
 }

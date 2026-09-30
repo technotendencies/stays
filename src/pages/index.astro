@@ -12,7 +12,6 @@ import { featuredStays } from '../lib/stays';
 import { site } from '../data/site';
 import { collections } from '../data/collections';
 import { photo, photoCredit, sitePhotos } from '../lib/photos';
-import PhotoCredit from '../components/PhotoCredit.astro';
 import { getCollection } from 'astro:content';
 import type { IconName } from '../lib/icons';
 
@@ -79,7 +78,6 @@ const schema = [
       <SearchBar />
       <CategoryChips glass />
     </div>
-    <PhotoCredit src={hero} bottom={96} />
     <div class="hero-wave"><Wave color="var(--deep)" /></div>
   </section>
 

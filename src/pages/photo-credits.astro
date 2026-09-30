@@ -4,15 +4,15 @@ import PageHero from '../components/PageHero.astro';
 import { allPhotoCredits } from '../lib/photos';
 
 const credits = allPhotoCredits();
-const crumbs = [{ name: 'Photo credits', href: '/photo-credits/' }];
+const crumbs = [{ name: 'Photo sources', href: '/photo-credits/' }];
 ---
 
-<Layout title="Photo Credits | Hiriketiya Stays" description="Credits and licences for the photos used on Hiriketiya Stays.">
+<Layout title="Photo Sources | Hiriketiya Stays" description="Sources and licences for the photos used on Hiriketiya Stays.">
   <PageHero
     crumbs={crumbs}
-    eyebrow="Thank you"
-    title="Photo <em>credits</em>"
-    lead="The photos on this site are shared by photographers under Creative Commons licences via Wikimedia Commons. Photos on demo listings are illustrative and do not show those properties."
+    eyebrow="About our photos"
+    title="Photo <em>sources</em>"
+    lead="The photos on this site are public domain (CC0) photos from Wikimedia Commons. Photos on demo listings are illustrative and do not show those properties."
   />
   <div class="wrap">
     <ul class="list">
@@ -24,7 +24,6 @@ const crumbs = [{ name: 'Photo credits', href: '/photo-credits/' }];
               <a href={c.sourceUrl} rel="noopener nofollow" target="_blank">
                 <b>{c.alt}</b>
               </a>
-              <span>Photo by {c.creator}</span>
               <span>
                 Licence:{' '}
                 <a href={c.licenseUrl} rel="noopener license" target="_blank">

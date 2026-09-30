@@ -38,7 +38,7 @@ Guide → "Going in January? See the best surf stays →" → collection page �
 3. **Guide facts are drafts** (travel times, seasons, sights). Have someone local review them. The restaurant guide has a TODO for real venues.
 4. **Affiliate IDs**: add your Booking.com `aid` / Agoda `cid` in `src/data/site.ts` once approved. Affiliate links get `rel="sponsored"`.
 5. **Map tiles** use the public OpenStreetMap server, which is fine for development but not for production traffic. Switch to a tile provider (MapTiler, Stadia, Mapbox …) in `StayMap.astro`.
-6. **Photos** are Creative Commons photos from Wikimedia Commons of the south coast (Mirissa, Tangalle, Dikwella, Weligama and nearby), credited on `/photo-credits/`. Photos on the demo stays are illustrative and labelled that way. Replace them with each property's own photos (with permission).
+6. **Photos** are high resolution public domain (CC0) photos from Wikimedia Commons, so no photographer credit is needed. Where a photo names a place (Hikkaduwa, Weligama, Unawatuna, Thiranagama, Arugam Bay, Negombo) it really is that place; the rest are generic tropical shots with alt text that does not claim a location. Sources are listed on `/photo-credits/`. Photos on the demo stays are illustrative and labelled that way. Replace them with each property's own photos (with permission).
 
 ## Adding photos
 
@@ -55,7 +55,7 @@ Drop JPGs into `public/images/` with these names and rebuild. No code changes ar
 
 Only use photos you have the rights to (your own, the property's with permission, or an open licence). Keep each file under about 400 KB.
 
-Openly licensed photos need a credit: add an entry to `src/data/photoCredits.json` (alt text, creator, licence, source link). It then shows as alt text, as a credit line on large photos, and on the `/photo-credits/` page. Remove the entry when you replace a photo with your own.
+Use high resolution photos only (at least 3000 px wide at the source). For a public domain photo, add an entry to `src/data/photoCredits.json` (alt text, licence, source link); it becomes the alt text and is listed on `/photo-credits/`. Photos under licences that require naming the photographer (CC BY, CC BY-SA) are not used on this site. Remove the entry when you replace a photo with your own.
 
 ## Adding a stay
 
