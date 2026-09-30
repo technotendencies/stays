@@ -11,7 +11,8 @@ import Icon from '../components/Icon.astro';
 import { featuredStays } from '../lib/stays';
 import { site } from '../data/site';
 import { collections } from '../data/collections';
-import { photo, sitePhotos } from '../lib/photos';
+import { photo, photoCredit, sitePhotos } from '../lib/photos';
+import PhotoCredit from '../components/PhotoCredit.astro';
 import { getCollection } from 'astro:content';
 import type { IconName } from '../lib/icons';
 
@@ -68,7 +69,7 @@ const schema = [
 >
   <section class="hero">
     <div class="hero-media" aria-hidden="true">
-      {hero ? <img src={hero} alt="" fetchpriority="high" /> : <OceanArt hue={188} time="dusk" />}
+      {hero ? <img src={hero} alt={photoCredit(hero)?.alt ?? ""} fetchpriority="high" /> : <OceanArt hue={188} time="dusk" />}
     </div>
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="wrap hero-inner">
@@ -78,6 +79,7 @@ const schema = [
       <SearchBar />
       <CategoryChips glass />
     </div>
+    <PhotoCredit src={hero} bottom={96} />
     <div class="hero-wave"><Wave color="var(--deep)" /></div>
   </section>
 
@@ -110,7 +112,7 @@ const schema = [
         {
           areas.map((a) => (
             <a class="area" href={a.href}>
-              <div class="area-media">{a.img ? <img src={a.img} alt="" loading="lazy" /> : <OceanArt hue={a.hue} time={a.time} />}</div>
+              <div class="area-media">{a.img ? <img src={a.img} alt={photoCredit(a.img)?.alt ?? ""} loading="lazy" /> : <OceanArt hue={a.hue} time={a.time} />}</div>
               <div class="area-text">
                 <h3>{a.name}</h3>
                 <p>{a.text}</p>

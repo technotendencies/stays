@@ -4,6 +4,8 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import StayImage from '../../components/StayImage.astro';
 import Icon from '../../components/Icon.astro';
 import Wave from '../../components/Wave.astro';
+import PhotoCredit from '../../components/PhotoCredit.astro';
+import { stayPhoto } from '../../lib/photos';
 import StayCard from '../../components/StayCard.astro';
 import StayMap from '../../components/StayMap.astro';
 import { stays } from '../../data/stays';
@@ -75,6 +77,7 @@ const schema = [
         </p>
       </div>
     </div>
+    <PhotoCredit src={stayPhoto(stay.slug, stay.image)} note={stay.verified ? undefined : "Illustrative photo"} bottom={84} />
     <div class="hero-wave"><Wave color="var(--sand-50)" /></div>
   </section>
 

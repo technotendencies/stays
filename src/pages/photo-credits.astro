@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { allPhotoCredits } from '../lib/photos';
+
+const credits = allPhotoCredits();
+const crumbs = [{ name: 'Photo credits', href: '/photo-credits/' }];
+---
+
+<Layout title="Photo Credits | Hiriketiya Stays" description="Credits and licences for the photos used on Hiriketiya Stays.">
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Thank you"
+    title="Photo <em>credits</em>"
+    lead="The photos on this site are shared by photographers under Creative Commons licences via Wikimedia Commons. Photos on demo listings are illustrative and do not show those properties."
+  />
+  <div class="wrap">
+    <ul class="list">
+      {
+        credits.map((c) => (
+          <li>
+            <img src={c.src} alt={c.alt} loading="lazy" />
+            <div>
+              <a href={c.sourceUrl} rel="noopener nofollow" target="_blank">
+                <b>{c.alt}</b>
+              </a>
+              <span>Photo by {c.creator}</span>
+              <span>
+                Licence:{' '}
+                <a href={c.licenseUrl} rel="noopener license" target="_blank">
+                  {c.license}
+                </a>
+                . Resized and cropped for this site.
+              </span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Layout>
+
+<style>
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 32px 0 0;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr));
+  }
+  li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    box-shadow: var(--shadow);
+  }
+  img {
+    width: 120px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex: none;
+  }
+  li div {
+    display: grid;
+    gap: 2px;
+    font-size: 0.9rem;
+  }
+  li span {
+    color: var(--muted);
+  }
+</style>

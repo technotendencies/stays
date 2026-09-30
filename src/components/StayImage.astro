@@ -1,7 +1,7 @@
 ---
 import type { Stay } from '../data/types';
 import OceanArt from './OceanArt.astro';
-import { stayPhoto } from '../lib/photos';
+import { photoCredit, stayPhoto } from '../lib/photos';
 
 interface Props {
   stay: Stay;
@@ -17,7 +17,7 @@ const dusk = stay.categories.includes('luxury') || stay.type === 'boutique';
 
 {
   src ? (
-    <img src={src} alt={`${stay.name}, Hiriketiya`} loading={eager ? 'eager' : 'lazy'} decoding="async" width="1200" height="800" />
+    <img src={src} alt={photoCredit(src)?.alt ?? `${stay.name}, Hiriketiya`} loading={eager ? 'eager' : 'lazy'} decoding="async" width="1200" height="800" />
   ) : (
     <OceanArt hue={hue} time={dusk ? 'dusk' : 'day'} label={`${stay.name} (photo coming soon)`} />
   )

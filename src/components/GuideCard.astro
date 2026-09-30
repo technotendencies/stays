@@ -1,7 +1,7 @@
 ---
 import OceanArt from './OceanArt.astro';
 import Icon from './Icon.astro';
-import { guidePhoto } from '../lib/photos';
+import { guidePhoto, photoCredit } from '../lib/photos';
 
 interface Props {
   id: string;
@@ -15,7 +15,7 @@ const img = guidePhoto(id);
 
 <a class="guide" href={`/guides/${id}/`}>
   <div class="media">
-    {img ? <img src={img} alt="" loading="lazy" /> : <OceanArt hue={172 + order * 5} time={order % 3 === 0 ? 'dusk' : 'day'} palms={order % 2 === 1} />}
+    {img ? <img src={img} alt={photoCredit(img)?.alt ?? ""} loading="lazy" /> : <OceanArt hue={172 + order * 5} time={order % 3 === 0 ? 'dusk' : 'day'} palms={order % 2 === 1} />}
   </div>
   <div class="text">
     <span class="title">{title}</span>

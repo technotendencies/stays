@@ -38,7 +38,7 @@ Guide → "Going in January? See the best surf stays →" → collection page �
 3. **Guide facts are drafts** (travel times, seasons, sights). Have someone local review them. The restaurant guide has a TODO for real venues.
 4. **Affiliate IDs**: add your Booking.com `aid` / Agoda `cid` in `src/data/site.ts` once approved. Affiliate links get `rel="sponsored"`.
 5. **Map tiles** use the public OpenStreetMap server, which is fine for development but not for production traffic. Switch to a tile provider (MapTiler, Stadia, Mapbox …) in `StayMap.astro`.
-6. **Photos**: every image slot shows an illustrated ocean scene until a photo is added. See *Adding photos* below.
+6. **Photos** are Creative Commons photos from Wikimedia Commons of the south coast (Mirissa, Tangalle, Dikwella, Weligama and nearby), credited on `/photo-credits/`. Photos on the demo stays are illustrative and labelled that way. Replace them with each property's own photos (with permission).
 
 ## Adding photos
 
@@ -53,7 +53,9 @@ Drop JPGs into `public/images/` with these names and rebuild. No code changes ar
 | Guide | `images/guides/<guide slug>.jpg` | 1600×900 |
 | Collection page header | `images/collections/<collection slug>.jpg` | 2400×1000 |
 
-Only use photos you have the rights to (your own, the property's with permission, or a licence such as Unsplash/Pexels). Keep each file under about 400 KB.
+Only use photos you have the rights to (your own, the property's with permission, or an open licence). Keep each file under about 400 KB.
+
+Openly licensed photos need a credit: add an entry to `src/data/photoCredits.json` (alt text, creator, licence, source link). It then shows as alt text, as a credit line on large photos, and on the `/photo-credits/` page. Remove the entry when you replace a photo with your own.
 
 ## Adding a stay
 
