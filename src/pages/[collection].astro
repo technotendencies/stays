@@ -1,0 +1,116 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import StayCard from '../components/StayCard.astro';
+import StayMap from '../components/StayMap.astro';
+import Faq from '../components/Faq.astro';
+import { collections, type Collection } from '../data/collections';
+import { allStays } from '../lib/stays';
+import { abs, breadcrumbSchema, faqSchema } from '../lib/schema';
+import { inline } from '../lib/inline';
+import { getCollection } from 'astro:content';
+
+export function getStaticPaths() {
+  return collections.map((c) => ({ params: { collection: c.slug }, props: { c } }));
+}
+
+const { c } = Astro.props as { c: Collection };
+let list = allStays();
+if (c.category) list = list.filter((s) => s.categories.includes(c.category!));
+if (c.filter) list = list.filter(c.filter);
+if (c.sort) list = [...list].sort(c.sort);
+
+const guides = (await getCollection('guides')).filter((g) => c.relatedGuides.includes(g.id));
+const others = collections.filter((o) => o.slug !== c.slug);
+const crumbs = [{ name: c.h1, href: `/${c.slug}/` }];
+const ranked = c.slug.startsWith('best-');
+const year = new Date().getFullYear();
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: c.h1,
+    itemListElement: list.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: abs(`/stays/${s.slug}/`), name: s.name })),
+  },
+  faqSchema(c.faq),
+].filter(Boolean) as object[];
+---
+
+<Layout title={c.metaTitle} description={c.metaDescription} schema={schema}>
+  <div class="wrap">
+    <Breadcrumbs items={crumbs} />
+    <header class="intro">
+      <p class="eyebrow">Updated {year}</p>
+      <h1>{c.h1}</h1>
+      {c.intro.map((p) => <p class="lead" set:html={inline(p)} />)}
+    </header>
+    <CategoryChips current={c.category} />
+
+    <section class="section">
+      <div class="section-head">
+        <h2>{list.length} {c.label.toLowerCase() === 'where to stay' ? 'stays' : c.label.toLowerCase()} on the map</h2>
+        <a class="link-arrow" href="/map/">Open full map →</a>
+      </div>
+      <StayMap stays={list} height="380px" />
+    </section>
+
+    <section>
+      <div class="grid">
+        {list.map((s, i) => <StayCard stay={s} rank={ranked ? i + 1 : undefined} showMonthly={c.category === 'long-stays'} />)}
+      </div>
+    </section>
+
+    <Faq items={c.faq} />
+
+    {
+      guides.length > 0 && (
+        <section class="related">
+          <h2>Plan your trip</h2>
+          <ul>
+            {guides.map((g) => (
+              <li>
+                <a href={`/guides/${g.id}/`}>{g.data.title} →</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="related">
+      <h2>More ways to stay in Hiriketiya</h2>
+      <ul class="others">
+        {
+          others.map((o) => (
+            <li>
+              <a href={`/${o.slug}/`}>{o.h1}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .intro {
+    margin-bottom: 24px;
+  }
+  .intro h1 {
+    margin-bottom: 16px;
+  }
+  .intro .lead {
+    margin: 0 0 12px;
+  }
+  .related ul {
+    padding-left: 20px;
+  }
+  .others {
+    columns: 2 260px;
+  }
+  .related {
+    margin-top: 40px;
+  }
+</style>

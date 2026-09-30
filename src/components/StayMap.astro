@@ -1,0 +1,353 @@
+---
+import { places } from '../data/places';
+import { site } from '../data/site';
+import { allStays, stayForClient } from '../lib/stays';
+import type { Stay } from '../data/types';
+
+interface Props {
+  /** Stays to show. Defaults to every stay. */
+  stays?: Stay[];
+  filters?: boolean;
+  list?: boolean;
+  height?: string;
+  /** Slug of a stay to centre on and highlight. */
+  focus?: string;
+  zoom?: number;
+}
+
+const { stays = allStays(), filters = false, list = false, height = '460px', focus, zoom = 16 } = Astro.props;
+const data = {
+  stays: stays.map(stayForClient),
+  places: places.map((p) => ({ ...p })),
+  center: stays.find((s) => s.slug === focus)?.coords ?? site.center,
+  zoom,
+  focus: focus ?? null,
+};
+const placeFilters = [
+  { key: 'beach', label: 'Beach', icon: '🏖️', on: true },
+  { key: 'surf', label: 'Surf', icon: '🏄', on: true },
+  { key: 'restaurant', label: 'Restaurants', icon: '🍽️', on: false },
+];
+const stayFilters = [
+  { key: 'villas', label: 'Villas' },
+  { key: 'hotels', label: 'Hotels' },
+  { key: 'budget', label: 'Budget' },
+  { key: 'luxury', label: 'Luxury' },
+];
+---
+
+<div class:list={['stay-map', { 'with-list': list }]} data-stay-map={JSON.stringify(data)}>
+  {
+    filters && (
+      <div class="filters chips" role="group" aria-label="Map filters">
+        {placeFilters.map((f) => (
+          <button type="button" class="chip" data-place-filter={f.key} aria-pressed={f.on ? "true" : "false"}>
+            <span aria-hidden="true">{f.icon}</span> {f.label}
+          </button>
+        ))}
+        <span class="sep" aria-hidden="true" />
+        {stayFilters.map((f) => (
+          <button type="button" class="chip" data-stay-filter={f.key} aria-pressed="false">
+            {f.label}
+          </button>
+        ))}
+      </div>
+    )
+  }
+  <div class="layout">
+    <div class="canvas" style={`height:${height}`} data-map-canvas></div>
+    {
+      list && (
+        <ol class="list" data-map-list aria-label="Stays on the map">
+          {data.stays.map((s) => (
+            <li data-slug={s.slug}>
+              <button type="button" data-focus={s.slug}>
+                <span class="n">{s.name}</span>
+                <span class="d">
+                  {s.typeLabel} · {s.distance}
+                </span>
+                <span class="p">${s.priceFrom}/night</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      )
+    }
+  </div>
+  <p class="count muted" data-map-count aria-live="polite"></p>
+</div>
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+  import type { ClientStay } from '../lib/stays';
+
+  interface MapData {
+    stays: ClientStay[];
+    places: { slug: string; name: string; kind: string; coords: [number, number]; note: string; verified: boolean }[];
+    center: [number, number];
+    zoom: number;
+    focus: string | null;
+  }
+
+  const placeIcons: Record<string, string> = { beach: '🏖️', surf: '🏄', restaurant: '🍽️', sight: '📍' };
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  function stayPopup(s: ClientStay) {
+    return `<div class="pop">
+      <strong>${esc(s.name)}</strong>
+      <div class="pop-type">${esc(s.typeLabel)}${s.verified ? '' : ' · <em>demo listing</em>'}</div>
+      <ul>
+        <li>${esc(s.distance)}</li>
+        ${s.amenities.map((a) => `<li>${esc(a)}</li>`).join('')}
+        <li><b>$${s.priceFrom}</b>/night</li>
+        <li>${esc(s.bestFor)}</li>
+      </ul>
+      <a class="pop-cta" href="${s.url}">Check availability →</a>
+    </div>`;
+  }
+
+  function matchesStayFilter(s: ClientStay, key: string) {
+    switch (key) {
+      case 'villas':
+        return s.type === 'villa';
+      case 'hotels':
+        return ['hotel', 'boutique', 'guesthouse', 'hostel'].includes(s.type);
+      case 'budget':
+        return s.categories.includes('budget');
+      case 'luxury':
+        return s.categories.includes('luxury');
+      default:
+        return true;
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-stay-map]').forEach((root) => {
+    const data: MapData = JSON.parse(root.dataset.stayMap!);
+    const canvas = root.querySelector<HTMLElement>('[data-map-canvas]')!;
+    const map = L.map(canvas, { scrollWheelZoom: false }).setView(data.center, data.zoom);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+    // Only hijack the scroll wheel once the user has engaged with the map.
+    map.on('click focus', () => map.scrollWheelZoom.enable());
+
+    const placeLayers: Record<string, L.LayerGroup> = {};
+    for (const p of data.places) {
+      placeLayers[p.kind] ??= L.layerGroup();
+      L.marker(p.coords, {
+        icon: L.divIcon({ className: `poi poi-${p.kind}`, html: placeIcons[p.kind] ?? '📍', iconSize: [30, 30] }),
+        title: p.name,
+        keyboard: true,
+      })
+        .bindPopup(`<div class="pop"><strong>${esc(p.name)}</strong><p>${esc(p.note)}</p></div>`)
+        .addTo(placeLayers[p.kind]);
+    }
+
+    const stayMarkers = new Map<string, L.Marker>();
+    for (const s of data.stays) {
+      const marker = L.marker(s.coords, {
+        icon: L.divIcon({
+          className: `price-pin${s.slug === data.focus ? ' focused' : ''}`,
+          html: `<span>$${s.priceFrom}</span>`,
+          iconSize: undefined as unknown as L.PointExpression,
+        }),
+        title: s.name,
+        riseOnHover: true,
+        zIndexOffset: s.slug === data.focus ? 1000 : 0,
+      }).bindPopup(stayPopup(s), { maxWidth: 260 });
+      stayMarkers.set(s.slug, marker);
+    }
+
+    const activePlaces = new Set<string>();
+    const activeStayFilters = new Set<string>();
+    root.querySelectorAll<HTMLButtonElement>('[data-place-filter][aria-pressed="true"]').forEach((b) => activePlaces.add(b.dataset.placeFilter!));
+    if (!root.querySelector('[data-place-filter]')) Object.keys(placeLayers).filter((k) => k !== 'restaurant').forEach((k) => activePlaces.add(k));
+
+    const count = root.querySelector<HTMLElement>('[data-map-count]');
+    const listItems = root.querySelectorAll<HTMLElement>('[data-map-list] li');
+
+    function render() {
+      for (const [kind, layer] of Object.entries(placeLayers)) {
+        if (activePlaces.has(kind)) layer.addTo(map);
+        else layer.remove();
+      }
+      let shown = 0;
+      for (const s of data.stays) {
+        const visible = activeStayFilters.size === 0 || [...activeStayFilters].some((k) => matchesStayFilter(s, k));
+        const m = stayMarkers.get(s.slug)!;
+        if (visible) {
+          m.addTo(map);
+          shown++;
+        } else m.remove();
+        listItems.forEach((li) => {
+          if (li.dataset.slug === s.slug) li.hidden = !visible;
+        });
+      }
+      if (count) count.textContent = `${shown} ${shown === 1 ? 'stay' : 'stays'} on the map`;
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-place-filter]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.placeFilter!;
+        const on = btn.getAttribute('aria-pressed') !== 'true';
+        btn.setAttribute('aria-pressed', String(on));
+        on ? activePlaces.add(k) : activePlaces.delete(k);
+        render();
+      }),
+    );
+    root.querySelectorAll<HTMLButtonElement>('[data-stay-filter]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.stayFilter!;
+        const on = btn.getAttribute('aria-pressed') !== 'true';
+        btn.setAttribute('aria-pressed', String(on));
+        on ? activeStayFilters.add(k) : activeStayFilters.delete(k);
+        render();
+      }),
+    );
+    root.querySelectorAll<HTMLButtonElement>('[data-focus]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const m = stayMarkers.get(btn.dataset.focus!);
+        if (!m) return;
+        map.setView(m.getLatLng(), Math.max(map.getZoom(), 17));
+        m.openPopup();
+        canvas.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }),
+    );
+
+    render();
+    if (data.focus) stayMarkers.get(data.focus)?.openPopup();
+    else if (data.stays.length > 1) {
+      map.fitBounds(L.latLngBounds(data.stays.map((s) => s.coords)).pad(0.15), { maxZoom: data.zoom });
+    }
+  });
+</script>
+
+<style>
+  .filters {
+    margin-bottom: 14px;
+    align-items: center;
+  }
+  .sep {
+    width: 1px;
+    height: 24px;
+    background: var(--line);
+    margin: 0 4px;
+  }
+  .layout {
+    display: grid;
+    gap: 16px;
+  }
+  .with-list .layout {
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 900px) {
+    .with-list .layout {
+      grid-template-columns: 1fr 320px;
+    }
+  }
+  .canvas {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    z-index: 0;
+    background: var(--ocean-100);
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 640px;
+    overflow-y: auto;
+  }
+  .list button {
+    width: 100%;
+    text-align: left;
+    display: grid;
+    gap: 2px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font: inherit;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .list button:hover {
+    border-color: var(--ocean-500);
+  }
+  .n {
+    font-weight: 600;
+  }
+  .d {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ocean-700);
+  }
+  .count {
+    font-size: 0.85rem;
+    margin: 8px 0 0;
+  }
+  :global(.price-pin) {
+    background: #fff;
+    color: var(--ink);
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+    font: 700 13px/1 var(--font-body);
+    padding: 6px 9px;
+    white-space: nowrap;
+    width: auto !important;
+    height: auto !important;
+    transform-origin: center;
+  }
+  :global(.price-pin:hover),
+  :global(.price-pin.focused) {
+    background: var(--ocean-900);
+    color: #fff;
+  }
+  :global(.poi) {
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 6px rgb(0 0 0 / 0.25);
+    font-size: 16px;
+  }
+  :global(.pop) {
+    font-family: var(--font-body);
+    font-size: 14px;
+    min-width: 190px;
+  }
+  :global(.pop strong) {
+    font-size: 15px;
+  }
+  :global(.pop-type) {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  :global(.pop ul) {
+    margin: 0 0 10px;
+    padding-left: 16px;
+  }
+  :global(.pop p) {
+    margin: 6px 0 0;
+  }
+  :global(.pop-cta) {
+    display: inline-block;
+    background: var(--coral);
+    color: #fff !important;
+    padding: 8px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>

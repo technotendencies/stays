@@ -1,0 +1,43 @@
+---
+import type { Faq } from '../data/collections';
+
+interface Props {
+  items: Faq[];
+  title?: string;
+}
+const { items, title = 'Frequently asked questions' } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="faq">
+      <h2>{title}</h2>
+      {items.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+  )
+}
+
+<style>
+  .faq {
+    max-width: 780px;
+    margin: 48px 0;
+  }
+  details {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  details p {
+    margin: 10px 0 0;
+    color: var(--muted);
+  }
+</style>

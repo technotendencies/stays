@@ -1,0 +1,71 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+import { breadcrumbSchema } from '../../lib/schema';
+
+const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order);
+const crumbs = [{ name: 'Guides', href: '/guides/' }];
+---
+
+<Layout
+  title="Hiriketiya Travel Guides — Weather, Surf, Food & Getting There"
+  description="Everything you need to plan a trip to Hiriketiya, Sri Lanka: when to go, surf season, weather, restaurants, things to do and how to get there."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <div class="wrap">
+    <Breadcrumbs items={crumbs} />
+    <h1>Hiriketiya guides</h1>
+    <p class="lead">Local, no-fluff guides to planning your time in Hiriketiya — and finding the right place to stay.</p>
+    <div class="list">
+      {
+        guides.map((g) => (
+          <a class="g" href={`/guides/${g.id}/`}>
+            <span class="e" aria-hidden="true">
+              {g.data.emoji}
+            </span>
+            <span>
+              <span class="t">{g.data.title}</span>
+              <span class="d">{g.data.description}</span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  h1 {
+    margin: 8px 0;
+  }
+  .list {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  }
+  .g {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .e {
+    font-size: 1.8rem;
+  }
+  .t {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+  }
+  .d {
+    display: block;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+</style>

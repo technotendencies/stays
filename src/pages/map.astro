@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StayMap from '../components/StayMap.astro';
+import { breadcrumbSchema } from '../lib/schema';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const crumbs = [{ name: 'Stay map', href: '/map/' }];
+---
+
+<Layout
+  title="Hiriketiya Map — Every Stay, Beach, Surf Break & Café"
+  description="Interactive map of Hiriketiya, Sri Lanka: every hotel, villa and guesthouse with price and distance to the beach, plus surf spots and restaurants."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <div class="wrap">
+    <Breadcrumbs items={crumbs} />
+    <h1>The Hiriketiya Stay Map</h1>
+    <p class="lead">Tap a price to see the stay. Toggle beaches, surf breaks and restaurants, or narrow down to villas, hotels, budget or luxury.</p>
+    <StayMap filters list height="min(72vh, 680px)" />
+  </div>
+</Layout>
+
+<style>
+  h1 {
+    margin: 8px 0 8px;
+  }
+  .lead {
+    margin: 0 0 20px;
+  }
+</style>

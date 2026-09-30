@@ -1,0 +1,152 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FunnelCta from '../../components/FunnelCta.astro';
+import MonthFunnel from '../../components/MonthFunnel.astro';
+import Faq from '../../components/Faq.astro';
+import { getCollection, render } from 'astro:content';
+import { getCollection as getStayCollection } from '../../data/collections';
+import { allStays } from '../../lib/stays';
+import { abs, breadcrumbSchema, faqSchema } from '../../lib/schema';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((g) => ({ params: { slug: g.id }, props: { guide: g } }));
+}
+
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
+const f = guide.data.funnel;
+const target = getStayCollection(f.collection);
+if (!target) throw new Error(`Guide ${guide.id} funnels to unknown collection "${f.collection}"`);
+
+let funnelStays = allStays();
+if (target.category) funnelStays = funnelStays.filter((s) => s.categories.includes(target.category!));
+if (target.filter) funnelStays = funnelStays.filter(target.filter);
+if (target.sort) funnelStays = [...funnelStays].sort(target.sort);
+funnelStays = funnelStays.slice(0, 3);
+
+const others = (await getCollection('guides')).filter((g) => g.id !== guide.id).sort((a, b) => a.data.order - b.data.order);
+const crumbs = [
+  { name: 'Guides', href: '/guides/' },
+  { name: guide.data.title, href: `/guides/${guide.id}/` },
+];
+const updated = guide.data.updated;
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guide.data.title,
+    description: guide.data.description,
+    dateModified: updated.toISOString(),
+    mainEntityOfPage: abs(`/guides/${guide.id}/`),
+    publisher: { '@type': 'Organization', name: site.name, url: site.url },
+  },
+  faqSchema(guide.data.faq),
+].filter(Boolean) as object[];
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Layout title={guide.data.metaTitle} description={guide.data.description} schema={schema}>
+  <div class="wrap">
+    <Breadcrumbs items={crumbs} />
+    <article>
+      <header>
+        <p class="eyebrow">Hiriketiya guide · Updated {updated.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</p>
+        <h1>{guide.data.title}</h1>
+        <p class="lead">{guide.data.description}</p>
+      </header>
+
+      <a class="quick" href={`/${target.slug}/`}>
+        <span aria-hidden="true">🏝️</span>
+        <span>{f.headline} <b>{f.cta}</b></span>
+      </a>
+
+      {
+        toc.length > 2 && (
+          <nav class="toc" aria-label="On this page">
+            <p>On this page</p>
+            <ol>
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      {guide.data.months && <MonthFunnel focus={guide.data.months} />}
+
+      <FunnelCta headline={f.headline} cta={f.cta} href={`/${target.slug}/`} stays={funnelStays} />
+
+      <Faq items={guide.data.faq} />
+    </article>
+
+    <section class="more">
+      <h2>More Hiriketiya guides</h2>
+      <ul>
+        {
+          others.map((g) => (
+            <li>
+              <a href={`/guides/${g.id}/`}>
+                {g.data.emoji} {g.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  header h1 {
+    margin: 8px 0 12px;
+    max-width: 20ch;
+  }
+  .quick {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 24px 0;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--coral);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--ink);
+    max-width: 70ch;
+  }
+  .quick b {
+    color: var(--coral);
+    white-space: nowrap;
+  }
+  .toc {
+    background: var(--sand-100);
+    border-radius: 12px;
+    padding: 14px 20px;
+    max-width: 70ch;
+    margin-bottom: 24px;
+  }
+  .toc p {
+    margin: 0 0 6px;
+    font-weight: 600;
+  }
+  .toc ol {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .more ul {
+    columns: 2 260px;
+    padding-left: 20px;
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site } from '../data/site';
+
+const subject = encodeURIComponent('List my property on Hiriketiya Stays');
+const body = encodeURIComponent('Property name:\nType (villa / hotel / guesthouse …):\nLink (website, Booking.com, Airbnb):\nWhatsApp:\n');
+---
+
+<Layout
+  title="List Your Property — Hiriketiya Stays"
+  description="Own a villa, hotel or guesthouse in Hiriketiya? Get listed on Hiriketiya Stays and receive direct bookings from travellers planning their trip."
+>
+  <div class="wrap narrow">
+    <p class="eyebrow">For hosts</p>
+    <h1>List your property in Hiriketiya</h1>
+    <p class="lead">
+      We help travellers find the right stay in Hiriketiya — and send them straight to you. Get listed with photos, your location on the
+      Hiriketiya Stay Map and a direct booking link.
+    </p>
+    <ul>
+      <li>Featured on the stay map, category pages and our guides</li>
+      <li>Direct booking link (your website or WhatsApp) — no OTA commission on direct deals</li>
+      <li>Accurate distance to the beach, amenities and "best for" tags</li>
+    </ul>
+    <a class="btn coral" href={`mailto:${site.email}?subject=${subject}&body=${body}`}>Get in touch →</a>
+  </div>
+</Layout>
+
+<style>
+  .narrow {
+    max-width: 760px;
+    padding-top: 40px;
+  }
+  ul {
+    margin: 20px 0 28px;
+  }
+</style>

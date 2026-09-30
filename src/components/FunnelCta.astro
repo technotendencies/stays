@@ -1,0 +1,54 @@
+---
+import type { Stay } from '../data/types';
+import StayCard from './StayCard.astro';
+
+interface Props {
+  headline: string;
+  cta: string;
+  href: string;
+  stays?: Stay[];
+}
+const { headline, cta, href, stays = [] } = Astro.props;
+---
+
+<aside class="funnel">
+  <div class="head">
+    <p class="h">{headline}</p>
+    <a class="btn coral" href={href}>{cta}</a>
+  </div>
+  {
+    stays.length > 0 && (
+      <div class="grid">
+        {stays.map((s) => (
+          <StayCard stay={s} />
+        ))}
+      </div>
+    )
+  }
+</aside>
+
+<style>
+  .funnel {
+    margin: 40px 0;
+    padding: 24px;
+    background: var(--ocean-100);
+    border-radius: var(--radius);
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .h {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    margin: 0;
+    color: var(--ocean-900);
+  }
+  .grid {
+    margin-top: 20px;
+  }
+</style>

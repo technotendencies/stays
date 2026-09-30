@@ -1,0 +1,158 @@
+---
+import type { Stay } from '../data/types';
+import StayImage from './StayImage.astro';
+import { amenityLabels, beachDistance, formatDistance, priceSymbols, typeLabels } from '../lib/stays';
+
+interface Props {
+  stay: Stay;
+  rank?: number;
+  showMonthly?: boolean;
+}
+const { stay, rank, showMonthly = false } = Astro.props;
+const d = beachDistance(stay);
+const keyAmenities = stay.amenities.filter((a) => ['pool', 'ac', 'surfboards', 'kitchen', 'sea-view', 'workspace'].includes(a)).slice(0, 3);
+---
+
+<article class="card" data-sleeps={stay.type === 'hostel' ? 99 : stay.sleeps} data-categories={stay.categories.join(' ')} data-price={stay.priceFrom}>
+  <a href={`/stays/${stay.slug}/`} class="media" tabindex="-1" aria-hidden="true">
+    <StayImage stay={stay} />
+    <span class="best">{stay.bestFor[0]}</span>
+    {rank && <span class="rank">#{rank}</span>}
+  </a>
+  <div class="body">
+    <div class="meta">
+      <span>{typeLabels[stay.type]} · {stay.area}</span>
+      {stay.rating && <span class="rating">★ {stay.rating.toFixed(1)}</span>}
+    </div>
+    <h3><a href={`/stays/${stay.slug}/`}>{stay.name}</a></h3>
+    <p class="dist">{formatDistance(d.meters)}</p>
+    <p class="summary">{stay.summary}</p>
+    <ul class="amen">{keyAmenities.map((a) => <li>{amenityLabels[a]}</li>)}</ul>
+    <div class="foot">
+      <span class="price">
+        {showMonthly && stay.monthlyFrom ? (
+          <>
+            <b>${stay.monthlyFrom.toLocaleString('en-US')}</b>/month
+          </>
+        ) : (
+          <>
+            from <b>${stay.priceFrom}</b>/night <span class="lvl">{priceSymbols(stay.priceFrom)}</span>
+          </>
+        )}
+      </span>
+      <a class="link-arrow" href={`/stays/${stay.slug}/`}>View stay →</a>
+    </div>
+    {!stay.verified && <span class="badge demo" title="Demo listing — details not yet verified">Demo listing</span>}
+  </div>
+</article>
+
+<style>
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .media {
+    position: relative;
+    aspect-ratio: 10 / 7;
+    display: block;
+    overflow: hidden;
+  }
+  .best,
+  .rank {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--ink);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 999px;
+  }
+  .rank {
+    left: auto;
+    right: 12px;
+    background: var(--ocean-900);
+    color: #fff;
+  }
+  .body {
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .rating {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  h3 {
+    margin: 0;
+  }
+  h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  h3 a:hover {
+    color: var(--ocean-700);
+  }
+  .dist {
+    margin: 0;
+    font-weight: 500;
+    color: var(--ocean-700);
+    font-size: 0.95rem;
+  }
+  .summary {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .amen {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .amen li {
+    font-size: 0.8rem;
+    background: var(--sand-100);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .foot {
+    margin-top: auto;
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .price {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .price b {
+    color: var(--ink);
+    font-size: 1.15rem;
+  }
+  .lvl {
+    color: var(--palm);
+    font-weight: 600;
+    margin-left: 2px;
+  }
+  .badge {
+    align-self: flex-start;
+  }
+</style>

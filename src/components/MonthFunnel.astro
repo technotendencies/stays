@@ -1,0 +1,90 @@
+---
+import { months } from '../data/seasons';
+
+interface Props {
+  /** Which angle to lead with in each month card. */
+  focus?: 'surf' | 'weather';
+}
+const { focus = 'weather' } = Astro.props;
+
+function cta(m: (typeof months)[number]) {
+  if (focus === 'surf' && (m.surf === 'Best' || m.surf === 'Good'))
+    return { text: `Going in ${m.name}? See the best surf stays →`, href: '/hiriketiya-surf-accommodation/' };
+  if (m.crowds === 'High') return { text: `Going in ${m.name}? Book early — see popular stays →`, href: '/best-hotels-in-hiriketiya/' };
+  if (m.crowds === 'Low') return { text: `Going in ${m.name}? Off-season deals on long stays →`, href: '/hiriketiya-long-term-rental/' };
+  return { text: `Going in ${m.name}? Find your stay →`, href: '/where-to-stay-in-hiriketiya/' };
+}
+const tone = { Best: 'good', Good: 'good', Fair: 'mid', 'Off-season': 'low', 'Dry & sunny': 'good', 'Mostly dry': 'good', Mixed: 'mid', Rainy: 'low' } as const;
+---
+
+<div class="months">
+  {
+    months.map((m) => (
+      <div class="m" id={m.slug}>
+        <h3>{m.name}</h3>
+        <p class="tags">
+          <span class={`t ${tone[m.weather]}`}>☀️ {m.weather}</span>
+          <span class={`t ${tone[m.surf]}`}>🏄 {m.surf}</span>
+          <span class="t">👥 {m.crowds} crowds</span>
+        </p>
+        <p class="note">{m.note}</p>
+        <a class="link-arrow" href={cta(m).href}>
+          {cta(m).text}
+        </a>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .months {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    margin: 24px 0;
+  }
+  .m {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0;
+  }
+  .t {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--sand-100);
+  }
+  .t.good {
+    background: #dcf2e3;
+  }
+  .t.mid {
+    background: #fff1cc;
+  }
+  .t.low {
+    background: #f6dcd5;
+  }
+  .note {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+    flex: 1;
+  }
+  .link-arrow {
+    font-size: 0.9rem;
+    white-space: normal;
+  }
+</style>

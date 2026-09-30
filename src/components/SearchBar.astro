@@ -1,0 +1,115 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<form class:list={['search', { compact }]} action="/stays/" method="get" role="search" data-search-form>
+  <label class="field when">
+    <span>When are you coming?</span>
+    <div class="dates">
+      <input type="date" name="checkin" aria-label="Check-in date" />
+      <span aria-hidden="true">→</span>
+      <input type="date" name="checkout" aria-label="Check-out date" />
+    </div>
+  </label>
+  <label class="field">
+    <span>Guests</span>
+    <select name="guests">
+      {[1, 2, 3, 4, 5, 6, 8, 10].map((n) => <option value={n} selected={n === 2}>{n} {n === 1 ? 'guest' : 'guests'}</option>)}
+    </select>
+  </label>
+  <button class="btn coral" type="submit">Find stays</button>
+</form>
+
+<script>
+  // Keep checkout after checkin, and remember the search so booking links can carry the dates.
+  document.querySelectorAll<HTMLFormElement>('[data-search-form]').forEach((form) => {
+    const checkin = form.elements.namedItem('checkin') as HTMLInputElement;
+    const checkout = form.elements.namedItem('checkout') as HTMLInputElement;
+    const guests = form.elements.namedItem('guests') as HTMLSelectElement;
+    const today = new Date().toISOString().slice(0, 10);
+    checkin.min = today;
+    checkout.min = today;
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('checkin')) checkin.value = params.get('checkin')!;
+    if (params.get('checkout')) checkout.value = params.get('checkout')!;
+    if (params.get('guests')) guests.value = params.get('guests')!;
+
+    checkin.addEventListener('change', () => {
+      checkout.min = checkin.value || today;
+      if (checkin.value && (!checkout.value || checkout.value <= checkin.value)) {
+        const d = new Date(checkin.value);
+        d.setDate(d.getDate() + 4);
+        checkout.value = d.toISOString().slice(0, 10);
+      }
+    });
+
+    form.addEventListener('submit', () => {
+      try {
+        sessionStorage.setItem('hs-search', JSON.stringify({ checkin: checkin.value, checkout: checkout.value, guests: guests.value }));
+      } catch {}
+      // Don't send empty fields in the URL.
+      [checkin, checkout].forEach((el) => {
+        if (!el.value) el.disabled = true;
+      });
+    });
+  });
+</script>
+
+<style>
+  .search {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    background: var(--card);
+    padding: 12px;
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 760px;
+  }
+  @media (min-width: 720px) {
+    .search {
+      grid-template-columns: 1.8fr 1fr auto;
+      align-items: end;
+      border-radius: 999px;
+      padding: 10px 10px 10px 26px;
+    }
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .field > span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .dates {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--muted);
+  }
+  input,
+  select {
+    font: inherit;
+    border: 0;
+    background: var(--sand-50);
+    border-radius: 10px;
+    padding: 8px 10px;
+    color: var(--ink);
+    min-width: 0;
+    width: 100%;
+  }
+  .btn {
+    padding: 16px 26px;
+  }
+</style>
