@@ -2,7 +2,7 @@
 import type { Stay } from '../data/types';
 import StayImage from './StayImage.astro';
 import Icon from './Icon.astro';
-import { beachDistance, formatDistance, priceSymbols, typeLabels } from '../lib/stays';
+import { beachDistance, formatDistance, isDemo, priceSymbols, typeLabels } from '../lib/stays';
 
 interface Props {
   stay: Stay;
@@ -14,7 +14,7 @@ const d = beachDistance(stay);
 const href = `/stays/${stay.slug}/`;
 ---
 
-<article class="card" data-sleeps={stay.type === 'hostel' ? 99 : stay.sleeps} data-categories={stay.categories.join(' ')} data-price={stay.priceFrom}>
+<article class="card" data-sleeps={stay.type === 'hostel' || !stay.sleeps ? 99 : stay.sleeps} data-categories={stay.categories.join(' ')} data-price={stay.priceFrom ?? ''}>
   <a href={href} class="media" tabindex="-1" aria-hidden="true">
     <StayImage stay={stay} />
     {rank && <span class="rank">{String(rank).padStart(2, '0')}</span>}
@@ -39,20 +39,25 @@ const href = `/stays/${stay.slug}/`;
           <span>
             <b>${stay.monthlyFrom.toLocaleString('en-US')}</b> / month
           </span>
+        ) : stay.priceFrom ? (
+            <span>
+              from <b>${stay.priceFrom}</b> / night
+            </span>
         ) : (
           <span>
-            from <b>${stay.priceFrom}</b> / night
+            <b>See prices</b>
           </span>
         )}
         <span class="type">
-          {typeLabels[stay.type]} · {priceSymbols(stay.priceFrom)}
+          {typeLabels[stay.type]}
+          {stay.priceFrom && <> · {priceSymbols(stay.priceFrom)}</>}
         </span>
       </span>
       <a class="link-arrow" href={href}>
         View stay <Icon name="arrowRight" size={16} />
       </a>
     </div>
-    {!stay.verified && <span class="badge demo" title="Demo listing: details not yet verified">Demo listing</span>}
+    {isDemo(stay) && <span class="badge demo" title="Demo listing: an invented example, not a real property">Demo listing</span>}
   </div>
 </article>
 

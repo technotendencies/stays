@@ -43,7 +43,12 @@ export function priceLevel(price: number): 1 | 2 | 3 | 4 {
   return 4;
 }
 
-export const priceSymbols = (price: number) => '$'.repeat(priceLevel(price));
+export const priceSymbols = (price?: number) => (price ? '$'.repeat(priceLevel(price)) : '');
+
+export const isDemo = (stay: Stay) => stay.status === 'demo';
+
+/** Formats the nightly price, or a prompt to check prices when the property has not published one. */
+export const priceLabel = (stay: Stay) => (stay.priceFrom ? `from $${stay.priceFrom}` : 'See prices');
 
 export const typeLabels: Record<StayType, string> = {
   villa: 'Villa',
@@ -101,7 +106,9 @@ function addParam(url: string, key: string, value: string) {
 }
 
 export function allStays(): Stay[] {
-  return [...stays].sort((a, b) => Number(!!b.featured) - Number(!!a.featured) || (b.rating ?? 0) - (a.rating ?? 0));
+  // Real stays first, then featured, then rating.
+  const real = (s: Stay) => Number(s.status !== 'demo');
+  return [...stays].sort((a, b) => real(b) - real(a) || Number(!!b.featured) - Number(!!a.featured) || (b.rating ?? 0) - (a.rating ?? 0));
 }
 
 export function getStay(slug: string) {
@@ -135,13 +142,13 @@ export function stayForClient(stay: Stay) {
     typeLabel: typeLabels[stay.type],
     categories: stay.categories,
     coords: stay.coords,
-    priceFrom: stay.priceFrom,
-    priceLevel: priceLevel(stay.priceFrom),
+    priceFrom: stay.priceFrom ?? null,
+    pin: stay.priceFrom ? `$${stay.priceFrom}` : typeLabels[stay.type],
     distance: formatDistance(d.meters),
     amenities: stay.amenities.filter((a) => ['pool', 'ac', 'kitchen', 'surfboards', 'sea-view'].includes(a)).map((a) => amenityLabels[a]),
     bestFor: stay.bestFor[0],
     sleeps: stay.sleeps,
-    verified: stay.verified,
+    demo: isDemo(stay),
     url: `/stays/${stay.slug}/`,
   };
 }

@@ -5,7 +5,7 @@ export const site = {
   tagline: 'The easiest way to find where to stay in Hiriketiya.',
   email: 'hello@hiriketiyastays.com',
   /** Hiriketiya bay, used to centre maps. */
-  center: [5.9648, 80.7078] as [number, number],
+  center: [5.9635, 80.707] as [number, number],
 };
 
 /**

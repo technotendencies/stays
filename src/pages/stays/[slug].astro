@@ -19,6 +19,7 @@ import {
   similarStays,
   typeLabels,
   walkMinutes,
+  isDemo,
 } from '../../lib/stays';
 import { abs, breadcrumbSchema } from '../../lib/schema';
 import type { Stay } from '../../data/types';
@@ -46,17 +47,18 @@ const schema = [
     url: abs(`/stays/${stay.slug}/`),
     address: { '@type': 'PostalAddress', addressLocality: stay.area === 'Dikwella' ? 'Dikwella' : 'Hiriketiya', addressRegion: 'Southern Province', addressCountry: 'LK' },
     geo: { '@type': 'GeoCoordinates', latitude: stay.coords[0], longitude: stay.coords[1] },
-    priceRange: priceSymbols(stay.priceFrom),
+    ...(stay.priceFrom ? { priceRange: priceSymbols(stay.priceFrom) } : {}),
+    ...(stay.website ? { sameAs: [stay.website] } : {}),
     amenityFeature: stay.amenities.map((a) => ({ '@type': 'LocationFeatureSpecification', name: amenityLabels[a], value: true })),
   },
 ];
 ---
 
 <Layout
-  title={`${stay.name}, Hiriketiya | ${typeLabels[stay.type]} from $${stay.priceFrom}/night`}
+  title={`${stay.name}, Hiriketiya | ${typeLabels[stay.type]}${stay.priceFrom ? ` from $${stay.priceFrom}/night` : ''}`}
   description={`${stay.summary} ${formatDistance(d.meters)}. ${stay.bestFor.join(', ')}.`}
-  schema={stay.verified ? schema : [breadcrumbSchema(crumbs)]}
-  noindex={!stay.verified}
+  schema={isDemo(stay) ? [breadcrumbSchema(crumbs)] : schema}
+  noindex={isDemo(stay)}
 >
   <section class="stay-hero dark">
     <div class="media"><StayImage stay={stay} eager /></div>
@@ -69,13 +71,13 @@ const schema = [
         <p class="sub">
           <span class="dist"><Icon name="footprints" size={16} /> {formatDistance(d.meters)}</span>
           {stay.rating && <span><Icon name="star" size={16} /> {stay.rating.toFixed(1)}</span>}
-          <span><Icon name="users" size={16} /> Sleeps {stay.sleeps}</span>
+          {stay.sleeps && <span><Icon name="users" size={16} /> Sleeps {stay.sleeps}</span>}
           {stay.bedrooms && <span><Icon name="bed" size={16} /> {stay.bedrooms} bedroom{stay.bedrooms > 1 ? 's' : ''}</span>}
-          {!stay.verified && <span class="badge demo">Demo listing</span>}
+          {isDemo(stay) && <span class="badge demo">Demo listing</span>}
         </p>
       </div>
     </div>
-    {!stay.verified && <span class="illustrative">Illustrative photo</span>}
+    {!stay.ownPhoto && <span class="illustrative">Illustrative photo, not the property</span>}
     <div class="hero-wave"><Wave color="var(--sand-50)" /></div>
   </section>
 
@@ -113,11 +115,19 @@ const schema = [
 
       <aside class="book">
         <div class="book-card">
-          <p class="price">
-            from <b>${stay.priceFrom}</b> / night
-          </p>
+          {
+            stay.priceFrom ? (
+              <p class="price">
+                from <b>${stay.priceFrom}</b> / night
+              </p>
+            ) : (
+              <p class="price">
+                <b>See prices</b>
+              </p>
+            )
+          }
           {stay.monthlyFrom && <p class="monthly">or ${stay.monthlyFrom.toLocaleString('en-US')} / month</p>}
-          <p class="muted small">Typical low season rate. Prices change with dates.</p>
+          <p class="muted small">{stay.priceFrom ? 'Lowest rate published by the property. Prices change with dates.' : 'Check live prices and availability for your dates.'}</p>
           {
             href ? (
               <a
@@ -142,6 +152,21 @@ const schema = [
             {stay.amenities.includes('ac') && <li><Icon name="check" size={16} /> Air conditioning</li>}
             {stay.amenities.includes('breakfast') && <li><Icon name="check" size={16} /> Breakfast available</li>}
           </ul>
+          {
+            stay.status === 'public' && (
+              <p class="facts muted small">
+                Details come from the property's own website and public listings{stay.checked ? `, checked ${stay.checked}` : ''}. Please confirm with the property before booking.
+                {stay.website && (
+                  <>
+                    {' '}
+                    <a href={stay.website} rel="nofollow noopener" target="_blank">
+                      Official website
+                    </a>
+                  </>
+                )}
+              </p>
+            )
+          }
         </div>
       </aside>
     </div>
@@ -369,6 +394,11 @@ const schema = [
   }
   .checks :global(svg) {
     color: var(--palm);
+  }
+  .facts {
+    margin: 16px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
   }
   .similar {
     margin-top: 64px;

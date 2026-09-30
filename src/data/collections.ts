@@ -154,7 +154,7 @@ export const collections: Collection[] = [
       'Hiriketiya has a reputation for being pricier than the rest of the south coast, but there are still great value guesthouses, cabanas and hostels if you know where to look.',
     ],
     category: 'budget',
-    sort: (a, b) => a.priceFrom - b.priceFrom,
+    sort: (a, b) => (a.priceFrom ?? Infinity) - (b.priceFrom ?? Infinity),
     faq: [
       {
         q: 'What is the cheapest way to stay in Hiriketiya?',
@@ -179,7 +179,7 @@ export const collections: Collection[] = [
       'Hiriketiya luxury is less marble lobbies, more barefoot design: infinity pools over the bay, open air bathrooms and private chefs.',
     ],
     category: 'luxury',
-    sort: (a, b) => b.priceFrom - a.priceFrom,
+    sort: (a, b) => (b.priceFrom ?? 0) - (a.priceFrom ?? 0),
     faq: [
       {
         q: 'Is Hiriketiya good for a honeymoon?',

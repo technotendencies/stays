@@ -1,0 +1,21 @@
+---
+/** Beach house with a leaning palm over a wave. House follows `currentColor`, palm and wave use the lagoon accent. */
+interface Props {
+  size?: number;
+}
+const { size = 38 } = Astro.props;
+---
+
+<svg class="logo-mark" width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden="true">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 19.5 15 12l9 7.5" stroke="currentColor" stroke-width="2.4"></path>
+    <path d="M8.5 18v9.5h13V18" stroke="currentColor" stroke-width="2.4"></path>
+    <path d="M13.3 27.5v-4.8h3.4v4.8" stroke="currentColor" stroke-width="2"></path>
+    <path d="M31.5 28.5c.4-5.6-.4-10.6-3.3-15.2" stroke="var(--logo-accent, #45c9c6)" stroke-width="2.2"></path>
+    <path
+      d="M28.2 13.3c-2.4-2.5-5.6-3-8.4-1.7m8.4 1.7c.4-3.3 2.6-5.6 5.4-6.2m-5.4 6.2c3-1.6 6.3-1.1 8.4.9m-8.4-.9c-1.4 2.6-1.4 5.3-.3 7.6"
+      stroke="var(--logo-accent, #45c9c6)"
+      stroke-width="2.2"></path>
+    <path d="M3 33c2.3-1.6 4.6-1.6 6.9 0s4.6 1.6 6.9 0 4.6-1.6 6.9 0 4.6 1.6 6.9 0 4.6-1.6 6.9 0" stroke="var(--logo-accent, #45c9c6)" stroke-width="2.2"></path>
+  </g>
+</svg>

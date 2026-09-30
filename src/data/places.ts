@@ -1,15 +1,15 @@
 import type { Place } from './types';
 
 /**
- * Points of interest on the stay map. Coordinates are approximate and should be
- * checked on the ground before launch. Restaurants are demo entries until verified.
+ * Points of interest on the stay map. Beaches and surf spots use OpenStreetMap
+ * positions. Restaurants are demo entries until verified.
  */
 export const places: Place[] = [
   {
     slug: 'hiriketiya-beach',
     name: 'Hiriketiya Beach',
     kind: 'beach',
-    coords: [5.9637, 80.7086],
+    coords: [5.9625, 80.7076],
     note: 'The horseshoe bay itself. Calm swimming in the middle, surf on the sides.',
     verified: true,
   },
@@ -17,7 +17,7 @@ export const places: Place[] = [
     slug: 'dikwella-beach',
     name: 'Dikwella Beach',
     kind: 'beach',
-    coords: [5.9628, 80.6975],
+    coords: [5.962, 80.69985],
     note: 'Long, quieter stretch of sand next to Dikwella town.',
     verified: true,
   },
@@ -25,7 +25,7 @@ export const places: Place[] = [
     slug: 'hiriketiya-beach-break',
     name: 'Hiriketiya beach break',
     kind: 'surf',
-    coords: [5.9632, 80.7078],
+    coords: [5.96154, 80.70776],
     note: 'Mellow, sand bottom waves inside the bay. The classic beginner and longboard spot.',
     verified: true,
   },
@@ -33,7 +33,7 @@ export const places: Place[] = [
     slug: 'hiriketiya-reef',
     name: 'Hiriketiya reef',
     kind: 'surf',
-    coords: [5.9626, 80.7101],
+    coords: [5.96141, 80.70894],
     note: 'Faster, hollower wave over reef. Intermediate to advanced surfers only.',
     verified: false,
   },

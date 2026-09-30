@@ -31,21 +31,31 @@ export interface Stay {
   slug: string;
   name: string;
   /**
-   * false = demo/seed listing. Shown with a "Demo listing" badge until the
-   * details (price, amenities, location, photos) have been checked with the property.
+   * demo:     invented seed listing. "Demo listing" badge, noindex, not in the sitemap.
+   * public:   a real place; facts come from its own website and public listings
+   *           (see `sources`) but have not been confirmed with the property yet.
+   * verified: details confirmed directly with the property.
    */
-  verified: boolean;
+  status: 'demo' | 'public' | 'verified';
+  /** Official website, if the property has one. */
+  website?: string;
+  /** Where the facts came from, for re-checking later. */
+  sources?: string[];
+  /** When the facts were last checked, e.g. "September 2026". */
+  checked?: string;
+  /** true when `image` is the property's own photo (used with permission). */
+  ownPhoto?: boolean;
   type: StayType;
   categories: Category[];
   area: string;
   coords: LatLng;
-  /** Typical lowest nightly rate in USD. */
-  priceFrom: number;
+  /** Lowest nightly rate in USD, only when the property states one. */
+  priceFrom?: number;
   /** Typical monthly rate in USD, for long stay pages. */
   monthlyFrom?: number;
   bestFor: string[];
   amenities: Amenity[];
-  sleeps: number;
+  sleeps?: number;
   bedrooms?: number;
   rating?: number;
   summary: string;

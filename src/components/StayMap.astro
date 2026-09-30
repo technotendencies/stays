@@ -67,7 +67,7 @@ const stayFilters = [
                 <span class="d">
                   {s.typeLabel} · {s.distance}
                 </span>
-                <span class="p">${s.priceFrom}/night</span>
+                <span class="p">{s.priceFrom ? `$${s.priceFrom}/night` : "See prices"}</span>
               </button>
             </li>
           ))}
@@ -103,11 +103,11 @@ const stayFilters = [
   function stayPopup(s: ClientStay) {
     return `<div class="pop">
       <strong>${esc(s.name)}</strong>
-      <div class="pop-type">${esc(s.typeLabel)}${s.verified ? '' : ' · <em>demo listing</em>'}</div>
+      <div class="pop-type">${esc(s.typeLabel)}${s.demo ? ' · <em>demo listing</em>' : ''}</div>
       <ul>
         <li>${esc(s.distance)}</li>
         ${s.amenities.map((a) => `<li>${esc(a)}</li>`).join('')}
-        <li><b>$${s.priceFrom}</b>/night</li>
+        <li>${s.priceFrom ? `<b>$${s.priceFrom}</b>/night` : 'See prices'}</li>
         <li>${esc(s.bestFor)}</li>
       </ul>
       <a class="pop-cta" href="${s.url}">Check availability →</a>
@@ -157,7 +157,7 @@ const stayFilters = [
       const marker = L.marker(s.coords, {
         icon: L.divIcon({
           className: `price-pin${s.slug === data.focus ? ' focused' : ''}`,
-          html: `<span>$${s.priceFrom}</span>`,
+          html: `<span>${esc(s.pin)}</span>`,
           iconSize: undefined as unknown as L.PointExpression,
         }),
         title: s.name,

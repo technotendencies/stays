@@ -1,4 +1,5 @@
 import type { Stay } from './types';
+import { realStays } from './realStays';
 
 /**
  * DEMO SEED DATA.
@@ -11,11 +12,11 @@ import type { Stay } from './types';
 const bookingSearch = 'https://www.booking.com/searchresults.html?ss=Hiriketiya%2C+Sri+Lanka';
 const airbnbSearch = 'https://www.airbnb.com/s/Hiriketiya--Sri-Lanka/homes';
 
-export const stays: Stay[] = [
+const demoStays: Stay[] = [
   {
     slug: 'bayfront-surf-house',
     name: 'Bayfront Surf House',
-    verified: false,
+    status: 'demo',
     type: 'guesthouse',
     categories: ['beachfront', 'surf', 'budget'],
     area: 'Hiriketiya Bay',
@@ -34,12 +35,11 @@ export const stays: Stay[] = [
     highlights: ['Steps from the beach break', 'Board rental on site', 'Breakfast included'],
     hue: 190,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
-    featured: true,
   },
   {
     slug: 'palm-hollow-villa',
     name: 'Palm Hollow Villa',
-    verified: false,
+    status: 'demo',
     type: 'villa',
     categories: ['villas', 'luxury'],
     area: 'Hiriketiya Hill',
@@ -58,12 +58,11 @@ export const stays: Stay[] = [
     highlights: ['Private pool', 'House cook', 'Sleeps 8'],
     hue: 150,
     booking: { provider: 'airbnb', url: airbnbSearch, affiliate: false },
-    featured: true,
   },
   {
     slug: 'coral-cove-boutique',
     name: 'Coral Cove Boutique Hotel',
-    verified: false,
+    status: 'demo',
     type: 'boutique',
     categories: ['boutique', 'beachfront', 'luxury'],
     area: 'Hiriketiya Bay',
@@ -82,12 +81,11 @@ export const stays: Stay[] = [
     highlights: ['Reef facing rooms', 'Infinity pool', 'Daily yoga in season'],
     hue: 20,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
-    featured: true,
   },
   {
     slug: 'jungle-loft-studios',
     name: 'Jungle Loft Studios',
-    verified: false,
+    status: 'demo',
     type: 'apartment',
     categories: ['long-stays', 'budget'],
     area: 'Jungle side',
@@ -107,12 +105,11 @@ export const stays: Stay[] = [
     highlights: ['Fibre wifi + desk', 'Monthly discounts', 'Kitchenette'],
     hue: 110,
     booking: { provider: 'whatsapp', url: 'https://wa.me/940000000000', affiliate: false },
-    featured: true,
   },
   {
     slug: 'reef-view-rooms',
     name: 'Reef View Rooms',
-    verified: false,
+    status: 'demo',
     type: 'guesthouse',
     categories: ['surf', 'budget'],
     area: 'Hiriketiya Bay',
@@ -131,12 +128,11 @@ export const stays: Stay[] = [
     highlights: ['Balcony surf check', 'Family run', 'Big Sri Lankan breakfast'],
     hue: 205,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
-    featured: true,
   },
   {
     slug: 'sandbar-hostel',
     name: 'Sandbar Social Hostel',
-    verified: false,
+    status: 'demo',
     type: 'hostel',
     categories: ['budget', 'surf'],
     area: 'Hiriketiya Bay',
@@ -153,12 +149,11 @@ export const stays: Stay[] = [
     highlights: ['Dorm beds from $18', 'Daily surf lessons', 'Social common area'],
     hue: 45,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
-    featured: true,
   },
   {
     slug: 'tidehouse-villa',
     name: 'Tidehouse Beach Villa',
-    verified: false,
+    status: 'demo',
     type: 'villa',
     categories: ['villas', 'beachfront', 'luxury'],
     area: 'Dikwella',
@@ -181,7 +176,7 @@ export const stays: Stay[] = [
   {
     slug: 'the-quiet-hill',
     name: 'The Quiet Hill',
-    verified: false,
+    status: 'demo',
     type: 'boutique',
     categories: ['boutique', 'long-stays'],
     area: 'Hiriketiya Hill',
@@ -204,7 +199,7 @@ export const stays: Stay[] = [
   {
     slug: 'lagoon-edge-cabanas',
     name: 'Lagoon Edge Cabanas',
-    verified: false,
+    status: 'demo',
     type: 'guesthouse',
     categories: ['budget'],
     area: 'Jungle side',
@@ -226,7 +221,7 @@ export const stays: Stay[] = [
   {
     slug: 'swell-and-salt-apartments',
     name: 'Swell & Salt Apartments',
-    verified: false,
+    status: 'demo',
     type: 'apartment',
     categories: ['long-stays', 'surf'],
     area: 'Hiriketiya Bay',
@@ -249,7 +244,7 @@ export const stays: Stay[] = [
   {
     slug: 'casa-kokos',
     name: 'Casa Kokos',
-    verified: false,
+    status: 'demo',
     type: 'villa',
     categories: ['villas'],
     area: 'Hiriketiya Hill',
@@ -269,7 +264,7 @@ export const stays: Stay[] = [
   {
     slug: 'blue-horizon-hotel',
     name: 'Blue Horizon Hotel',
-    verified: false,
+    status: 'demo',
     type: 'hotel',
     categories: ['beachfront', 'luxury'],
     area: 'Dikwella',
@@ -289,3 +284,5 @@ export const stays: Stay[] = [
     booking: { provider: 'agoda', url: 'https://www.agoda.com/search?city=Hiriketiya', affiliate: true },
   },
 ];
+
+export const stays: Stay[] = [...realStays, ...demoStays];
