@@ -5,7 +5,6 @@ import '@fontsource-variable/figtree/wght.css';
 import '../styles/global.css';
 import { site } from '../data/site';
 import Wave from '../components/Wave.astro';
-import LogoMark from '../components/LogoMark.astro';
 
 interface Props {
   title: string;
@@ -54,11 +53,10 @@ const path = Astro.url.pathname;
     <header class:list={['site-header', { overlay }]} data-header>
       <div class="wrap bar">
         <a href="/" class="logo" aria-label={`${site.name} home`}>
-          <LogoMark />
           <span><i>Hiriketiya</i> Stays</span>
         </a>
         <nav aria-label="Main">
-          {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+          {nav.map((n) => <a href={n.href} class:list={[{ 'hide-sm': n.href === '/where-to-stay-in-hiriketiya/' }]} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
         </nav>
       </div>
     </header>
@@ -69,7 +67,7 @@ const path = Astro.url.pathname;
     <footer class="site-footer">
       <div class="wrap cols">
         <div>
-          <p class="logo-foot"><LogoMark size={40} /> <span><i>Hiriketiya</i> Stays</span></p>
+          <p class="logo-foot"><i>Hiriketiya</i> Stays</p>
           <p class="muted">{site.tagline}</p>
           <p><a href="/list-your-property/">List your property →</a></p>
           <p><a href="/photo-credits/">Photo sources</a></p>
@@ -147,8 +145,10 @@ const path = Astro.url.pathname;
     text-decoration: none;
     color: #fff;
     font-family: var(--font-display);
-    font-size: 1.35rem;
-    letter-spacing: -0.01em;
+    font-size: 1.7rem;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
   }
   .logo i,
   .logo-foot i {
@@ -176,12 +176,15 @@ const path = Astro.url.pathname;
     color: #fff;
   }
   @media (max-width: 600px) {
-    .logo span {
+    .logo {
+      font-size: 1.3rem;
+    }
+    .hide-sm {
       display: none;
     }
     nav a {
-      padding: 8px 9px;
-      font-size: 0.92rem;
+      padding: 8px 7px;
+      font-size: 0.88rem;
     }
   }
   .site-footer {
