@@ -33,7 +33,7 @@ Guide → "Going in January? See the best surf stays →" → collection page �
 
 ## ⚠️ Before launch
 
-1. **Stays.** `src/data/realStays.ts` has 11 real Hiriketiya stays (`status: 'public'`): coordinates from OpenStreetMap, facts only from each property's own website or public listings (sources are listed per stay), prices only where the property publishes one. Confirm details with each property, add their own photos (`ownPhoto: true`) and set `status: 'verified'`. `src/data/stays.ts` still has 12 invented demo stays (`status: 'demo'`): "Demo listing" badge, `noindex`, not in the sitemap. Delete them before launch.
+1. **Stays.** `src/data/realStays.ts` has 19 real stays around Hiriketiya, Dikwella and Nilwella (`status: 'public'`): coordinates from OpenStreetMap, facts only from each property's own website or public listings (sources are listed per stay), prices only where the property publishes one. Confirm details with each property, add their own photos (`ownPhoto: true`) and set `status: 'verified'`. `src/data/stays.ts` still has 12 invented demo stays (`status: 'demo'`): "Demo listing" badge, `noindex`, not in the sitemap. Delete them before launch.
 2. **Restaurants on the map are demo entries** (`src/data/places.ts`), and all map coordinates are approximate. Check them on the ground.
 3. **Guide facts are drafts** (travel times, seasons, sights). Have someone local review them. The restaurant guide has a TODO for real venues.
 4. **Affiliate IDs**: add your Booking.com `aid` / Agoda `cid` in `src/data/site.ts` once approved. Affiliate links get `rel="sponsored"`.

@@ -143,7 +143,6 @@ export function stayForClient(stay: Stay) {
     categories: stay.categories,
     coords: stay.coords,
     priceFrom: stay.priceFrom ?? null,
-    pin: stay.priceFrom ? `$${stay.priceFrom}` : typeLabels[stay.type],
     distance: formatDistance(d.meters),
     amenities: stay.amenities.filter((a) => ['pool', 'ac', 'kitchen', 'surfboards', 'sea-view'].includes(a)).map((a) => amenityLabels[a]),
     bestFor: stay.bestFor[0],

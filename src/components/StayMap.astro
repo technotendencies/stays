@@ -155,11 +155,17 @@ const stayFilters = [
     const stayMarkers = new Map<string, L.Marker>();
     for (const s of data.stays) {
       const marker = L.marker(s.coords, {
-        icon: L.divIcon({
-          className: `price-pin${s.slug === data.focus ? ' focused' : ''}`,
-          html: `<span>${esc(s.pin)}</span>`,
-          iconSize: undefined as unknown as L.PointExpression,
-        }),
+        icon: s.priceFrom
+          ? L.divIcon({
+              className: `price-pin${s.slug === data.focus ? ' focused' : ''}`,
+              html: `<span>$${s.priceFrom}</span>`,
+              iconSize: undefined as unknown as L.PointExpression,
+            })
+          : L.divIcon({
+              className: `stay-dot${s.slug === data.focus ? ' focused' : ''}`,
+              html: icon('house', 14),
+              iconSize: [28, 28],
+            }),
         title: s.name,
         riseOnHover: true,
         zIndexOffset: s.slug === data.focus ? 1000 : 0,
@@ -225,7 +231,8 @@ const stayFilters = [
 
     render();
     if (data.focus) stayMarkers.get(data.focus)?.openPopup();
-    else if (data.stays.length > 1) {
+    // Small sets (category pages) fit their stays; the full map opens on the bay itself.
+    else if (data.stays.length > 1 && data.stays.length <= 12) {
       map.fitBounds(L.latLngBounds(data.stays.map((s) => s.coords)).pad(0.15), { maxZoom: data.zoom });
     }
   });
@@ -317,6 +324,20 @@ const stayFilters = [
   }
   :global(.price-pin:hover),
   :global(.price-pin.focused) {
+    background: var(--deep);
+    color: #fff;
+  }
+  :global(.stay-dot) {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ocean-900);
+    border: 2px solid var(--ocean-900);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+  }
+  :global(.stay-dot:hover),
+  :global(.stay-dot.focused) {
     background: var(--deep);
     color: #fff;
   }

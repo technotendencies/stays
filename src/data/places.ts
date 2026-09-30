@@ -22,6 +22,22 @@ export const places: Place[] = [
     verified: true,
   },
   {
+    slug: 'dikwella-beach-west',
+    name: 'Dikwella Beach (west)',
+    kind: 'beach',
+    coords: [5.96127, 80.68684],
+    note: 'The western end of Dikwella beach, by the Batigama peninsula.',
+    verified: true,
+  },
+  {
+    slug: 'blue-beach-island',
+    name: 'Blue Beach Island',
+    kind: 'beach',
+    coords: [5.96081, 80.71974],
+    note: 'A small island joined to the shore by a sand bar at Nilwella, just east of Hiriketiya.',
+    verified: true,
+  },
+  {
     slug: 'hiriketiya-beach-break',
     name: 'Hiriketiya beach break',
     kind: 'surf',
