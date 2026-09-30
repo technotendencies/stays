@@ -26,7 +26,7 @@ export const places: Place[] = [
     name: 'Hiriketiya beach break',
     kind: 'surf',
     coords: [5.9632, 80.7078],
-    note: 'Mellow, sand-bottom waves inside the bay. The classic beginner and longboard spot.',
+    note: 'Mellow, sand bottom waves inside the bay. The classic beginner and longboard spot.',
     verified: true,
   },
   {
@@ -50,7 +50,7 @@ export const places: Place[] = [
     name: 'Jungle Kitchen (demo)',
     kind: 'restaurant',
     coords: [5.9661, 80.7068],
-    note: 'Demo entry: Sri Lankan rice & curry and wood-fired dinners on the hill.',
+    note: 'Demo entry: Sri Lankan rice & curry and wood fired dinners on the hill.',
     verified: false,
   },
   {

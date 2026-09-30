@@ -4,8 +4,8 @@ import type { Stay } from './types';
  * DEMO SEED DATA.
  *
  * Every stay below is an invented placeholder (verified: false) that shows how a
- * listing looks across the site. Replace each one with a real property — with
- * checked prices, amenities, coordinates, photos and a working booking link —
+ * listing looks across the site. Replace each one with a real property
+ * checked prices, amenities, coordinates, photos and a working booking link,
  * and flip `verified` to true.
  */
 const bookingSearch = 'https://www.booking.com/searchresults.html?ss=Hiriketiya%2C+Sri+Lanka';
@@ -50,9 +50,9 @@ export const stays: Stay[] = [
     sleeps: 8,
     bedrooms: 4,
     rating: 9.4,
-    summary: 'Four-bedroom villa in the palms with a private pool, cook and a 7-minute walk to the bay.',
+    summary: 'Four bedroom villa in the palms with a private pool, cook and a 7 minute walk to the bay.',
     description: [
-      'Palm Hollow sits in a quiet coconut grove above the bay. The open-plan living area opens straight onto a 12-metre pool.',
+      'Palm Hollow sits in a quiet coconut grove above the bay. The open plan living area opens straight onto a 12 metre pool.',
       'A house cook prepares Sri Lankan breakfasts and, on request, rice & curry dinners.',
     ],
     highlights: ['Private pool', 'House cook', 'Sleeps 8'],
@@ -74,12 +74,12 @@ export const stays: Stay[] = [
     sleeps: 2,
     bedrooms: 1,
     rating: 9.2,
-    summary: 'Ten design-led rooms facing the reef, with a small infinity pool and morning yoga.',
+    summary: 'Ten design led rooms facing the reef, with a small infinity pool and morning yoga.',
     description: [
-      'Polished concrete, local timber and linen — Coral Cove is the kind of place people plan the whole trip around.',
+      'Polished concrete, local timber and linen: Coral Cove is the kind of place people plan the whole trip around.',
       'Every room faces the reef side of the bay. The rooftop yoga deck runs classes most mornings in season.',
     ],
-    highlights: ['Reef-facing rooms', 'Infinity pool', 'Daily yoga in season'],
+    highlights: ['Reef facing rooms', 'Infinity pool', 'Daily yoga in season'],
     hue: 20,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
     featured: true,
@@ -99,7 +99,7 @@ export const stays: Stay[] = [
     sleeps: 2,
     bedrooms: 1,
     rating: 8.7,
-    summary: 'Self-catering studios with fibre wifi and proper desks, built for month-long stays.',
+    summary: 'Self catering studios with fibre wifi and proper desks, built for month long stays.',
     description: [
       'Six studios in the green hills behind the bay, each with a kitchenette, desk and fast fibre connection.',
       'Monthly rates include cleaning twice a week. Scooter rental can be arranged.',
@@ -123,12 +123,12 @@ export const stays: Stay[] = [
     sleeps: 3,
     bedrooms: 1,
     rating: 8.6,
-    summary: 'Family-run guesthouse overlooking the reef — watch the sets roll in from your balcony.',
+    summary: 'Family run guesthouse overlooking the reef. Watch the sets roll in from your balcony.',
     description: [
-      'A friendly family-run place with four rooms and a shared terrace that looks straight at the reef.',
+      'A friendly family run place with four rooms and a shared terrace that looks straight at the reef.',
       'The host family cooks a huge Sri Lankan breakfast and knows every surf teacher in the bay.',
     ],
-    highlights: ['Balcony surf check', 'Family-run', 'Big Sri Lankan breakfast'],
+    highlights: ['Balcony surf check', 'Family run', 'Big Sri Lankan breakfast'],
     hue: 205,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
     featured: true,
@@ -148,7 +148,7 @@ export const stays: Stay[] = [
     rating: 8.4,
     summary: 'Dorms and a few privates, a sociable bar and daily surf lessons for beginners.',
     description: [
-      'The cheapest bed near the bay — with a lively common area, family dinners and surf lessons every morning.',
+      'The cheapest bed near the bay, with a lively common area, family dinners and surf lessons every morning.',
     ],
     highlights: ['Dorm beds from $18', 'Daily surf lessons', 'Social common area'],
     hue: 45,
@@ -169,9 +169,9 @@ export const stays: Stay[] = [
     sleeps: 10,
     bedrooms: 5,
     rating: 9.5,
-    summary: 'Five-bedroom villa directly on Dikwella beach, with staff and a lawn that runs to the sand.',
+    summary: 'Five bedroom villa directly on Dikwella beach, with staff and a lawn that runs to the sand.',
     description: [
-      'Right on the long, quiet sand of Dikwella beach — a five-minute tuk-tuk from the Hiriketiya scene.',
+      'Right on the long, quiet sand of Dikwella beach, a five minute tuk tuk from the Hiriketiya scene.',
       'Fully staffed with a chef, and big enough for two families or a group of friends.',
     ],
     highlights: ['Directly on the beach', 'Fully staffed', 'Sleeps 10'],
@@ -193,11 +193,11 @@ export const stays: Stay[] = [
     sleeps: 2,
     bedrooms: 1,
     rating: 9.0,
-    summary: 'Five cabanas on the hill with a shared pool, co-working deck and sunset views.',
+    summary: 'Five cabanas on the hill with a shared pool, coworking deck and sunset views.',
     description: [
-      'A calm little retreat ten minutes up the hill — far enough from the bay to sleep well, close enough to walk down for sunrise surf.',
+      'A calm little retreat ten minutes up the hill: far enough from the bay to sleep well, close enough to walk down for sunrise surf.',
     ],
-    highlights: ['Co-working deck', 'Shared pool', 'Monthly rates'],
+    highlights: ['Coworking deck', 'Shared pool', 'Monthly rates'],
     hue: 265,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
   },
@@ -219,7 +219,7 @@ export const stays: Stay[] = [
     description: [
       'If you want to wake up to birdsong instead of beach bars, these cabanas in the paddy fields are great value.',
     ],
-    highlights: ['Paddy-field views', 'Very quiet', 'Great value'],
+    highlights: ['Paddy field views', 'Very quiet', 'Great value'],
     hue: 85,
     booking: { provider: 'booking', url: bookingSearch, affiliate: true },
   },
@@ -238,7 +238,7 @@ export const stays: Stay[] = [
     sleeps: 3,
     bedrooms: 1,
     rating: 8.8,
-    summary: 'One-bed apartments with kitchens and board storage, a 3-minute walk to the break.',
+    summary: 'One bed apartments with kitchens and board storage, a 3 minute walk to the break.',
     description: [
       'Four modern apartments set back from the bay road. Built for surfers who stay a season, not a weekend.',
     ],
@@ -260,8 +260,8 @@ export const stays: Stay[] = [
     sleeps: 4,
     bedrooms: 2,
     rating: 9.1,
-    summary: 'Two-bedroom plunge-pool villa, tucked into the palms 10 minutes from the bay.',
-    description: ['A private, whitewashed two-bedroom villa with a plunge pool and an outdoor rain shower.'],
+    summary: 'Two bedroom plunge pool villa, tucked into the palms 10 minutes from the bay.',
+    description: ['A private, whitewashed two bedroom villa with a plunge pool and an outdoor rain shower.'],
     highlights: ['Plunge pool', 'Very private', 'Outdoor shower'],
     hue: 340,
     booking: { provider: 'airbnb', url: airbnbSearch, affiliate: false },
@@ -280,9 +280,9 @@ export const stays: Stay[] = [
     sleeps: 4,
     bedrooms: 1,
     rating: 8.9,
-    summary: 'Full-service beach hotel with a big pool, restaurant and sea-view rooms between Dikwella and the bay.',
+    summary: 'Full service beach hotel with a big pool, restaurant and sea view rooms between Dikwella and the bay.',
     description: [
-      'For those who want hotel comforts — 24h reception, a pool bar and room service — with the bay a short walk along the coast.',
+      'For those who want hotel comforts (24h reception, a pool bar and room service) with the bay a short walk along the coast.',
     ],
     highlights: ['Large pool', 'Restaurant & bar', 'Family rooms'],
     hue: 200,

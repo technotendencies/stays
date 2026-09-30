@@ -9,14 +9,14 @@ const crumbs = [{ name: 'Guides', href: '/guides/' }];
 ---
 
 <Layout
-  title="Hiriketiya Travel Guides — Weather, Surf, Food & Getting There"
+  title="Hiriketiya Travel Guides: Weather, Surf, Food & Getting There"
   description="Everything you need to plan a trip to Hiriketiya, Sri Lanka: when to go, surf season, weather, restaurants, things to do and how to get there."
   schema={[breadcrumbSchema(crumbs)]}
 >
   <div class="wrap">
     <Breadcrumbs items={crumbs} />
     <h1>Hiriketiya guides</h1>
-    <p class="lead">Local, no-fluff guides to planning your time in Hiriketiya — and finding the right place to stay.</p>
+    <p class="lead">Local, no fluff guides to planning your time in Hiriketiya and finding the right place to stay.</p>
     <div class="list">
       {
         guides.map((g) => (

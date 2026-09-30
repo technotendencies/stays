@@ -14,7 +14,7 @@ faq:
   - q: Is Weligama or Hiriketiya better for beginner surfers?
     a: Both are great for beginners. Weligama's long, sandy bay has lots of room and many surf schools; Hiriketiya is smaller and more crowded but has a very friendly beach break and a more intimate vibe.
   - q: How far is Weligama from Hiriketiya?
-    a: Roughly 50–60 minutes by car along the coast.
+    a: Roughly 50 to 60 minutes by car along the coast.
 ---
 
 Weligama and Hiriketiya are the two classic places to learn to surf on Sri Lanka's south coast. Here's how they differ.
@@ -25,7 +25,7 @@ Weligama and Hiriketiya are the two classic places to learn to surf on Sri Lanka
 | --- | --- | --- |
 | **Beach** | Small horseshoe bay | Long, wide sandy bay |
 | **Surf** | Beach break + reef, can be crowded | Huge beginner area, room to spread out |
-| **Vibe** | Boutique, café culture, remote workers | Surf-camp town, more local life |
+| **Vibe** | Boutique, café culture, remote workers | Surf camp town, more local life |
 | **Stays** | Guesthouses, boutique, villas | Surf camps, hostels, hotels |
 | **Nearby** | Dikwella, Tangalle | Mirissa, Midigama, Ahangama |
 
@@ -38,9 +38,9 @@ Weligama and Hiriketiya are the two classic places to learn to surf on Sri Lanka
 ## Choose Weligama if…
 
 - You're a **total beginner** who wants space away from crowds
-- You want **surf-camp packages** with coaching, video and yoga
+- You want **surf camp packages** with coaching, video and yoga
 - You want easy access to **Midigama and Ahangama** breaks
 
 ## Our take
 
-For a first week of surf lessons, Weligama is hard to beat for space. For a trip that's as much about the place as the waves — and staying longer — Hiriketiya wins.
+For a first week of surf lessons, Weligama is hard to beat for space. For a trip that's as much about the place as the waves (and staying longer), Hiriketiya wins.

@@ -51,7 +51,7 @@ const schema = [
 ---
 
 <Layout
-  title={`${stay.name}, Hiriketiya — ${typeLabels[stay.type]} from $${stay.priceFrom}/night`}
+  title={`${stay.name}, Hiriketiya | ${typeLabels[stay.type]} from $${stay.priceFrom}/night`}
   description={`${stay.summary} ${formatDistance(d.meters)}. ${stay.bestFor.join(', ')}.`}
   schema={stay.verified ? schema : [breadcrumbSchema(crumbs)]}
   noindex={!stay.verified}
@@ -88,7 +88,7 @@ const schema = [
 
         <h2>Location</h2>
         <p>
-          {stay.name} is in <b>{stay.area}</b>, about {d.meters}m from {d.beach} — roughly a {walkMinutes(d.meters)}-minute walk.
+          {stay.name} is in <b>{stay.area}</b>, about {d.meters}m from {d.beach}, roughly a {walkMinutes(d.meters)} minute walk.
         </p>
         <StayMap focus={stay.slug} height="340px" zoom={17} />
 
@@ -110,7 +110,7 @@ const schema = [
             from <b>${stay.priceFrom}</b> / night
           </p>
           {stay.monthlyFrom && <p class="monthly">or ${stay.monthlyFrom.toLocaleString('en-US')} / month</p>}
-          <p class="muted small">Typical low-season rate. Prices change with dates.</p>
+          <p class="muted small">Typical low season rate. Prices change with dates.</p>
           {
             href ? (
               <a

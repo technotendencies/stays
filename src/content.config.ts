@@ -18,7 +18,7 @@ const guides = defineCollection({
       cta: z.string(),
       collection: z.string(),
     }),
-    /** Show the month-by-month grid ("Going in January? →"). */
+    /** Show the month by month grid ("Going in January? →"). */
     months: z.enum(['surf', 'weather']).optional(),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
   }),

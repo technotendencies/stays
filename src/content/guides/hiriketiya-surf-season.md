@@ -14,29 +14,29 @@ funnel:
 faq:
   - q: When is the best surf in Hiriketiya?
     a: The main season is roughly November to April, with the most consistent, clean conditions from December to March.
-  - q: Can you surf Hiriketiya in the off-season?
-    a: Sometimes. The bay offers some shelter, so small, rideable days do happen in the monsoon — but conditions are much less reliable and often messy. The east coast is the better bet from May to September.
+  - q: Can you surf Hiriketiya in the off season?
+    a: Sometimes. The bay offers some shelter, so small, rideable days do happen in the monsoon, but conditions are much less reliable and often messy. The east coast is the better bet from May to September.
   - q: Is Hiriketiya crowded?
-    a: In peak season the beach break gets very busy, especially mid-morning. Surf early (sunrise) or late afternoon for fewer people.
+    a: In peak season the beach break gets very busy, especially mid morning. Surf early (sunrise) or late afternoon for fewer people.
 ---
 
-Hiriketiya is one of the most popular surf spots on Sri Lanka's south coast — a sheltered bay with waves for complete beginners and experienced surfers side by side.
+Hiriketiya is one of the most popular surf spots on Sri Lanka's south coast: a sheltered bay with waves for complete beginners and experienced surfers side by side.
 
 ## When is surf season?
 
 | Period | Conditions |
 | --- | --- |
-| **December – March** | Best: consistent swell, light offshore mornings, clean waves |
+| **December to March** | Best: consistent swell, light offshore mornings, clean waves |
 | November, April | Good: season starting / ending, fewer people |
-| May – October | Off-season: monsoon wind and rain; unreliable |
+| May to October | Off season: monsoon wind and rain; unreliable |
 
 ## The breaks
 
-**The beach break** — in the middle of the bay, over sand. Mellow, forgiving waves that are perfect for learning and longboarding. This is where the surf schools teach.
+**The beach break** sits in the middle of the bay, over sand. Mellow, forgiving waves that are perfect for learning and longboarding. This is where the surf schools teach.
 
-**The reef** — on the side of the bay. Faster and hollower, breaking over reef. For confident intermediate and advanced surfers only; wear booties if you're unsure of the tide.
+**The reef** is on the side of the bay. Faster and hollower, breaking over reef. For confident intermediate and advanced surfers only; wear booties if you're unsure of the tide.
 
-> Respect the line-up: beginners stay on the inside of the beach break, and don't paddle out at the reef until you can turn and duck-dive confidently.
+> Respect the lineup: beginners stay on the inside of the beach break, and don't paddle out at the reef until you can turn and duck dive confidently.
 
 ## Lessons & boards
 

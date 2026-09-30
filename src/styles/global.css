@@ -15,8 +15,8 @@
   --radius: 18px;
   --shadow: 0 1px 2px rgb(20 40 50 / 0.06), 0 8px 24px rgb(20 40 50 / 0.08);
   --wrap: 1180px;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Newsreader Variable', ui-serif, serif;
+  --font-body: 'Figtree Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 *,
@@ -36,6 +36,15 @@ body {
   font-family: var(--font-body);
   font-size: 17px;
   line-height: 1.6;
+  hyphens: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Italic accent in headings, as in "Find your <em>perfect</em> stay". */
+h1 em,
+h2 em {
+  font-style: italic;
+  color: var(--ocean-500);
 }
 
 img,
@@ -52,9 +61,10 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
   margin: 0 0 0.5em;
 }
 

@@ -41,7 +41,7 @@ export interface Stay {
   coords: LatLng;
   /** Typical lowest nightly rate in USD. */
   priceFrom: number;
-  /** Typical monthly rate in USD, for long-stay pages. */
+  /** Typical monthly rate in USD, for long stay pages. */
   monthlyFrom?: number;
   bestFor: string[];
   amenities: Amenity[];

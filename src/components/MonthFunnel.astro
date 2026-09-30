@@ -10,11 +10,11 @@ const { focus = 'weather' } = Astro.props;
 function cta(m: (typeof months)[number]) {
   if (focus === 'surf' && (m.surf === 'Best' || m.surf === 'Good'))
     return { text: `Going in ${m.name}? See the best surf stays →`, href: '/hiriketiya-surf-accommodation/' };
-  if (m.crowds === 'High') return { text: `Going in ${m.name}? Book early — see popular stays →`, href: '/best-hotels-in-hiriketiya/' };
-  if (m.crowds === 'Low') return { text: `Going in ${m.name}? Off-season deals on long stays →`, href: '/hiriketiya-long-term-rental/' };
+  if (m.crowds === 'High') return { text: `Going in ${m.name}? Book early and see popular stays →`, href: '/best-hotels-in-hiriketiya/' };
+  if (m.crowds === 'Low') return { text: `Going in ${m.name}? Off season deals on long stays →`, href: '/hiriketiya-long-term-rental/' };
   return { text: `Going in ${m.name}? Find your stay →`, href: '/where-to-stay-in-hiriketiya/' };
 }
-const tone = { Best: 'good', Good: 'good', Fair: 'mid', 'Off-season': 'low', 'Dry & sunny': 'good', 'Mostly dry': 'good', Mixed: 'mid', Rainy: 'low' } as const;
+const tone = { Best: 'good', Good: 'good', Fair: 'mid', 'Off season': 'low', 'Dry & sunny': 'good', 'Mostly dry': 'good', Mixed: 'mid', Rainy: 'low' } as const;
 ---
 
 <div class="months">

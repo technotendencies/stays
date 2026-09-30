@@ -125,7 +125,7 @@ export function similarStays(stay: Stay, limit = 3) {
     .map((x) => x.s);
 }
 
-/** Compact, serialisable shape used by client-side map and search scripts. */
+/** Compact, serialisable shape used by client side map and search scripts. */
 export function stayForClient(stay: Stay) {
   const d = beachDistance(stay);
   return {
