@@ -33,12 +33,12 @@ Guide → "Going in January? See the best surf stays →" → collection page �
 
 ## ⚠️ Before launch
 
-1. **Stays.** `src/data/realStays.ts` has 19 real stays around Hiriketiya, Dikwella and Nilwella (`status: 'public'`): coordinates from OpenStreetMap, facts only from each property's own website or public listings (sources are listed per stay), prices only where the property publishes one. Confirm details with each property, add their own photos (`ownPhoto: true`) and set `status: 'verified'`. `src/data/stays.ts` still has 12 invented demo stays (`status: 'demo'`): "Demo listing" badge, `noindex`, not in the sitemap. Delete them before launch.
+1. **Stays.** `src/data/realStays.ts` has 19 real stays around Hiriketiya, Dikwella and Nilwella (`status: 'public'`): coordinates from OpenStreetMap, facts only from each property's own website or public listings (sources are listed per stay), prices only where the property publishes one. Confirm details with each property, add their own photos as `public/images/stays/<slug>.jpg` (`ownPhoto: true`) and set `status: 'verified'`. Until then they use illustrative photos from `public/images/illustrative/`, labelled as such.
 2. **Restaurants on the map are demo entries** (`src/data/places.ts`), and all map coordinates are approximate. Check them on the ground.
 3. **Guide facts are drafts** (travel times, seasons, sights). Have someone local review them. The restaurant guide has a TODO for real venues.
 4. **Affiliate IDs**: add your Booking.com `aid` / Agoda `cid` in `src/data/site.ts` once approved. Affiliate links get `rel="sponsored"`.
 5. **Map tiles** use the public OpenStreetMap server, which is fine for development but not for production traffic. Switch to a tile provider (MapTiler, Stadia, Mapbox …) in `StayMap.astro`.
-6. **Photos** are high resolution public domain (CC0) photos from Wikimedia Commons, so no photographer credit is needed. Where a photo names a place (Hikkaduwa, Weligama, Unawatuna, Thiranagama, Arugam Bay, Negombo) it really is that place; the rest are generic tropical shots with alt text that does not claim a location. Sources are listed on `/photo-credits/`. Photos on the demo stays are illustrative and labelled that way. Replace them with each property's own photos (with permission).
+6. **Photos** are high resolution public domain (CC0) photos from Wikimedia Commons, so no photographer credit is needed. Where a photo names a place (Hikkaduwa, Weligama, Unawatuna, Thiranagama, Arugam Bay, Negombo) it really is that place; the rest are generic tropical shots with alt text that does not claim a location. Sources are listed on `/photo-credits/`. Photos on stays are illustrative until the property provides its own, and are labelled that way. Replace them with each property's own photos (with permission).
 
 ## Adding photos
 
@@ -59,7 +59,7 @@ Use high resolution photos only (at least 3000 px wide at the source). For a pub
 
 ## Adding a stay
 
-Add an object to `src/data/stays.ts`. Distance to the beach is calculated from `coords`. Pick `categories` carefully: they decide which SEO pages and map filters the stay appears on.
+Add an object to `src/data/realStays.ts`, with its sources. Distance to the beach is calculated from `coords`. Pick `categories` carefully: they decide which SEO pages and map filters the stay appears on.
 
 ## Adding a guide
 

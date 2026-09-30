@@ -143,76 +143,70 @@
     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
     "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61881461"
   },
-  "/images/stays/bayfront-surf-house.jpg": {
+  "/images/illustrative/surfer-beach-hut.jpg": {
     "alt": "Surfer by a beach hut",
     "license": "CC0 1.0 (public domain)",
     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
     "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62062445"
   },
-  "/images/stays/palm-hollow-villa.jpg": {
-    "alt": "Swimming pool and palms at sunset",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61710043"
-  },
-  "/images/stays/coral-cove-boutique.jpg": {
-    "alt": "Palm tree and sandy beach at sunset",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61881461"
-  },
-  "/images/stays/jungle-loft-studios.jpg": {
-    "alt": "Looking up into a forest of coconut palms",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61915281"
-  },
-  "/images/stays/reef-view-rooms.jpg": {
-    "alt": "Sunrise reflecting over the ocean",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61764740"
-  },
-  "/images/stays/sandbar-hostel.jpg": {
-    "alt": "Surfer crouching low on a wave",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62347174"
-  },
-  "/images/stays/tidehouse-villa.jpg": {
-    "alt": "Aerial view of a boat on a sandy beach",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62085990"
-  },
-  "/images/stays/the-quiet-hill.jpg": {
-    "alt": "Tropical palm leaves against a blue sky",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61859913"
-  },
-  "/images/stays/lagoon-edge-cabanas.jpg": {
-    "alt": "Fisherman casting a line at sunset",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=60979498"
-  },
-  "/images/stays/swell-and-salt-apartments.jpg": {
-    "alt": "Surfer riding a wave",
-    "license": "CC0 1.0 (public domain)",
-    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62058664"
-  },
-  "/images/stays/casa-kokos.jpg": {
+  "/images/illustrative/coconut-palm.jpg": {
     "alt": "Coconut palm against a blue sky",
     "license": "CC0 1.0 (public domain)",
     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
     "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61824188"
   },
-  "/images/stays/blue-horizon-hotel.jpg": {
-    "alt": "Palm trees on a sunny beach",
+  "/images/illustrative/palm-sunset-beach.jpg": {
+    "alt": "Palm tree and sandy beach at sunset",
     "license": "CC0 1.0 (public domain)",
     "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61893359"
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61881461"
+  },
+  "/images/illustrative/palm-forest.jpg": {
+    "alt": "Looking up into a forest of coconut palms",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61915281"
+  },
+  "/images/illustrative/fisherman-sunset.jpg": {
+    "alt": "Fisherman casting a line at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=60979498"
+  },
+  "/images/illustrative/pool-palms-dusk.jpg": {
+    "alt": "Swimming pool and palms at sunset",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61710043"
+  },
+  "/images/illustrative/ocean-sunrise.jpg": {
+    "alt": "Sunrise reflecting over the ocean",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61764740"
+  },
+  "/images/illustrative/surfer-crouching.jpg": {
+    "alt": "Surfer crouching low on a wave",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62347174"
+  },
+  "/images/illustrative/surfer-riding-wave.jpg": {
+    "alt": "Surfer riding a wave",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62058664"
+  },
+  "/images/illustrative/palm-leaves.jpg": {
+    "alt": "Tropical palm leaves against a blue sky",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=61859913"
+  },
+  "/images/illustrative/aerial-beach.jpg": {
+    "alt": "Aerial view of a boat on a sandy beach",
+    "license": "CC0 1.0 (public domain)",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en/",
+    "sourceUrl": "https://commons.wikimedia.org/w/index.php?curid=62085990"
   }
 }

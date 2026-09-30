@@ -82,14 +82,13 @@ export const collections: Collection[] = [
     slug: 'best-hotels-in-hiriketiya',
     label: 'Best hotels',
     h1: 'The best hotels in Hiriketiya',
-    metaTitle: 'Best Hotels in Hiriketiya (2026): Top Rated Stays',
+    metaTitle: 'Best Hotels in Hiriketiya (2026): Our Shortlist',
     metaDescription:
-      'The best rated hotels and stays in Hiriketiya, Sri Lanka, ranked by guest score, with prices, beach distance and what each is best for.',
+      'Our shortlist of the best places to stay in Hiriketiya, Sri Lanka, from surf hostels to pool villas, with beach distance and what each is best for.',
     keyword: 'best hotels hiriketiya',
     intro: [
-      'Our shortlist of the highest rated places to stay in Hiriketiya, across every budget. Ranked by guest rating, then checked by us.',
+      'Our shortlist of places to stay in and around Hiriketiya, across every budget, with the stays we like most at the top. Every listing links to its sources so you can check the details yourself.',
     ],
-    sort: (a, b) => (b.rating ?? 0) - (a.rating ?? 0),
     faq: [
       {
         q: 'What is the best hotel in Hiriketiya for couples?',
@@ -219,10 +218,10 @@ export const collections: Collection[] = [
     h1: 'Hiriketiya long term rentals',
     metaTitle: 'Hiriketiya Long Term Rentals: Monthly Stays & Nomad Apartments',
     metaDescription:
-      'Monthly rentals in Hiriketiya for digital nomads and surfers: apartments, studios and villas with fast wifi, kitchens and monthly rates.',
+      'Long stays in Hiriketiya for digital nomads and surfers: coliving, coworking and guesthouses with fast wifi and kitchens.',
     keyword: 'hiriketiya long term rental',
     intro: [
-      'Plenty of people come to Hiriketiya for a week and stay for a season. These places offer monthly rates, kitchens and proper wifi for working.',
+      'Plenty of people come to Hiriketiya for a week and stay for a season. These places are set up for it, with coworking spaces, kitchens and fast wifi. Ask each one directly about weekly and monthly rates.',
     ],
     category: 'long-stays',
     sort: (a, b) => (a.monthlyFrom ?? Infinity) - (b.monthlyFrom ?? Infinity),

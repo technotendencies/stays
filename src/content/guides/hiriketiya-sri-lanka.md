@@ -56,4 +56,4 @@ Our [where to stay in Hiriketiya](/where-to-stay-in-hiriketiya/) page compares e
 
 ## How many days?
 
-Three to four nights is a good minimum. Surfers and remote workers often stay weeks, and there are plenty of [long term rentals](/hiriketiya-long-term-rental/) with monthly rates.
+Three to four nights is a good minimum. Surfers and remote workers often stay weeks, and there are [places set up for long stays](/hiriketiya-long-term-rental/), with coworking and kitchens.

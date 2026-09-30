@@ -26,7 +26,6 @@ if (c.sort) list = [...list].sort(c.sort);
 const guides = (await getCollection('guides')).filter((g) => c.relatedGuides.includes(g.id));
 const others = collections.filter((o) => o.slug !== c.slug);
 const crumbs = [{ name: c.h1, href: `/${c.slug}/` }];
-const ranked = c.slug.startsWith('best-');
 const year = new Date().getFullYear();
 const schema = [
   breadcrumbSchema(crumbs),
@@ -57,7 +56,7 @@ const schema = [
 
     <section>
       <div class="grid">
-        {list.map((s, i) => <StayCard stay={s} rank={ranked ? i + 1 : undefined} showMonthly={c.category === 'long-stays'} />)}
+        {list.map((s) => <StayCard stay={s} showMonthly={c.category === 'long-stays'} />)}
       </div>
     </section>
 
