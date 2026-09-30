@@ -71,6 +71,19 @@ const { compact = false } = Astro.props;
     width: 100%;
     max-width: 760px;
   }
+  /* Phones: dates on one row, guests and button side by side below. */
+  @media (max-width: 719px) {
+    .search {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+    .when {
+      grid-column: 1 / -1;
+    }
+    .btn {
+      padding: 14px 20px;
+    }
+  }
   @media (min-width: 720px) {
     .search {
       grid-template-columns: 1.8fr 1fr auto;

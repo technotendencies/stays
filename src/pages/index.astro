@@ -75,7 +75,7 @@ const schema = [
       <div class="hero-content">
       <p class="eyebrow"><Icon name="mapPin" size={15} /> Hiriketiya · Sri Lanka</p>
       <h1>Find your <em>perfect</em> stay in Hiriketiya</h1>
-      <p class="lead">Every villa, surf house and boutique hotel around the bay on one map, with honest distances to the beach.</p>
+      <p class="lead">Every stay around the bay, on one map.</p>
       <SearchBar />
       <CategoryChips glass />
       </div>
@@ -231,11 +231,6 @@ const schema = [
       object-position: 50% 57%;
     }
   }
-  @media (max-width: 720px) {
-    .hero-media :global(img) {
-      object-position: 58% 66%;
-    }
-  }
   @keyframes drift {
     from {
       transform: scale(1.02);
@@ -273,9 +268,37 @@ const schema = [
       max-width: 640px;
     }
   }
-  @media (max-width: 999px) {
+  /* Phones: text at the top, the photo made taller than the hero so the couple
+     on the rock lands in the open space below the search. */
+  @media (max-width: 720px) {
+    .hero {
+      align-items: flex-start;
+      /* Small phones scroll a little rather than hide the couple behind the search. */
+      min-height: max(min(100svh, 920px), 780px);
+    }
+    .hero-media :global(img) {
+      height: 125%;
+      object-position: 60% 0;
+    }
     .hero-shade {
-      background: linear-gradient(180deg, rgb(3 24 42 / 0.55) 0%, rgb(3 24 42 / 0.35) 50%, rgb(3 24 42 / 0.8) 100%);
+      background: linear-gradient(180deg, rgb(3 24 42 / 0.6) 0%, rgb(3 24 42 / 0.35) 55%, rgb(3 24 42 / 0) 72%, rgb(3 24 42 / 0.5) 100%);
+    }
+    .hero-inner {
+      gap: 16px;
+      padding-top: 96px;
+    }
+    .hero .lead {
+      font-size: 1.1rem;
+    }
+    .hero :global(.chips) {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-right: -16px;
+      padding-right: 16px;
+    }
+    .hero :global(.chip) {
+      flex: none;
     }
   }
   .hero .eyebrow {
