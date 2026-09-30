@@ -68,7 +68,7 @@ const schema = [
 >
   <section class="hero">
     <div class="hero-media" aria-hidden="true">
-      {hero ? <img src={hero} alt={photoCredit(hero)?.alt ?? "Surfer with her board next to a tuk tuk, looking out over a palm fringed bay at sunset"} fetchpriority="high" /> : <OceanArt hue={188} time="dusk" />}
+      {hero ? <img src={hero} alt={photoCredit(hero)?.alt ?? "Couple sitting on a rock above the waves at sunset, framed by tropical leaves"} fetchpriority="high" /> : <OceanArt hue={188} time="dusk" />}
     </div>
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="wrap hero-inner">
@@ -221,13 +221,19 @@ const schema = [
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Keep the surfer and tuk tuk on the left in view. */
-    object-position: 20% 60%;
+    /* Keep the couple on the rock in view. */
+    object-position: 50% 52%;
     animation: drift 24s ease-in-out infinite alternate;
+  }
+  /* Taller crops on wide screens: keep the couple clear of the wave edge. */
+  @media (min-width: 1400px) {
+    .hero-media :global(img) {
+      object-position: 50% 57%;
+    }
   }
   @media (max-width: 720px) {
     .hero-media :global(img) {
-      object-position: 24% 60%;
+      object-position: 58% 66%;
     }
   }
   @keyframes drift {
@@ -247,7 +253,7 @@ const schema = [
   .hero-shade {
     background:
       linear-gradient(180deg, rgb(3 24 42 / 0.45) 0%, rgb(3 24 42 / 0) 30%, rgb(3 24 42 / 0.1) 70%, rgb(3 24 42 / 0.8) 100%),
-      linear-gradient(270deg, rgb(3 24 42 / 0.55) 0%, rgb(3 24 42 / 0.2) 45%, rgb(3 24 42 / 0) 65%);
+      linear-gradient(90deg, rgb(3 24 42 / 0.6) 0%, rgb(3 24 42 / 0.2) 45%, rgb(3 24 42 / 0) 65%);
   }
   .hero-inner {
     position: relative;
@@ -262,11 +268,9 @@ const schema = [
     flex-direction: column;
     gap: 22px;
   }
-  /* The photo's subject is on the left, so the text sits on the right on wide screens. */
   @media (min-width: 1000px) {
     .hero-content {
-      margin-left: auto;
-      max-width: 620px;
+      max-width: 640px;
     }
   }
   @media (max-width: 999px) {
