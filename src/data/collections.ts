@@ -1,4 +1,5 @@
 import type { Category, Stay } from './types';
+import { nearestMeters } from '../lib/spots';
 
 export interface Faq {
   q: string;
@@ -23,12 +24,15 @@ export interface Collection {
   sort?: (a: Stay, b: Stay) => number;
   faq: Faq[];
   relatedGuides: string[];
+  /** Show stays grouped by area (bay, Pehebiya, Dikwella …). */
+  showAreas?: boolean;
 }
 
 export const collections: Collection[] = [
   {
     slug: 'where-to-stay-in-hiriketiya',
     label: 'Where to stay',
+    showAreas: true,
     h1: 'Where to stay in Hiriketiya',
     metaTitle: 'Where to Stay in Hiriketiya (2026): Areas, Stays & Map',
     metaDescription:
@@ -248,6 +252,90 @@ export const collections: Collection[] = [
     category: 'boutique',
     faq: [],
     relatedGuides: ['hiriketiya-restaurants', 'things-to-do-in-hiriketiya'],
+  },
+  {
+    slug: 'best-hostels-in-hiriketiya',
+    label: 'Hostels',
+    h1: 'The best hostels in Hiriketiya',
+    metaTitle: 'Best Hostels in Hiriketiya: Social, Surf and Budget Beds',
+    metaDescription: 'Hostels in Hiriketiya for solo travellers and surfers: dorms, private rooms, kitchens and how close each is to the bay.',
+    keyword: 'best hostels hiriketiya',
+    intro: [
+      'Hostels are the easiest way to meet people in Hiriketiya. These are the ones around the bay, with dorms, private rooms and shared kitchens.',
+    ],
+    filter: (s) => s.type === 'hostel',
+    faq: [],
+    relatedGuides: ['three-days-in-hiriketiya', 'how-to-get-to-hiriketiya'],
+  },
+  {
+    slug: 'hiriketiya-stays-for-couples',
+    label: 'For couples',
+    h1: 'Stays for couples in Hiriketiya',
+    metaTitle: 'Hiriketiya Stays for Couples: Plunge Pools, Boutique Rooms and Quiet Villas',
+    metaDescription: 'Romantic stays in Hiriketiya for couples: boutique hotels, private villas and rooms with pools, close to the bay.',
+    keyword: 'hiriketiya couples',
+    intro: ['Boutique rooms, small villas with plunge pools and places that feel private, with the bay a short walk away.'],
+    filter: (s) => s.bestFor.some((b) => /couple/i.test(b)) || s.type === 'villa' || s.type === 'boutique',
+    faq: [],
+    relatedGuides: ['hiriketiya-sri-lanka', 'one-day-in-hiriketiya'],
+  },
+  {
+    slug: 'hiriketiya-digital-nomad-stays',
+    label: 'Digital nomads',
+    h1: 'Stays for digital nomads in Hiriketiya',
+    metaTitle: 'Hiriketiya for Digital Nomads: Stays with Desks, Wifi and Coworking',
+    metaDescription: 'Where to stay in Hiriketiya if you work remotely: coliving, coworking and rooms with desks and fast wifi.',
+    keyword: 'hiriketiya digital nomad',
+    intro: [
+      'Working from Hiriketiya is easy if you pick the right base. These stays have desks, coworking or proper wifi. Pair them with our [coworking spots](/hiriketiya-coworking/).',
+    ],
+    filter: (s) => s.amenities.includes('workspace') || s.categories.includes('long-stays'),
+    faq: [],
+    relatedGuides: ['best-time-to-visit-hiriketiya', 'three-days-in-hiriketiya'],
+  },
+  {
+    slug: 'hiriketiya-stays-near-nightlife',
+    label: 'Near the nightlife',
+    h1: 'Stays close to the nightlife in Hiriketiya',
+    metaTitle: 'Hiriketiya Stays Near the Nightlife: Walk Home from Dots and ClearPoint',
+    metaDescription: 'Stay within walking distance of Hiriketiya nightlife: Dots, ClearPoint and Lychee Bar. Every stay with its walk to the bars.',
+    keyword: 'hiriketiya nightlife stay',
+    intro: [
+      'Going out at Dots or ClearPoint? These stays are within about a 7 minute walk of the bars, so you can walk home. See [what is on tonight](/tonight/).',
+    ],
+    filter: (s) => nearestMeters(s.coords, ['nightlife']) <= 450,
+    sort: (a, b) => nearestMeters(a.coords, ['nightlife']) - nearestMeters(b.coords, ['nightlife']),
+    faq: [],
+    relatedGuides: ['three-days-in-hiriketiya'],
+  },
+  {
+    slug: 'quiet-stays-hiriketiya',
+    label: 'Quiet stays',
+    h1: 'Quiet stays in Hiriketiya',
+    metaTitle: 'Quiet Stays in Hiriketiya: Away from the Bars',
+    metaDescription: 'Peaceful places to stay around Hiriketiya, Dikwella and Nilwella, at least a 10 minute walk from the nightlife.',
+    keyword: 'quiet stay hiriketiya',
+    intro: [
+      'If sleep matters more than parties, stay a little further out. Every stay here is at least a 10 minute walk from the bars, and some are a scooter ride away.',
+    ],
+    filter: (s) => nearestMeters(s.coords, ['nightlife']) >= 700,
+    sort: (a, b) => nearestMeters(b.coords, ['nightlife']) - nearestMeters(a.coords, ['nightlife']),
+    faq: [],
+    relatedGuides: ['hiriketiya-sri-lanka'],
+  },
+  {
+    slug: 'hiriketiya-family-stays',
+    label: 'Families',
+    h1: 'Family stays in Hiriketiya',
+    metaTitle: 'Hiriketiya with Kids: Family Friendly Stays',
+    metaDescription: 'Family friendly places to stay in Hiriketiya and Dikwella: villas, family rooms and hotels with pools.',
+    keyword: 'hiriketiya with kids',
+    intro: [
+      'Hiriketiya bay is calm enough to swim in during the dry season, which makes it a good beach for families. These stays have room for a family, or are listed as family friendly.',
+    ],
+    filter: (s) => s.bestFor.some((b) => /famil/i.test(b)) || (s.sleeps ?? 0) >= 4,
+    faq: [],
+    relatedGuides: ['best-time-to-visit-hiriketiya', 'things-to-do-in-hiriketiya'],
   },
 ];
 

@@ -22,6 +22,10 @@ import {
   isDemo,
 } from '../../lib/stays';
 import { abs, breadcrumbSchema } from '../../lib/schema';
+import SaveButton from '../../components/SaveButton.astro';
+import ReportUpdate from '../../components/ReportUpdate.astro';
+import { nearestMeters, spotsNear, travelLabel } from '../../lib/spots';
+import { areas, areaOf } from '../../data/areas';
 import type { Stay } from '../../data/types';
 
 export function getStaticPaths() {
@@ -33,6 +37,26 @@ const d = beachDistance(stay);
 const href = bookingHref(stay);
 const provider = stay.booking ? providerLabels[stay.booking.provider] : undefined;
 const primary = getStayCollection(categoryCollection[stay.categories[0]]);
+const nightlifeM = nearestMeters(stay.coords, ['nightlife']);
+const breakfastM = nearestMeters(stay.coords, ['breakfast']);
+const area = areas.find((a) => a.key === areaOf(stay))!;
+const scooter = d.meters > 1200 || nightlifeM > 1200;
+const snapshot = [
+  { icon: 'umbrella' as const, label: 'Beach', value: travelLabel(d.meters) },
+  ...(Number.isFinite(nightlifeM) ? [{ icon: 'music' as const, label: 'Nightlife', value: travelLabel(nightlifeM) }] : []),
+  ...(Number.isFinite(breakfastM) ? [{ icon: 'coffee' as const, label: 'Breakfast café', value: travelLabel(breakfastM) }] : []),
+  { icon: 'compass' as const, label: 'Scooter needed', value: scooter ? 'Recommended' : 'No, walkable' },
+  { icon: 'mapPin' as const, label: 'Area', value: area.name },
+];
+const nearby = spotsNear(stay.coords, { limit: 6 });
+const checkLabels: Record<string, string> = {
+  location: 'Location checked',
+  photos: 'Photos current',
+  amenities: 'Amenities checked',
+  'beach-distance': 'Beach distance walked',
+  wifi: 'Wifi tested',
+  noise: 'Noise checked',
+};
 const crumbs = [
   ...(primary ? [{ name: primary.label, href: `/${primary.slug}/` }] : [{ name: 'Stays', href: '/stays/' }]),
   { name: stay.name, href: `/stays/${stay.slug}/` },
@@ -74,6 +98,8 @@ const schema = [
           {stay.sleeps && <span><Icon name="users" size={16} /> Sleeps {stay.sleeps}</span>}
           {stay.bedrooms && <span><Icon name="bed" size={16} /> {stay.bedrooms} bedroom{stay.bedrooms > 1 ? 's' : ''}</span>}
           {isDemo(stay) && <span class="badge demo">Demo listing</span>}
+          {stay.status === 'verified' && <span class="badge hiri"><Icon name="circleCheck" size={14} /> Hiri verified</span>}
+          <SaveButton kind="stay" slug={stay.slug} name={stay.name} url={`/stays/${stay.slug}/`} light />
         </p>
       </div>
     </div>
@@ -89,6 +115,55 @@ const schema = [
         <p class="summary">{stay.summary}</p>
         {stay.description.map((p) => <p>{p}</p>)}
 
+        <section class="snapshot">
+          <h2>Hiri Stays snapshot</h2>
+          <dl>
+            {
+              snapshot.map((x) => (
+                <div>
+                  <dt>
+                    <Icon name={x.icon} size={16} /> {x.label}
+                  </dt>
+                  <dd>{x.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          <p class="muted small">Walking times are estimates from the map. {area.blurb}</p>
+        </section>
+
+        {
+          stay.localTake && (
+            <>
+              <h2>Our local take</h2>
+              <p class="take">{stay.localTake}</p>
+            </>
+          )
+        }
+        {
+          stay.goodToKnow && (
+            <>
+              <h2>Good to know</h2>
+              <ul class="know">
+                {stay.goodToKnow.map((g) => (
+                  <li>{g}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+        {
+          stay.verifiedChecks && stay.verifiedChecks.length > 0 && (
+            <ul class="checked">
+              {stay.verifiedChecks.map((c) => (
+                <li>
+                  <Icon name="circleCheck" size={16} /> {checkLabels[c]}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
         <h2>Highlights</h2>
         <ul class="highlights">{stay.highlights.map((h) => <li><Icon name="sparkles" size={18} /> {h}</li>)}</ul>
 
@@ -100,6 +175,22 @@ const schema = [
           {stay.name} is in <b>{stay.area}</b>, about {d.meters}m from {d.beach}, roughly a {walkMinutes(d.meters)} minute walk.
         </p>
         <StayMap focus={stay.slug} height="340px" zoom={17} />
+
+        {
+          nearby.length > 0 && (
+            <>
+              <h2>Nearby</h2>
+              <ul class="nearby">
+                {nearby.map(({ spot, meters }) => (
+                  <li>
+                    <a href={`/local/${spot.slug}/`}>{spot.name}</a>
+                    <span>{travelLabel(meters)}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )
+        }
 
         <h2>Good for</h2>
         <p class="chips">
@@ -170,6 +261,8 @@ const schema = [
         </div>
       </aside>
     </div>
+
+    <div class="report-wrap"><ReportUpdate name={stay.name} checked={stay.checked} /></div>
 
     <section class="similar">
       <h2>Similar stays in Hiriketiya</h2>
@@ -395,10 +488,94 @@ const schema = [
   .checks :global(svg) {
     color: var(--palm);
   }
+  .badge.hiri {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--palm);
+    color: #fff;
+  }
+  .snapshot {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .snapshot h2 {
+    margin-top: 0;
+  }
+  .snapshot dl {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px 20px;
+    margin: 0;
+  }
+  .snapshot dt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .snapshot dt :global(svg) {
+    color: var(--ocean-500);
+  }
+  .snapshot dd {
+    margin: 2px 0 0;
+    font-weight: 600;
+  }
+  .small {
+    font-size: 0.85rem;
+    margin: 14px 0 0;
+  }
+  .take {
+    font-size: 1.1rem;
+  }
+  .know {
+    padding-left: 20px;
+  }
+  .checked {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    color: var(--palm);
+    font-weight: 600;
+  }
+  .checked li {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .nearby {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .nearby li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .nearby span {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
   .facts {
     margin: 16px 0 0;
     padding-top: 14px;
     border-top: 1px solid var(--line);
+  }
+  .report-wrap {
+    margin-top: 40px;
   }
   .similar {
     margin-top: 64px;

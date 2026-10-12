@@ -6,6 +6,7 @@ import '../styles/global.css';
 import { site } from '../data/site';
 import Wave from '../components/Wave.astro';
 import LogoMark from '../components/LogoMark.astro';
+import { icon } from '../lib/icons';
 
 interface Props {
   title: string;
@@ -24,7 +25,7 @@ const ogImage = new URL(image, site.url).toString();
 const nav = [
   { href: '/stays/', label: 'Stays' },
   { href: '/map/', label: 'Map' },
-  { href: '/where-to-stay-in-hiriketiya/', label: 'Where to stay' },
+  { href: '/local/', label: 'Local guide' },
   { href: '/guides/', label: 'Guides' },
 ];
 const path = Astro.url.pathname;
@@ -79,6 +80,10 @@ const path = Astro.url.pathname;
         </a>
         <nav aria-label="Main">
           {nav.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+          <a href="/saved/" class="saved-link" aria-label="Saved places" aria-current={path.startsWith('/saved/') ? 'page' : undefined}>
+            <span set:html={icon('heart', 18)} />
+            <span class="saved-count" data-saved-count></span>
+          </a>
         </nav>
       </div>
     </header>
@@ -105,7 +110,20 @@ const path = Astro.url.pathname;
           <a href="/hiriketiya-long-term-rental/">Long term rentals</a>
         </div>
         <div>
+          <h4>Local guide</h4>
+          <a href="/best-restaurants-hiriketiya/">Restaurants</a>
+          <a href="/best-breakfast-hiriketiya/">Breakfast</a>
+          <a href="/cheap-food-hiriketiya/">Cheap eats</a>
+          <a href="/hiriketiya-sunset/">Sunset</a>
+          <a href="/hiriketiya-nightlife/">Nightlife</a>
+          <a href="/tonight/">Tonight</a>
+          <a href="/hiriketiya-coworking/">Coworking</a>
+          <a href="/hiriketiya-massage/">Massage</a>
+        </div>
+        <div>
           <h4>Guides</h4>
+          <a href="/guides/one-day-in-hiriketiya/">One day in Hiriketiya</a>
+          <a href="/guides/three-days-in-hiriketiya/">Three days in Hiriketiya</a>
           <a href="/guides/best-time-to-visit-hiriketiya/">Best time to visit</a>
           <a href="/guides/hiriketiya-surf-season/">Surf season</a>
           <a href="/guides/hiriketiya-weather/">Weather</a>
@@ -229,6 +247,19 @@ const path = Astro.url.pathname;
     font-size: 0.97rem;
     white-space: nowrap;
     transition: background 0.15s;
+  }
+  .saved-link {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px;
+  }
+  .saved-link :global(svg) {
+    display: block;
+  }
+  .saved-count {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--lagoon-soft);
   }
   nav a:hover,
   nav a[aria-current='page'] {

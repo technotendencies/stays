@@ -1,0 +1,160 @@
+---
+import type { Spot } from '../data/spots';
+import Icon from './Icon.astro';
+import SaveButton from './SaveButton.astro';
+import { tagIcons, tagLabels, weekdays } from '../lib/spots';
+
+interface Props {
+  spot: Spot;
+  /** Tags to show first, for example the topic of the page. */
+  focus?: string[];
+}
+const { spot, focus = [] } = Astro.props;
+const tags = [...spot.tags].sort((a, b) => Number(focus.includes(b)) - Number(focus.includes(a))).slice(0, 4);
+const dayName = (d: string) => weekdays.find((w) => w.key === d)?.label ?? d;
+const url = `/local/${spot.slug}/`;
+---
+
+<article class="spot" data-tags={spot.tags.join(' ')}>
+  <div class="top">
+    <div class="badges">
+      {spot.localPick && <span class="badge pick"><Icon name="star" size={13} /> Local pick</span>}
+      {spot.budgetGem && <span class="badge gem"><Icon name="wallet" size={13} /> Budget gem</span>}
+      {spot.sponsored && <span class="badge sponsored">Sponsored</span>}
+    </div>
+    <SaveButton kind="spot" slug={spot.slug} name={spot.name} url={url} />
+  </div>
+  <h3><a href={url}>{spot.name}</a></h3>
+  {spot.area && (
+    <p class="area">
+      <Icon name="mapPin" size={14} /> {spot.area}
+    </p>
+  )}
+  <p class="summary">{spot.summary}</p>
+  {
+    spot.events?.map((e) => (
+      <p class="event">
+        <Icon name="music" size={14} />
+        <span>
+          {e.what}
+          {e.days.length > 0 && <> · {e.days.map(dayName).join(' and ')}</>}
+          {!e.verified && <em> (check before you go)</em>}
+        </span>
+      </p>
+    ))
+  }
+  <ul class="tags">
+    {
+      tags.map((t) => (
+        <li>
+          {tagIcons[t] && <Icon name={tagIcons[t]!} size={13} />} {tagLabels[t]}
+        </li>
+      ))
+    }
+  </ul>
+</article>
+
+<style>
+  .spot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 22px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 38px;
+  }
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .badge.pick {
+    background: var(--ocean-900);
+    color: #fff;
+  }
+  .badge.pick :global(svg) {
+    color: var(--lagoon);
+  }
+  .badge.gem {
+    background: #dcf2e3;
+    color: #1d5a3a;
+  }
+  .badge.sponsored {
+    background: #fff3cd;
+    color: #7a5b00;
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.45rem;
+  }
+  h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  h3 a:hover {
+    color: var(--ocean-700);
+  }
+  .area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .area :global(svg) {
+    color: var(--ocean-500);
+  }
+  .summary {
+    margin: 0;
+    color: var(--muted);
+  }
+  .event {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ocean-900);
+  }
+  .event em {
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: auto 0 0;
+    padding-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tags li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    background: var(--ocean-100);
+    color: var(--ocean-900);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+</style>

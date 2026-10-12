@@ -1,0 +1,359 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import LocalMap from '../../components/LocalMap.astro';
+import SpotCard from '../../components/SpotCard.astro';
+import SaveButton from '../../components/SaveButton.astro';
+import ReportUpdate from '../../components/ReportUpdate.astro';
+import FunnelCta from '../../components/FunnelCta.astro';
+import Icon from '../../components/Icon.astro';
+import { spots, type Spot } from '../../data/spots';
+import { topics } from '../../data/topics';
+import { allStays, distanceMeters } from '../../lib/stays';
+import { spotsNear, tagIcons, tagLabels, travelLabel, weekdays } from '../../lib/spots';
+import { abs, breadcrumbSchema } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return spots.map((spot) => ({ params: { slug: spot.slug }, props: { spot } }));
+}
+
+const { spot } = Astro.props as { spot: Spot };
+const topic = topics.find((t) => t.tags.some((tag) => spot.tags.includes(tag)));
+const crumbs = [
+  { name: 'Local guide', href: '/local/' },
+  ...(topic ? [{ name: topic.label, href: `/${topic.slug}/` }] : []),
+  { name: spot.name, href: `/local/${spot.slug}/` },
+];
+const dayName = (d: string) => weekdays.find((w) => w.key === d)?.label ?? d;
+const nearbyStays = spot.coords
+  ? allStays()
+      .map((s) => ({ s, m: distanceMeters(spot.coords!, s.coords) }))
+      .sort((a, b) => a.m - b.m)
+      .slice(0, 4)
+  : [];
+const nearbySpots = spot.coords ? spotsNear(spot.coords, { exclude: spot.slug, limit: 4 }) : [];
+const related = spots.filter((s) => s.slug !== spot.slug && s.tags[0] === spot.tags[0]).slice(0, 3);
+// Very short entries without a pin are kept out of search results until they have more to say.
+const thin = !spot.body && !spot.coords && !spot.goodToKnow && spot.summary.length < 60;
+const area = spot.area ?? 'Hiriketiya';
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': spot.tags.includes('food') || spot.tags.includes('breakfast') || spot.tags.includes('cheap-eats') ? 'Restaurant' : 'LocalBusiness',
+    name: spot.name,
+    description: spot.summary,
+    url: abs(`/local/${spot.slug}/`),
+    address: { '@type': 'PostalAddress', addressLocality: area, addressRegion: 'Southern Province', addressCountry: 'LK' },
+    ...(spot.coords ? { geo: { '@type': 'GeoCoordinates', latitude: spot.coords[0], longitude: spot.coords[1] } } : {}),
+    ...(spot.website ? { sameAs: [spot.website] } : {}),
+  },
+];
+---
+
+<Layout title={`${spot.name}, ${area} | Hiriketiya Local Guide`} description={`${spot.summary} An independent local recommendation.`} schema={schema} noindex={thin}>
+  <PageHero crumbs={crumbs} eyebrow={spot.area ? spot.area : 'Hiriketiya'} title={spot.name} lead={spot.summary} hue={185}>
+    <div class="hero-badges">
+      {spot.localPick && <span class="badge pick"><Icon name="star" size={14} /> Local pick</span>}
+      {spot.budgetGem && <span class="badge gem"><Icon name="wallet" size={14} /> Budget gem</span>}
+      {spot.sponsored && <span class="badge sponsored">Sponsored</span>}
+      <SaveButton kind="spot" slug={spot.slug} name={spot.name} url={`/local/${spot.slug}/`} light />
+    </div>
+  </PageHero>
+
+  <div class="wrap cols">
+    <div class="main">
+      {spot.body?.map((p) => <p class="body">{p}</p>)}
+
+      <ul class="tags">
+        {
+          spot.tags.map((t) => {
+            const page = topics.find((tp) => tp.tags.includes(t));
+            const inner = (
+              <>
+                {tagIcons[t] && <Icon name={tagIcons[t]!} size={14} />} {tagLabels[t]}
+              </>
+            );
+            return <li>{page ? <a href={`/${page.slug}/`}>{inner}</a> : <span>{inner}</span>}</li>;
+          })
+        }
+      </ul>
+
+      {
+        spot.events && spot.events.length > 0 && (
+          <section>
+            <h2>When to go</h2>
+            <ul class="events">
+              {spot.events.map((e) => (
+                <li>
+                  <Icon name="music" size={16} />
+                  <span>
+                    <b>{e.what}</b>
+                    {e.days.length > 0 ? <> on {e.days.map(dayName).join(' and ')}</> : <> (day varies)</>}
+                    {!e.verified && <em> Not confirmed recently, check before you go.</em>}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        spot.goodToKnow && (
+          <section>
+            <h2>Good to know</h2>
+            <ul class="good">
+              {spot.goodToKnow.map((g) => (
+                <li>
+                  <Icon name="check" size={16} /> {g}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      {
+        spot.coords ? (
+          <section>
+            <h2>Where it is</h2>
+            <LocalMap spots={[spot, ...nearbySpots.map((n) => n.spot)]} stays={nearbyStays.map((n) => n.s)} center={spot.coords} zoom={17} focus={spot.slug} height="340px" />
+          </section>
+        ) : (
+          <p class="muted nopin">
+            <Icon name="mapPin" size={16} /> We have not pinned this one on the map yet.
+          </p>
+        )
+      }
+
+      {
+        nearbySpots.length > 0 && (
+          <section>
+            <h2>Nearby</h2>
+            <ul class="nearby">
+              {nearbySpots.map(({ spot: n, meters }) => (
+                <li>
+                  <a href={`/local/${n.slug}/`}>{n.name}</a>
+                  <span>{travelLabel(meters)}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <ReportUpdate name={spot.name} checked={spot.checked} />
+    </div>
+
+    <aside class="side">
+      {
+        spot.website && (
+          <a class="btn cta" href={spot.website} target="_blank" rel="nofollow noopener">
+            Official website <Icon name="arrowRight" size={16} />
+          </a>
+        )
+      }
+      {
+        spot.instagram && (
+          <a class="btn ghost cta" href={spot.instagram} target="_blank" rel="nofollow noopener">
+            Instagram
+          </a>
+        )
+      }
+      {
+        nearbyStays.length > 0 && (
+          <div class="stays">
+            <h3>Stay nearby</h3>
+            <ul>
+              {nearbyStays.map(({ s, m }) => (
+                <li>
+                  <a href={`/stays/${s.slug}/`}>{s.name}</a>
+                  <span>{travelLabel(m)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+      <p class="independent">
+        <Icon name="circleCheck" size={16} /> An independent recommendation. Nobody paid to be here.
+      </p>
+    </aside>
+  </div>
+
+  <div class="wrap">
+    {
+      related.length > 0 && (
+        <section class="section">
+          <h2>More like this</h2>
+          <div class="grid">
+            {related.map((r) => (
+              <SpotCard spot={r} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+    <FunnelCta headline="Coming to Hiriketiya?" cta="Find your stay →" href="/find-my-stay/" />
+  </div>
+</Layout>
+
+<style>
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  .badge.pick {
+    background: var(--coral);
+    color: #fff;
+  }
+  .badge.gem {
+    background: #dcf2e3;
+    color: #1d5a3a;
+  }
+  .badge.sponsored {
+    background: #fff3cd;
+    color: #7a5b00;
+  }
+  .cols {
+    display: grid;
+    gap: 40px;
+    padding-top: 32px;
+  }
+  @media (min-width: 900px) {
+    .cols {
+      grid-template-columns: 1fr 320px;
+    }
+  }
+  .main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .main h2 {
+    font-size: 1.5rem;
+    margin: 12px 0 10px;
+  }
+  .body {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tags a,
+  .tags span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--ocean-100);
+    color: var(--ocean-900);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .tags a:hover {
+    background: var(--ocean-900);
+    color: #fff;
+  }
+  .events,
+  .good,
+  .nearby {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .events li,
+  .good li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .events :global(svg),
+  .good :global(svg) {
+    color: var(--ocean-500);
+    margin-top: 4px;
+    flex: none;
+  }
+  .events em {
+    display: block;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .nearby li,
+  .stays li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .nearby span,
+  .stays span {
+    color: var(--muted);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .nopin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .cta {
+    width: 100%;
+  }
+  .stays {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+  }
+  .stays h3 {
+    margin: 0 0 12px;
+  }
+  .stays ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .independent {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  .independent :global(svg) {
+    color: var(--palm);
+    flex: none;
+    margin-top: 3px;
+  }
+</style>

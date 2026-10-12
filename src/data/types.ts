@@ -67,6 +67,12 @@ export interface Stay {
   hue: number;
   booking?: Booking;
   featured?: boolean;
+  /** Personal take written after visiting ("Our local take"). Only set once someone has been there. */
+  localTake?: string;
+  /** Honest practical notes ("The road is dark at night"). Only from a visit or the property. */
+  goodToKnow?: string[];
+  /** Checks done in person for the HIRI VERIFIED badge. */
+  verifiedChecks?: ('location' | 'photos' | 'amenities' | 'beach-distance' | 'wifi' | 'noise')[];
 }
 
 export type PlaceKind = 'beach' | 'surf' | 'restaurant' | 'sight';

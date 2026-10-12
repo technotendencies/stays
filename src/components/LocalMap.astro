@@ -1,0 +1,278 @@
+---
+import { places } from '../data/places';
+import { site } from '../data/site';
+import type { Spot } from '../data/spots';
+import type { Stay } from '../data/types';
+import { allStays, distanceMeters, stayForClient } from '../lib/stays';
+import { allSpots, mapFilters, spotForClient, tagIcons } from '../lib/spots';
+import { icon } from '../lib/icons';
+import Icon from './Icon.astro';
+
+interface Props {
+  spots?: Spot[];
+  stays?: Stay[];
+  filters?: boolean;
+  list?: boolean;
+  height?: string;
+  center?: [number, number];
+  zoom?: number;
+  /** Highlight one stay or spot (by slug). */
+  focus?: string;
+}
+
+const { spots = allSpots(), stays = allStays(), filters = false, list = false, height = '480px', center = site.center, zoom = 16, focus } = Astro.props;
+const pinned = spots.filter((s) => s.coords);
+const data = {
+  spots: pinned.map((s) => ({ ...spotForClient(s), icon: icon(tagIcons[s.tags.find((t) => tagIcons[t])!] ?? 'mapPin', 14) })),
+  stays: stays.map(stayForClient),
+  // Beaches and surf spots, minus any that are already a recommended spot (avoids double pins).
+  places: places.filter((p) => p.kind !== 'restaurant' && !pinned.some((sp) => distanceMeters(sp.coords!, p.coords) < 60)),
+  center,
+  zoom,
+  focus: focus ?? null,
+  icons: { house: icon('house', 14), beach: icon('umbrella', 14), surf: icon('waves', 14) },
+};
+const unpinned = spots.length - pinned.length;
+---
+
+<div class="local-map" data-local-map={JSON.stringify(data)}>
+  {
+    filters && (
+      <div class="filters" role="group" aria-label="Map filters">
+        {mapFilters.map((f) => (
+          <button type="button" class="chip" data-filter={f.key} aria-pressed="false">
+            <Icon name={f.icon} size={16} /> {f.label}
+          </button>
+        ))}
+        <button type="button" class="chip clear" data-clear hidden>
+          Clear
+        </button>
+      </div>
+    )
+  }
+  <div class:list={['layout', { 'with-list': list }]}>
+    <div class="canvas" style={`height:${height}`} data-canvas></div>
+    {list && <ol class="list" data-list aria-label="Places on the map" />}
+  </div>
+  <p class="count muted" aria-live="polite">
+    <span data-count></span>
+    {unpinned > 0 && <> · {unpinned} more {unpinned === 1 ? 'place is' : 'places are'} listed in the guide but not yet pinned</>}
+  </p>
+</div>
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+  import type { ClientStay } from '../lib/stays';
+  import type { ClientSpot } from '../lib/spots';
+
+  type MapSpot = ClientSpot & { icon: string };
+  interface Data {
+    spots: MapSpot[];
+    stays: ClientStay[];
+    places: { name: string; kind: string; coords: [number, number]; note: string }[];
+    center: [number, number];
+    zoom: number;
+    focus: string | null;
+    icons: Record<string, string>;
+  }
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  // Map filter key → spot tags it needs. 'stay' and 'tonight' are special.
+  const tagFor: Record<string, string> = {
+    breakfast: 'breakfast', coffee: 'coffee', surf: 'surf', work: 'work', 'cheap-eats': 'cheap-eats', drinks: 'drinks',
+    sunset: 'sunset', massage: 'massage', wellness: 'wellness', laundry: 'laundry',
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-local-map]').forEach((root) => {
+    const data: Data = JSON.parse(root.dataset.localMap!);
+    const canvas = root.querySelector<HTMLElement>('[data-canvas]')!;
+    const map = L.map(canvas, { scrollWheelZoom: false }).setView(data.center, data.zoom);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+    map.on('click focus', () => map.scrollWheelZoom.enable());
+
+    for (const p of data.places) {
+      L.marker(p.coords, { icon: L.divIcon({ className: `poi poi-${p.kind}`, html: data.icons[p.kind] ?? '', iconSize: [26, 26] }), title: p.name })
+        .bindPopup(`<div class="pop"><strong>${esc(p.name)}</strong><p>${esc(p.note)}</p></div>`)
+        .addTo(map);
+    }
+
+    const spotMarkers = new Map<string, L.Marker>();
+    for (const s of data.spots) {
+      const m = L.marker(s.coords!, {
+        icon: L.divIcon({ className: `spot-pin${s.localPick ? ' pick' : ''}${s.slug === data.focus ? ' focused' : ''}`, html: s.icon, iconSize: [30, 30] }),
+        title: s.name,
+        riseOnHover: true,
+      }).bindPopup(
+        `<div class="pop"><strong>${esc(s.name)}</strong>${s.localPick ? '<div class="pop-type">Local pick</div>' : ''}<p>${esc(s.summary)}</p><a class="pop-cta" href="${s.url}">See details →</a></div>`,
+        { maxWidth: 260 },
+      );
+      spotMarkers.set(s.slug, m);
+    }
+    const stayMarkers = new Map<string, L.Marker>();
+    for (const s of data.stays) {
+      const m = L.marker(s.coords, {
+        icon: L.divIcon({ className: `stay-pin${s.slug === data.focus ? ' focused' : ''}`, html: data.icons.house, iconSize: [26, 26] }),
+        title: s.name,
+      }).bindPopup(
+        `<div class="pop"><strong>${esc(s.name)}</strong><div class="pop-type">${esc(s.typeLabel)} · ${esc(s.distance)}</div><a class="pop-cta" href="${s.url}">View stay →</a></div>`,
+        { maxWidth: 260 },
+      );
+      stayMarkers.set(s.slug, m);
+    }
+
+    const active = new Set<string>();
+    const params = new URLSearchParams(location.search);
+    (params.get('filter') || '').split(',').filter(Boolean).forEach((f) => active.add(f));
+    const list = root.querySelector<HTMLElement>('[data-list]');
+    const count = root.querySelector<HTMLElement>('[data-count]');
+    const clear = root.querySelector<HTMLButtonElement>('[data-clear]');
+
+    function render() {
+      const spotFilters = [...active].filter((k) => k !== 'stay');
+      const showStays = active.size === 0 || active.has('stay');
+      const showSpots = active.size === 0 || spotFilters.length > 0;
+      const visibleSpots = data.spots.filter(
+        (s) => showSpots && spotFilters.every((k) => (k === 'tonight' ? s.tonight : s.tags.includes(tagFor[k] as never))),
+      );
+      const visibleStays = showStays ? data.stays : [];
+      for (const [slug, m] of spotMarkers) (visibleSpots.some((s) => s.slug === slug) ? m.addTo(map) : m.remove());
+      for (const [slug, m] of stayMarkers) (visibleStays.some((s) => s.slug === slug) ? m.addTo(map) : m.remove());
+      root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(active.has(b.dataset.filter!))));
+      if (clear) clear.hidden = active.size === 0;
+      const n = visibleSpots.length + visibleStays.length;
+      if (count) count.textContent = `${n} ${n === 1 ? 'place' : 'places'} on the map`;
+      if (list) {
+        list.innerHTML = [
+          ...visibleSpots.map((s) => `<li><button type="button" data-go="spot:${s.slug}"><span class="n">${esc(s.name)}</span><span class="d">${s.localPick ? 'Local pick · ' : ''}${esc(s.summary)}</span></button></li>`),
+          ...visibleStays.map((s) => `<li><button type="button" data-go="stay:${s.slug}"><span class="n">${esc(s.name)}</span><span class="d">${esc(s.typeLabel)} · ${esc(s.distance)}</span></button></li>`),
+        ].join('');
+      }
+      if (active.size) {
+        const url = new URL(location.href);
+        url.searchParams.set('filter', [...active].join(','));
+        history.replaceState(null, '', url);
+      }
+    }
+
+    root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const k = b.dataset.filter!;
+        active.has(k) ? active.delete(k) : active.add(k);
+        render();
+      }),
+    );
+    clear?.addEventListener('click', () => {
+      active.clear();
+      const url = new URL(location.href);
+      url.searchParams.delete('filter');
+      history.replaceState(null, '', url);
+      render();
+    });
+    list?.addEventListener('click', (e) => {
+      const go = (e.target as HTMLElement).closest<HTMLElement>('[data-go]')?.dataset.go;
+      if (!go) return;
+      const [kind, slug] = go.split(':');
+      const m = (kind === 'spot' ? spotMarkers : stayMarkers).get(slug);
+      if (!m) return;
+      map.setView(m.getLatLng(), Math.max(map.getZoom(), 17));
+      m.openPopup();
+      canvas.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    render();
+    const focused = data.focus && (spotMarkers.get(data.focus) ?? stayMarkers.get(data.focus));
+    if (focused) focused.openPopup();
+  });
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .clear {
+    background: transparent;
+    border-style: dashed;
+  }
+  .layout {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 900px) {
+    .with-list {
+      grid-template-columns: 1fr 320px;
+    }
+  }
+  .canvas {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    z-index: 0;
+    background: var(--ocean-100);
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 680px;
+    overflow-y: auto;
+  }
+  .list :global(button) {
+    width: 100%;
+    text-align: left;
+    display: grid;
+    gap: 2px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font: inherit;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .list :global(button:hover) {
+    border-color: var(--ocean-500);
+  }
+  .list :global(.n) {
+    font-weight: 600;
+  }
+  .list :global(.d) {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .count {
+    font-size: 0.85rem;
+    margin: 8px 0 0;
+  }
+  :global(.spot-pin),
+  :global(.stay-pin) {
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgb(3 24 42 / 0.35);
+    color: #fff;
+    background: var(--ocean-700);
+  }
+  :global(.spot-pin.pick) {
+    background: var(--coral);
+  }
+  :global(.stay-pin) {
+    background: #fff;
+    color: var(--ocean-900);
+    border-color: var(--ocean-900);
+  }
+  :global(.spot-pin.focused),
+  :global(.stay-pin.focused) {
+    transform: scale(1.25);
+    z-index: 1000 !important;
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  kind: 'stay' | 'spot';
+  slug: string;
+  name: string;
+  url: string;
+  /** Light button for use on photos and dark cards. */
+  light?: boolean;
+}
+const { kind, slug, name, url, light = false } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={['save', { light }]}
+  data-save={JSON.stringify({ kind, slug, name, url })}
+  aria-pressed="false"
+  aria-label={`Save ${name}`}
+  title="Save for your trip"
+>
+  <Icon name="heart" size={18} />
+</button>
+
+<script>
+  // Favourites live in this browser only (localStorage), no account needed.
+  const KEY = 'hs-saved';
+  type Saved = { kind: string; slug: string; name: string; url: string };
+  const read = (): Saved[] => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY) || '[]');
+    } catch {
+      return [];
+    }
+  };
+  const write = (v: Saved[]) => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(v));
+    } catch {}
+  };
+  const sync = () => {
+    const saved = read();
+    document.querySelectorAll<HTMLButtonElement>('[data-save]').forEach((b) => {
+      const item: Saved = JSON.parse(b.dataset.save!);
+      b.setAttribute('aria-pressed', String(saved.some((s) => s.kind === item.kind && s.slug === item.slug)));
+    });
+    document.querySelectorAll<HTMLElement>('[data-saved-count]').forEach((el) => {
+      el.textContent = saved.length ? String(saved.length) : '';
+    });
+  };
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-save]');
+    if (!b) return;
+    e.preventDefault();
+    const item: Saved = JSON.parse(b.dataset.save!);
+    const saved = read();
+    const i = saved.findIndex((s) => s.kind === item.kind && s.slug === item.slug);
+    if (i >= 0) saved.splice(i, 1);
+    else saved.push(item);
+    write(saved);
+    sync();
+  });
+  sync();
+</script>
+
+<style>
+  .save {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    flex: none;
+    transition:
+      color 0.15s,
+      background 0.15s;
+  }
+  .save.light {
+    background: rgb(255 255 255 / 0.9);
+    border-color: transparent;
+    color: var(--ink);
+  }
+  .save:hover {
+    color: var(--coral);
+  }
+  .save[aria-pressed='true'] {
+    color: var(--coral);
+  }
+  .save[aria-pressed='true'] :global(svg) {
+    fill: var(--coral);
+  }
+</style>

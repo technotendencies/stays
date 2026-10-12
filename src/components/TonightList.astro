@@ -1,0 +1,129 @@
+---
+import { allSpots, weekdays } from '../lib/spots';
+
+/** Every event night, grouped by weekday. The script highlights today in the visitor's own time zone. */
+const week = weekdays.map((d) => ({
+  ...d,
+  items: allSpots().flatMap((s) => (s.events ?? []).filter((e) => e.days.includes(d.key)).map((e) => ({ s, e }))),
+}));
+const varies = allSpots().flatMap((s) => (s.events ?? []).filter((e) => e.days.length === 0).map((e) => ({ s, e })));
+interface Props {
+  /** Only show today (QR page). */
+  todayOnly?: boolean;
+}
+const { todayOnly = false } = Astro.props;
+---
+
+<div class:list={['tonight', { 'today-only': todayOnly }]} data-tonight>
+  {
+    week.map((d) => (
+      <div class="day" data-day={d.key}>
+        <h3>
+          {d.label}
+          <span class="now" hidden>Tonight</span>
+        </h3>
+        {d.items.length ? (
+          <ul>
+            {d.items.map(({ s, e }) => (
+              <li>
+                <a href={`/local/${s.slug}/`}>{s.name}</a>
+                <span>{e.what}</span>
+                {!e.verified && <em>check before you go</em>}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="muted">Nothing regular. A good night for sunset and an early dinner.</p>
+        )}
+      </div>
+    ))
+  }
+  {
+    !todayOnly && varies.length > 0 && (
+      <div class="day">
+        <h3>Some nights</h3>
+        <ul>
+          {varies.map(({ s, e }) => (
+            <li>
+              <a href={`/local/${s.slug}/`}>{s.name}</a>
+              <span>{e.what}, the day changes</span>
+              <em>ask locally</em>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  const keys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  // Hiriketiya time (UTC+5:30), so the list is right even if the visitor's phone is still on home time.
+  const now = new Date(Date.now() + (330 + new Date().getTimezoneOffset()) * 60000);
+  const today = keys[now.getDay()];
+  document.querySelectorAll<HTMLElement>('[data-tonight]').forEach((root) => {
+    const days = [...root.querySelectorAll<HTMLElement>('[data-day]')];
+    const idx = days.findIndex((d) => d.dataset.day === today);
+    if (idx < 0) return;
+    days[idx].classList.add('is-today');
+    days[idx].querySelector<HTMLElement>('.now')!.hidden = false;
+    if (root.classList.contains('today-only')) days.forEach((d, i) => (d.hidden = i !== idx));
+    else days.slice(0, idx).forEach((d) => root.appendChild(d));
+  });
+</script>
+
+<style>
+  .tonight {
+    display: grid;
+    gap: 14px;
+  }
+  .day {
+    padding: 18px 22px;
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--shadow);
+  }
+  .day.is-today {
+    outline: 2px solid var(--lagoon);
+  }
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 10px;
+  }
+  .now {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--coral);
+    color: #fff;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: baseline;
+  }
+  li a {
+    font-weight: 600;
+  }
+  li em {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .muted {
+    margin: 0;
+  }
+</style>

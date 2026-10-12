@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import SaveButton from '../components/SaveButton.astro';
+---
+
+<Layout title="Your Saved Places | Hiriketiya Stays" description="The stays and places you saved for your trip to Hiriketiya." noindex>
+  <PageHero crumbs={[{ name: 'Saved', href: '/saved/' }]} eyebrow="Your trip" title="Saved for your trip" lead="Tap the heart on any stay or place to save it here. Saved on this device only, no account needed." hue={330} />
+  <div class="wrap saved">
+    <p class="empty muted" data-empty>Nothing saved yet. Start with the <a href="/local/">local guide</a> or <a href="/stays/">stays</a>.</p>
+    <section data-group="stay" hidden>
+      <h2>Stays</h2>
+      <ul data-list></ul>
+    </section>
+    <section data-group="spot" hidden>
+      <h2>Places</h2>
+      <ul data-list></ul>
+    </section>
+  </div>
+  <!-- Loads the shared save script so hearts on this page stay in sync. -->
+  <div hidden><SaveButton kind="spot" slug="" name="" url="" /></div>
+</Layout>
+
+<script>
+  type Saved = { kind: string; slug: string; name: string; url: string };
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  function render() {
+    let saved: Saved[] = [];
+    try {
+      saved = JSON.parse(localStorage.getItem('hs-saved') || '[]');
+    } catch {}
+    document.querySelector<HTMLElement>('[data-empty]')!.hidden = saved.length > 0;
+    document.querySelectorAll<HTMLElement>('[data-group]').forEach((g) => {
+      const items = saved.filter((s) => s.kind === g.dataset.group);
+      g.hidden = !items.length;
+      g.querySelector('[data-list]')!.innerHTML = items
+        .map((s) => `<li><a href="${esc(s.url)}">${esc(s.name)}</a><button type="button" data-remove="${esc(s.kind)}:${esc(s.slug)}">Remove</button></li>`)
+        .join('');
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const key = (e.target as HTMLElement).closest<HTMLElement>('[data-remove]')?.dataset.remove;
+    if (!key) return;
+    const [kind, slug] = key.split(':');
+    try {
+      const saved: Saved[] = JSON.parse(localStorage.getItem('hs-saved') || '[]');
+      localStorage.setItem('hs-saved', JSON.stringify(saved.filter((s) => !(s.kind === kind && s.slug === slug))));
+    } catch {}
+    render();
+  });
+  render();
+</script>
+
+<style>
+  .saved {
+    max-width: 760px;
+    padding-top: 32px;
+  }
+  .saved ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .saved :global(li) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--card);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+  }
+  .saved :global(li a) {
+    font-weight: 600;
+  }
+  .saved :global(li button) {
+    border: 0;
+    background: none;
+    color: var(--muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import SpotCard from '../../components/SpotCard.astro';
+import Icon from '../../components/Icon.astro';
+import { topics } from '../../data/topics';
+import { allSpots, tagLabels } from '../../lib/spots';
+import { breadcrumbSchema } from '../../lib/schema';
+import type { SpotTag } from '../../data/spots';
+
+const spots = allSpots();
+const picks = spots.filter((s) => s.localPick);
+const filterTags: SpotTag[] = ['breakfast', 'coffee', 'food', 'cheap-eats', 'drinks', 'nightlife', 'social', 'sunset', 'views', 'beach', 'work', 'wellness', 'sport'];
+const crumbs = [{ name: 'Local guide', href: '/local/' }];
+---
+
+<Layout
+  title="Hiriketiya Local Guide: Where to Eat, Drink, Work and Explore"
+  description="An independent local guide to Hiriketiya: food, breakfast, sunset, nightlife, coworking, wellness and things to do. No paid rankings."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Independent local guide"
+    title="Hiriketiya, the local way"
+    lead="The places we actually go to: food, sunset, nights out, work spots and things to do. Nobody pays to be on this list."
+    image="/images/sunset.jpg"
+  />
+  <div class="wrap">
+    <section class="section topics">
+      <h2>Start here</h2>
+      <div class="topic-grid">
+        {
+          topics.map((t) => (
+            <a class="topic" href={`/${t.slug}/`}>
+              <span>{t.label}</span>
+              <Icon name="arrowRight" size={16} />
+            </a>
+          ))
+        }
+        <a class="topic" href="/tonight/"><span>Tonight in Hiriketiya</span><Icon name="arrowRight" size={16} /></a>
+        <a class="topic" href="/map/"><span>Local map</span><Icon name="arrowRight" size={16} /></a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Local picks</h2>
+      <p class="muted">The ones we would send a friend to first.</p>
+      <div class="grid">{picks.map((s) => <SpotCard spot={s} />)}</div>
+    </section>
+
+    <section class="section">
+      <h2>Everything in the guide</h2>
+      <div class="chips" role="group" aria-label="Filter places" data-tag-filter>
+        <button type="button" class="chip" data-tag="" aria-pressed="true">All</button>
+        {filterTags.map((t) => <button type="button" class="chip" data-tag={t} aria-pressed="false">{tagLabels[t]}</button>)}
+      </div>
+      <div class="grid all" data-spot-grid>{spots.map((s) => <SpotCard spot={s} />)}</div>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-tag]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-spot-grid] > article');
+  chips.forEach((c) =>
+    c.addEventListener('click', () => {
+      const tag = c.dataset.tag!;
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      cards.forEach((card) => (card.hidden = !!tag && !card.dataset.tags!.split(' ').includes(tag)));
+    }),
+  );
+</script>
+
+<style>
+  .topics h2 {
+    margin-bottom: 20px;
+  }
+  .topic-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+  .topic {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .topic:hover {
+    color: var(--ocean-700);
+  }
+  .chips {
+    margin: 16px 0 24px;
+  }
+</style>

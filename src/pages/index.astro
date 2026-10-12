@@ -3,7 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import SearchBar from '../components/SearchBar.astro';
 import CategoryChips from '../components/CategoryChips.astro';
 import StayCard from '../components/StayCard.astro';
-import StayMap from '../components/StayMap.astro';
+import LocalMap from '../components/LocalMap.astro';
+import SpotCard from '../components/SpotCard.astro';
+import { allSpots } from '../lib/spots';
+import { topics } from '../data/topics';
 import OceanArt from '../components/OceanArt.astro';
 import Wave from '../components/Wave.astro';
 import GuideCard from '../components/GuideCard.astro';
@@ -16,6 +19,7 @@ import { getCollection } from 'astro:content';
 import type { IconName } from '../lib/icons';
 
 const popular = featuredStays(6);
+const localPicks = allSpots().filter((s) => s.localPick).slice(0, 6);
 const guides = (await getCollection('guides')).sort((a, b) => a.data.order - b.data.order).slice(0, 6);
 const hero = photo(sitePhotos.hero);
 const areas = [
@@ -108,6 +112,14 @@ const schema = [
         </div>
         <a class="link-arrow" href="/where-to-stay-in-hiriketiya/">Compare the areas <Icon name="arrowRight" size={16} /></a>
       </div>
+      <a class="finder" href="/find-my-stay/">
+        <Icon name="compass" size={28} />
+        <span>
+          <b>Not sure which stay is right for you?</b>
+          <span>Answer five quick questions and see your best matches.</span>
+        </span>
+        <span class="btn coral">Find my Hiri stay <Icon name="arrowRight" size={16} /></span>
+      </a>
       <div class="areas">
         {
           areas.map((a) => (
@@ -127,17 +139,35 @@ const schema = [
     </div>
   </section>
 
+  <section class="section picks">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow"><Icon name="star" size={15} /> Local picks</p>
+          <h2>Where we actually go</h2>
+          <p class="lead">Food, sunset, nights out and work spots. Independent recommendations: nobody pays to be on this list.</p>
+        </div>
+        <a class="link-arrow" href="/local/">The whole local guide <Icon name="arrowRight" size={16} /></a>
+      </div>
+      <div class="grid">{localPicks.map((s) => <SpotCard spot={s} />)}</div>
+      <div class="topic-links">
+        {topics.slice(0, 8).map((t) => <a class="chip" href={`/${t.slug}/`}>{t.label}</a>)}
+        <a class="chip" href="/tonight/">Tonight</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section map-teaser">
     <div class="wrap">
       <div class="section-head">
         <div>
-          <p class="eyebrow"><Icon name="map" size={15} /> The Hiriketiya Stay Map</p>
+          <p class="eyebrow"><Icon name="map" size={15} /> The Hiriketiya Local Map</p>
           <h2>See exactly where you'll wake up</h2>
-          <p class="lead">Every stay, beach, surf break and café in one place. Filter by villas, hotels, budget or luxury.</p>
+          <p class="lead">Every stay plus our favourite places for breakfast, coffee, sunset and nights out. Filters combine, so Work and Coffee shows places good for both.</p>
         </div>
         <a class="btn" href="/map/">Open the full map <Icon name="arrowRight" size={16} /></a>
       </div>
-      <StayMap height="440px" filters />
+      <LocalMap height="460px" filters />
     </div>
   </section>
 
@@ -373,6 +403,44 @@ const schema = [
   }
   .area .link-arrow {
     color: var(--lagoon-soft);
+  }
+  .finder {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 20px;
+    margin-bottom: 28px;
+    padding: 22px 26px;
+    border-radius: var(--radius);
+    background: var(--ocean-900);
+    color: #fff;
+    text-decoration: none;
+  }
+  .finder > :global(svg) {
+    color: var(--lagoon);
+  }
+  .finder > span:nth-child(2) {
+    flex: 1;
+    display: grid;
+    gap: 2px;
+    min-width: 220px;
+  }
+  .finder b {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.4rem;
+  }
+  .finder span span {
+    color: var(--on-dark-muted);
+  }
+  .picks {
+    padding-top: 0;
+  }
+  .topic-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
   }
   .map-teaser {
     background: var(--foam);

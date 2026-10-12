@@ -21,7 +21,14 @@ npm run check    # type check
 | **Hiriketiya Stay Map** | `src/pages/map.astro`, `src/components/StayMap.astro` | Price pins, filters: Beach · Surf · Restaurants · Villas · Hotels · Budget · Luxury |
 | SEO landing pages (`/hiriketiya-villas/`, `/cheap-accommodation-hiriketiya/` …) | `src/data/collections.ts` → `src/pages/[collection].astro` | One page per search intent, with map, list, FAQ schema |
 | Guides (surf season, weather, vs Mirissa …) | `src/content/guides/*.md` | Every guide has a `funnel` in frontmatter pointing to a stay page |
-| For hosts | `src/pages/list-your-property.astro` | Start of the direct-deals pipeline |
+| For hosts | `src/pages/list-your-property.astro` | Start of the direct deals pipeline |
+| **Local guide** (food, sunset, nightlife, work, wellness …) | `src/data/spots.ts` → `/local/` and `/local/<slug>/` | Local picks, budget gems, event nights, last checked, report an update |
+| Local topic pages (`/best-breakfast-hiriketiya/`, `/hiriketiya-nightlife/` …) | `src/data/topics.ts` → `src/pages/[collection].astro` | One page per search intent, each ending in a funnel to stays |
+| **Hiriketiya Local Map** | `src/pages/map.astro`, `src/components/LocalMap.astro` | Filters combine: Work + Coffee shows places good for both. `?filter=work,coffee` links work |
+| Tonight / QR page | `/tonight/`, `/today/` | Event nights by weekday (Sri Lanka time). `/today/` is the target for QR signs |
+| Stay finder | `/find-my-stay/` | Five questions, scored in the browser |
+| Saved places | `/saved/` | Hearts on stays and spots, stored in the visitor's browser |
+| Areas | `src/data/areas.ts` | Bay, Pehebiya, Dikwella, Bathigama, outside Hiri. Shown on the where to stay page |
 
 ### The funnel
 
@@ -39,6 +46,31 @@ Guide → "Going in January? See the best surf stays →" → collection page �
 4. **Affiliate IDs**: add your Booking.com `aid` / Agoda `cid` in `src/data/site.ts` once approved. Affiliate links get `rel="sponsored"`.
 5. **Map tiles** use the public OpenStreetMap server, which is fine for development but not for production traffic. Switch to a tile provider (MapTiler, Stadia, Mapbox …) in `StayMap.astro`.
 6. **Photos** are high resolution public domain (CC0) photos from Wikimedia Commons, so no photographer credit is needed. Where a photo names a place (Hikkaduwa, Weligama, Unawatuna, Thiranagama, Arugam Bay, Negombo) it really is that place; the rest are generic tropical shots with alt text that does not claim a location. Sources are listed on `/photo-credits/`. Photos on stays are illustrative until the property provides its own, and are labelled that way. Replace them with each property's own photos (with permission).
+
+## Local guide rules
+
+- Nobody can pay for a place in a list or a higher position. A sponsored spot sets `sponsored: true` and is labelled.
+- Recommendations are personal; practical facts are verified. Event days stay marked "check before you go" until `verified: true`. Set `checked` (for example `'October 2026'`) once a spot is confirmed on the ground.
+- Spots only appear on the map once `coords` is a confirmed pin. 13 pins come from OpenStreetMap; the rest need pinning on the ground.
+- Very short spot pages without a pin are `noindex` until they have more to say.
+- Each spot's `toCheck` field is the pre launch checklist (spelling, pins, prices, event days). It is never shown on the site.
+- The planned nightclub near ClearPoint is deliberately not listed until its name, owner, opening date and size are officially confirmed.
+
+## Pre launch checklist for the local guide
+
+Run `grep -n "toCheck" src/data/spots.ts` for the full list. The main ones: spelling and pins for every spot, event days for Dots, ClearPoint, Rip Robana, Secret Jungle Party and Lychee Bar, Dikwella Saturday market times and place, Kave Waves buffet price and days, Blue Hole location and safety, and the Pehebiya spelling. Long term rental leads (Noble Nest, Rosie's, L24) and hostels (Bare Foot, Strand, Chill Vibes, Wake n Flow, La Luna) are not listed yet: add them to `realStays.ts` once contact details and permission are confirmed.
+
+## Extra domains
+
+Add each extra domain to Cloudflare (Add a domain, change its nameservers at the registrar), then create a **Redirect Rule** (Rules → Redirect Rules, or Bulk Redirects) with a 301 to the main site:
+
+| Domain | Redirect to |
+| --- | --- |
+| stayhiriketiya.com | https://hiriketiyastays.com/ |
+| hiriketiyarestaurants.com | https://hiriketiyastays.com/best-restaurants-hiriketiya/ |
+| surfhiriketiya.com | https://hiriketiyastays.com/hiriketiya-surf-accommodation/ |
+| hirihotels.com, hirihotel.com | https://hiriketiyastays.com/hiriketiya-hotels/ |
+| hirivillas.com, hirivilla.com | https://hiriketiyastays.com/hiriketiya-villas/ |
 
 ## Adding photos
 

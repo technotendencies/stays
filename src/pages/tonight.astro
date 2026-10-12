@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import TonightList from '../components/TonightList.astro';
+import FunnelCta from '../components/FunnelCta.astro';
+import { breadcrumbSchema } from '../lib/schema';
+import { site } from '../data/site';
+
+const crumbs = [{ name: 'Tonight', href: '/tonight/' }];
+---
+
+<Layout
+  title="Tonight in Hiriketiya: Parties, Karaoke and What Is On"
+  description="What is on tonight in Hiriketiya: parties, karaoke and nights out, day by day. Event nights change, so check before you go."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="What is on"
+    title="Tonight in Hiriketiya"
+    lead="The regular nights out, starting with tonight. Hiriketiya changes fast, so anything marked 'check before you go' has not been confirmed recently."
+    hue={260}
+  />
+  <div class="wrap narrow">
+    <TonightList />
+    <p class="muted tip">
+      Know about a night that is missing or has moved? <a href={`mailto:${site.email}?subject=${encodeURIComponent('Tonight in Hiriketiya update')}`}>Tell us</a>.
+    </p>
+    <FunnelCta headline="Want to walk home after a night out?" cta="See stays near the nightlife →" href="/hiriketiya-stays-near-nightlife/" />
+  </div>
+</Layout>
+
+<style>
+  .narrow {
+    max-width: 820px;
+    padding-top: 32px;
+  }
+  .tip {
+    margin-top: 20px;
+  }
+</style>

@@ -1,0 +1,391 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { allStays, beachDistance, formatDistance, priceLevel, typeLabels } from '../lib/stays';
+import { nearestMeters } from '../lib/spots';
+import { stayPhoto } from '../lib/photos';
+import { breadcrumbSchema } from '../lib/schema';
+import type { Stay } from '../data/types';
+
+/**
+ * Features per stay, worked out at build time. Price uses the published rate when
+ * there is one, otherwise a rough band from the type of stay (only used for matching,
+ * never shown as a price).
+ */
+const typeBand: Record<Stay['type'], number> = { hostel: 1, guesthouse: 2, apartment: 2, hotel: 3, boutique: 3, villa: 3 };
+const features = allStays().map((s) => {
+  const beach = beachDistance(s).meters;
+  const night = nearestMeters(s.coords, ['nightlife']);
+  const best = s.bestFor.join(' ').toLowerCase();
+  return {
+    slug: s.slug,
+    name: s.name,
+    url: `/stays/${s.slug}/`,
+    img: stayPhoto(s.slug, s.image) ?? null,
+    type: typeLabels[s.type],
+    distance: formatDistance(beach),
+    price: s.priceFrom ? `from $${s.priceFrom}/night` : 'See prices',
+    band: s.priceFrom ? priceLevel(s.priceFrom) : typeBand[s.type],
+    beach,
+    who: {
+      solo: s.type === 'hostel' || /solo|meeting|nomad/.test(best),
+      couple: /couple|honeymoon/.test(best) || s.type === 'villa' || s.type === 'boutique',
+      friends: s.type === 'hostel' || (s.sleeps ?? 0) >= 4 || /group/.test(best),
+      family: /famil/.test(best) || (s.sleeps ?? 0) >= 4,
+    },
+    vibe: {
+      surf: s.categories.includes('surf') || s.amenities.includes('surfboards'),
+      beach: s.categories.includes('beachfront') || beach <= 300,
+      work: s.amenities.includes('workspace') || s.categories.includes('long-stays'),
+      social: s.type === 'hostel' || night <= 450,
+      wellness: s.amenities.includes('yoga') || /ayurveda|wellness|spa/i.test(s.description.join(' ')),
+      nightlife: night <= 450,
+      quiet: night >= 700,
+      luxury: s.categories.includes('luxury'),
+    },
+    has: {
+      pool: s.amenities.includes('pool'),
+      ac: s.amenities.includes('ac'),
+      kitchen: s.amenities.includes('kitchen'),
+      workspace: s.amenities.includes('workspace'),
+      breakfast: s.amenities.includes('breakfast'),
+    },
+  };
+});
+const crumbs = [{ name: 'Find my stay', href: '/find-my-stay/' }];
+const vibes = [
+  ['surf', 'Surf'],
+  ['beach', 'Beach'],
+  ['work', 'Work'],
+  ['social', 'Social'],
+  ['wellness', 'Wellness'],
+  ['nightlife', 'Nightlife'],
+  ['quiet', 'Peace and quiet'],
+  ['luxury', 'Luxury'],
+];
+const musts = [
+  ['pool', 'Pool'],
+  ['ac', 'AC'],
+  ['kitchen', 'Kitchen'],
+  ['workspace', 'Workspace'],
+  ['breakfast', 'Breakfast'],
+];
+---
+
+<Layout
+  title="Find My Hiri Stay: The Right Place to Stay in Hiriketiya for You"
+  description="Answer five quick questions about budget, who you travel with and your vibe, and see the Hiriketiya stays that fit you best."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <PageHero
+    crumbs={crumbs}
+    eyebrow="Stay finder"
+    title="Find my <em>Hiri</em> stay"
+    lead="Five quick questions. We match you with the stays around the bay that fit how you actually want to experience Hiriketiya."
+    hue={175}
+  />
+  <div class="wrap finder">
+    <form data-finder>
+      <fieldset>
+        <legend>What is your budget per night?</legend>
+        <div class="opts">
+          {
+            [
+              ['1', '$', 'Under $50'],
+              ['2', '$$', '$50 to $120'],
+              ['3', '$$$', '$120 to $250'],
+              ['4', '$$$$', '$250 and up'],
+            ].map(([v, l, h]) => (
+              <label class="opt">
+                <input type="radio" name="budget" value={v} />
+                <span>
+                  <b>{l}</b>
+                  <small>{h}</small>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Who is travelling?</legend>
+        <div class="opts">
+          {
+            [
+              ['solo', 'Solo'],
+              ['couple', 'Couple'],
+              ['friends', 'Friends'],
+              ['family', 'Family'],
+            ].map(([v, l]) => (
+              <label class="opt">
+                <input type="radio" name="who" value={v} />
+                <span>{l}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>What is your vibe? <small>Pick any</small></legend>
+        <div class="opts">
+          {
+            vibes.map(([v, l]) => (
+              <label class="opt">
+                <input type="checkbox" name="vibe" value={v} />
+                <span>{l}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>How close to the beach?</legend>
+        <div class="opts">
+          {
+            [
+              ['barefoot', 'Barefoot close'],
+              ['walk', 'Short walk'],
+              ['scooter', 'Scooter is fine'],
+            ].map(([v, l]) => (
+              <label class="opt">
+                <input type="radio" name="beach" value={v} />
+                <span>{l}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Must haves? <small>Pick any</small></legend>
+        <div class="opts">
+          {
+            musts.map(([v, l]) => (
+              <label class="opt">
+                <input type="checkbox" name="must" value={v} />
+                <span>{l}</span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+      <button class="btn coral go" type="submit">Show my matches</button>
+    </form>
+
+    <section class="results" data-results hidden>
+      <h2 data-results-title>Your Hiri matches</h2>
+      <ol data-results-list></ol>
+      <p class="muted small">
+        Matches use what each stay publishes plus distances from our map. Prices are not always published, so always check the live price.
+      </p>
+    </section>
+  </div>
+</Layout>
+
+<script define:vars={{ features }}>
+  const form = document.querySelector('[data-finder]');
+  const results = document.querySelector('[data-results]');
+  const listEl = document.querySelector('[data-results-list]');
+  const titleEl = document.querySelector('[data-results-title]');
+  const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const vibeNames = { surf: 'surf', beach: 'the beach', work: 'working', social: 'meeting people', wellness: 'wellness', nightlife: 'nightlife', quiet: 'peace and quiet', luxury: 'luxury' };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const budget = Number(fd.get('budget') || 0);
+    const who = fd.get('who');
+    const vibe = fd.getAll('vibe');
+    const beach = fd.get('beach');
+    const must = fd.getAll('must');
+
+    const scored = features.map((f) => {
+      let score = 0;
+      let max = 0;
+      const why = [];
+      if (budget) {
+        max += 30;
+        const gap = Math.abs(f.band - budget);
+        score += gap === 0 ? 30 : gap === 1 ? 14 : 0;
+        if (gap === 0) why.push('fits your budget');
+      }
+      if (who) {
+        max += 20;
+        if (f.who[who]) {
+          score += 20;
+          why.push(`good for ${who === 'solo' ? 'solo travellers' : who === 'couple' ? 'couples' : who}`);
+        }
+      }
+      if (vibe.length) {
+        max += 30;
+        const hits = vibe.filter((v) => f.vibe[v]);
+        score += (30 * hits.length) / vibe.length;
+        if (hits.length) why.push(hits.map((h) => vibeNames[h]).join(' and '));
+      }
+      if (beach) {
+        max += 20;
+        const ok = beach === 'barefoot' ? f.beach <= 250 : beach === 'walk' ? f.beach <= 900 : true;
+        const close = beach === 'barefoot' ? f.beach <= 500 : beach === 'walk' ? f.beach <= 1500 : true;
+        score += ok ? 20 : close ? 8 : 0;
+      }
+      if (must.length) {
+        max += 30;
+        const hits = must.filter((m) => f.has[m]);
+        score += (30 * hits.length) / must.length;
+        if (hits.length === must.length) why.push(`has ${must.join(', ').replace('ac', 'AC')}`);
+      }
+      const pct = max ? Math.round((score / max) * 100) : 50;
+      return { f, pct, why };
+    });
+
+    const top = scored.sort((a, b) => b.pct - a.pct).slice(0, 7);
+    titleEl.textContent = `These ${top.length} stays fit you best`;
+    listEl.innerHTML = top
+      .map(
+        ({ f, pct, why }) => `<li class="match">
+          ${f.img ? `<img src="${f.img}" alt="" loading="lazy">` : '<div class="ph"></div>'}
+          <div class="m-body">
+            <span class="pct">${pct}% match</span>
+            <h3><a href="${f.url}">${esc(f.name)}</a></h3>
+            <p class="meta">${esc(f.type)} · ${esc(f.distance)} · ${esc(f.price)}</p>
+            ${why.length ? `<p class="why">Why: ${esc(why.join(', '))}.</p>` : ''}
+            <a class="btn coral" href="${f.url}">Check availability →</a>
+          </div>
+        </li>`,
+      )
+      .join('');
+    results.hidden = false;
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+
+<style>
+  .finder {
+    max-width: 880px;
+    padding-top: 32px;
+  }
+  form {
+    display: grid;
+    gap: 18px;
+  }
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 22px 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+  }
+  legend small {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-left: 6px;
+  }
+  .opts {
+    clear: both;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .opt input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .opt span {
+    display: grid;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--sand-50);
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+  }
+  .opt small {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .opt input:checked + span {
+    background: var(--ocean-900);
+    border-color: var(--ocean-900);
+    color: #fff;
+  }
+  .opt input:checked + span small {
+    color: var(--lagoon-soft);
+  }
+  .opt input:focus-visible + span {
+    outline: 2px solid var(--ocean-500);
+    outline-offset: 2px;
+  }
+  .go {
+    justify-self: start;
+    padding: 16px 28px;
+    font-size: 1.05rem;
+  }
+  .results {
+    margin-top: 48px;
+  }
+  .results ol {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  .results :global(.match) {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  @media (max-width: 600px) {
+    .results :global(.match) {
+      grid-template-columns: 1fr;
+    }
+    .results :global(.match img) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+  .results :global(.match img),
+  .results :global(.ph) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--ocean-100);
+  }
+  .results :global(.m-body) {
+    padding: 18px 22px;
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+  }
+  .results :global(.pct) {
+    font-weight: 700;
+    color: var(--palm);
+  }
+  .results :global(h3) {
+    margin: 0;
+  }
+  .results :global(h3 a) {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .results :global(.meta),
+  .results :global(.why) {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .small {
+    font-size: 0.85rem;
+  }
+</style>

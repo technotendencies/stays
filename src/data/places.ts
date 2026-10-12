@@ -1,8 +1,8 @@
 import type { Place } from './types';
 
 /**
- * Points of interest on the stay map. Beaches and surf spots use OpenStreetMap
- * positions. Restaurants are demo entries until verified.
+ * Beaches and surf spots on the maps, from OpenStreetMap. Restaurants, bars and
+ * other recommendations live in spots.ts.
  */
 export const places: Place[] = [
   {
@@ -30,6 +30,14 @@ export const places: Place[] = [
     verified: true,
   },
   {
+    slug: 'bathigama-beach',
+    name: 'Bathigama Beach',
+    kind: 'beach',
+    coords: [5.9595, 80.67939],
+    note: 'Quiet beach at the far western end of Dikwella.',
+    verified: true,
+  },
+  {
     slug: 'blue-beach-island',
     name: 'Blue Beach Island',
     kind: 'beach',
@@ -51,30 +59,6 @@ export const places: Place[] = [
     kind: 'surf',
     coords: [5.96141, 80.70894],
     note: 'Faster, hollower wave over reef. Intermediate to advanced surfers only.',
-    verified: false,
-  },
-  {
-    slug: 'demo-bay-cafe',
-    name: 'Bay Café (demo)',
-    kind: 'restaurant',
-    coords: [5.9643, 80.7079],
-    note: 'Demo entry: smoothie bowls, coffee and breakfast right on the sand.',
-    verified: false,
-  },
-  {
-    slug: 'demo-jungle-kitchen',
-    name: 'Jungle Kitchen (demo)',
-    kind: 'restaurant',
-    coords: [5.9661, 80.7068],
-    note: 'Demo entry: Sri Lankan rice & curry and wood fired dinners on the hill.',
-    verified: false,
-  },
-  {
-    slug: 'demo-sunset-bar',
-    name: 'Sunset Bar (demo)',
-    kind: 'restaurant',
-    coords: [5.9641, 80.7097],
-    note: 'Demo entry: cocktails and grilled fish with a view over the reef.',
     verified: false,
   },
 ];

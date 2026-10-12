@@ -2,6 +2,7 @@
 import type { Stay } from '../data/types';
 import StayImage from './StayImage.astro';
 import Icon from './Icon.astro';
+import SaveButton from './SaveButton.astro';
 import { beachDistance, formatDistance, isDemo, priceSymbols, typeLabels } from '../lib/stays';
 
 interface Props {
@@ -15,16 +16,19 @@ const href = `/stays/${stay.slug}/`;
 ---
 
 <article class="card" data-sleeps={stay.type === 'hostel' || !stay.sleeps ? 99 : stay.sleeps} data-categories={stay.categories.join(' ')} data-price={stay.priceFrom ?? ''}>
-  <a href={href} class="media" tabindex="-1" aria-hidden="true">
-    <StayImage stay={stay} />
-    {rank && <span class="rank">{String(rank).padStart(2, '0')}</span>}
-    <span class="best">{stay.bestFor[0]}</span>
-    {stay.rating && (
-      <span class="rating">
-        <Icon name="star" size={14} /> {stay.rating.toFixed(1)}
-      </span>
-    )}
-  </a>
+  <div class="media-wrap">
+    <a href={href} class="media" tabindex="-1" aria-hidden="true">
+      <StayImage stay={stay} />
+      {rank && <span class="rank">{String(rank).padStart(2, '0')}</span>}
+      <span class="best">{stay.bestFor[0]}</span>
+      {stay.rating && (
+        <span class="rating">
+          <Icon name="star" size={14} /> {stay.rating.toFixed(1)}
+        </span>
+      )}
+    </a>
+    <span class="save-slot"><SaveButton kind="stay" slug={stay.slug} name={stay.name} url={href} light /></span>
+  </div>
   <div class="body">
     <h3><a href={href}>{stay.name}</a></h3>
     <p class="loc">
@@ -132,6 +136,15 @@ const href = `/stays/${stay.slug}/`;
     font-weight: 600;
     padding: 6px 12px;
     border-radius: 999px;
+  }
+  .media-wrap {
+    position: relative;
+  }
+  .save-slot {
+    position: absolute;
+    z-index: 1;
+    left: 14px;
+    bottom: 14px;
   }
   .rating {
     top: auto;

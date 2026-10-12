@@ -1,0 +1,170 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import { photo } from '../../lib/photos';
+import CategoryChips from '../../components/CategoryChips.astro';
+import StayCard from '../../components/StayCard.astro';
+import StayMap from '../../components/StayMap.astro';
+import Faq from '../../components/Faq.astro';
+import { collections, type Collection } from '../../data/collections';
+import { allStays } from '../../lib/stays';
+import { abs, breadcrumbSchema, faqSchema } from '../../lib/schema';
+import { inline } from '../../lib/inline';
+import { getCollection } from 'astro:content';
+import { areas, areaOf } from '../../data/areas';
+import { beachDistance, formatDistance, typeLabels } from '../../lib/stays';
+
+interface Props {
+  c: Collection;
+}
+const { c } = Astro.props;
+let list = allStays();
+if (c.category) list = list.filter((s) => s.categories.includes(c.category!));
+if (c.filter) list = list.filter(c.filter);
+if (c.sort) list = [...list].sort(c.sort);
+
+const byArea = c.showAreas ? areas.map((a) => ({ a, stays: list.filter((s) => areaOf(s) === a.key) })).filter((x) => x.stays.length) : [];
+const guides = (await getCollection('guides')).filter((g) => c.relatedGuides.includes(g.id));
+const others = collections.filter((o) => o.slug !== c.slug);
+const crumbs = [{ name: c.h1, href: `/${c.slug}/` }];
+const year = new Date().getFullYear();
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: c.h1,
+    itemListElement: list.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: abs(`/stays/${s.slug}/`), name: s.name })),
+  },
+  faqSchema(c.faq),
+].filter(Boolean) as object[];
+---
+
+<Layout title={c.metaTitle} description={c.metaDescription} schema={schema}>
+  <PageHero crumbs={crumbs} eyebrow={`Updated ${year}`} title={c.h1} image={`/images/collections/${c.slug}.jpg`}>
+    {c.intro.map((p) => <p class="lead" set:html={inline(p)} />)}
+    <div class="hero-chips"><CategoryChips current={c.category} glass /></div>
+  </PageHero>
+  <div class="wrap">
+
+    <section class="section">
+      <div class="section-head">
+        <h2>{list.length} {c.label.toLowerCase() === 'where to stay' ? 'stays' : c.label.toLowerCase()} on the map</h2>
+        <a class="link-arrow" href="/map/">Open full map <Icon name="arrowRight" size={16} /></a>
+      </div>
+      <StayMap stays={list} height="380px" />
+    </section>
+
+    {
+      byArea.length > 0 && (
+        <section class="areas">
+          <h2>Pick your area</h2>
+          <div class="area-grid">
+            {byArea.map(({ a, stays }) => (
+              <div class="area">
+                <h3>{a.name}</h3>
+                <p class="muted">{a.blurb}</p>
+                <ul>
+                  {stays.map((s) => (
+                    <li>
+                      <a href={`/stays/${s.slug}/`}>{s.name}</a>
+                      <span>
+                        {typeLabels[s.type]} · {formatDistance(beachDistance(s).meters)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section>
+      <div class="grid">
+        {list.map((s) => <StayCard stay={s} showMonthly={c.category === 'long-stays'} />)}
+      </div>
+    </section>
+
+    <Faq items={c.faq} />
+
+    {
+      guides.length > 0 && (
+        <section class="related">
+          <h2>Plan your trip</h2>
+          <ul>
+            {guides.map((g) => (
+              <li>
+                <a href={`/guides/${g.id}/`}>{g.data.title} →</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="related">
+      <h2>More ways to stay in Hiriketiya</h2>
+      <ul class="others">
+        {
+          others.map((o) => (
+            <li>
+              <a href={`/${o.slug}/`}>{o.h1}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .areas {
+    margin-bottom: 48px;
+  }
+  .area-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  }
+  .area {
+    padding: 22px 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .area h3 {
+    margin: 0 0 4px;
+  }
+  .area ul {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: grid;
+    gap: 8px;
+  }
+  .area li {
+    display: grid;
+  }
+  .area li span {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .hero-chips {
+    margin-top: 20px;
+  }
+  .section {
+    padding-top: 32px;
+  }
+  .related ul {
+    padding-left: 20px;
+  }
+  .others {
+    columns: 2 260px;
+  }
+  .related {
+    margin-top: 40px;
+  }
+</style>

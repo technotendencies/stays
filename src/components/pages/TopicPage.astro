@@ -1,0 +1,165 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../PageHero.astro';
+import SpotCard from '../SpotCard.astro';
+import LocalMap from '../LocalMap.astro';
+import FunnelCta from '../FunnelCta.astro';
+import Faq from '../Faq.astro';
+import Icon from '../Icon.astro';
+import { topics, type Topic } from '../../data/topics';
+import { mapFilters, spotsWith, weekdays } from '../../lib/spots';
+import { abs, breadcrumbSchema, faqSchema } from '../../lib/schema';
+import { inline } from '../../lib/inline';
+
+interface Props {
+  t: Topic;
+}
+const { t } = Astro.props;
+const list = spotsWith(...t.tags);
+const pinned = list.filter((s) => s.coords);
+const mapFilter = mapFilters.find((f) => f.tags?.some((tag) => t.tags.includes(tag)))?.key ?? (t.showEvents ? 'tonight' : undefined);
+const others = topics.filter((o) => o.slug !== t.slug);
+const crumbs = [
+  { name: 'Local guide', href: '/local/' },
+  { name: t.h1, href: `/${t.slug}/` },
+];
+const year = new Date().getFullYear();
+const schema = [
+  breadcrumbSchema(crumbs),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: t.h1,
+    itemListElement: list.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: abs(`/local/${s.slug}/`), name: s.name })),
+  },
+  t.faq ? faqSchema(t.faq) : null,
+].filter(Boolean) as object[];
+const events = t.showEvents
+  ? weekdays
+      .map((d) => ({ day: d, items: list.flatMap((s) => (s.events ?? []).filter((e) => e.days.includes(d.key)).map((e) => ({ spot: s, e }))) }))
+      .filter((d) => d.items.length)
+  : [];
+---
+
+<Layout title={t.metaTitle} description={t.metaDescription} schema={schema}>
+  <PageHero crumbs={crumbs} eyebrow={`Local guide · Updated ${year}`} title={t.h1} image={`/images/topics/${t.slug}.jpg`}>
+    {t.intro.map((p) => <p class="lead" set:html={inline(p)} />)}
+  </PageHero>
+  <div class="wrap">
+    <p class="promise">
+      <Icon name="circleCheck" size={18} /> Independent. Nobody pays to be on this list or to be ranked higher.
+    </p>
+
+    {
+      events.length > 0 && (
+        <section class="week">
+          <h2>The week in Hiriketiya</h2>
+          <ul>
+            {events.map((d) => (
+              <li>
+                <b>{d.day.label}</b>
+                <span>
+                  {d.items.map(({ spot, e }, i) => (
+                    <>
+                      {i > 0 && ' · '}
+                      <a href={`/local/${spot.slug}/`}>{spot.name}</a> {e.what.toLowerCase()}
+                      {!e.verified && '*'}
+                    </>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p class="muted small">* Not confirmed recently. Check before you go.</p>
+        </section>
+      )
+    }
+
+    <section class="section list">
+      <div class="grid">
+        {list.map((s) => <SpotCard spot={s} focus={t.tags} />)}
+      </div>
+    </section>
+
+    {
+      pinned.length > 0 && (
+        <section>
+          <div class="section-head">
+            <h2>On the map</h2>
+            <a class="link-arrow" href={mapFilter ? `/map/?filter=${mapFilter}` : '/map/'}>
+              Open the local map <Icon name="arrowRight" size={16} />
+            </a>
+          </div>
+          <LocalMap spots={list} stays={[]} height="380px" />
+        </section>
+      )
+    }
+
+    <FunnelCta headline={t.funnel.headline} cta={`${t.funnel.cta} →`} href={t.funnel.href} />
+
+    {t.faq && <Faq items={t.faq} />}
+
+    <section class="more">
+      <h2>More of the local guide</h2>
+      <ul>
+        {
+          others.map((o) => (
+            <li>
+              <a href={`/${o.slug}/`}>{o.h1}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .promise {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 28px 0 0;
+    font-weight: 500;
+    color: var(--ocean-900);
+  }
+  .promise :global(svg) {
+    color: var(--palm);
+  }
+  .list {
+    padding-top: 28px;
+  }
+  .week {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .week h2 {
+    font-size: 1.6rem;
+  }
+  .week ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .week li {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
+  }
+  .small {
+    font-size: 0.85rem;
+    margin: 12px 0 0;
+  }
+  .more {
+    margin-top: 40px;
+  }
+  .more ul {
+    columns: 2 260px;
+    padding-left: 20px;
+  }
+</style>

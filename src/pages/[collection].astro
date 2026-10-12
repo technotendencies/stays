@@ -1,111 +1,19 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import PageHero from '../components/PageHero.astro';
-import Icon from '../components/Icon.astro';
-import { photo } from '../lib/photos';
-import CategoryChips from '../components/CategoryChips.astro';
-import StayCard from '../components/StayCard.astro';
-import StayMap from '../components/StayMap.astro';
-import Faq from '../components/Faq.astro';
+import StayCollectionPage from '../components/pages/StayCollectionPage.astro';
+import TopicPage from '../components/pages/TopicPage.astro';
 import { collections, type Collection } from '../data/collections';
-import { allStays } from '../lib/stays';
-import { abs, breadcrumbSchema, faqSchema } from '../lib/schema';
-import { inline } from '../lib/inline';
-import { getCollection } from 'astro:content';
+import { topics, type Topic } from '../data/topics';
 
+/** Root level SEO pages: stay collections (/hiriketiya-villas/) and local topics (/hiriketiya-nightlife/). */
 export function getStaticPaths() {
-  return collections.map((c) => ({ params: { collection: c.slug }, props: { c } }));
+  return [
+    ...collections.map((c) => ({ params: { collection: c.slug }, props: { c, t: undefined } })),
+    ...topics.map((t) => ({ params: { collection: t.slug }, props: { c: undefined, t } })),
+  ];
 }
 
-const { c } = Astro.props as { c: Collection };
-let list = allStays();
-if (c.category) list = list.filter((s) => s.categories.includes(c.category!));
-if (c.filter) list = list.filter(c.filter);
-if (c.sort) list = [...list].sort(c.sort);
-
-const guides = (await getCollection('guides')).filter((g) => c.relatedGuides.includes(g.id));
-const others = collections.filter((o) => o.slug !== c.slug);
-const crumbs = [{ name: c.h1, href: `/${c.slug}/` }];
-const year = new Date().getFullYear();
-const schema = [
-  breadcrumbSchema(crumbs),
-  {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: c.h1,
-    itemListElement: list.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: abs(`/stays/${s.slug}/`), name: s.name })),
-  },
-  faqSchema(c.faq),
-].filter(Boolean) as object[];
+const { c, t } = Astro.props as { c?: Collection; t?: Topic };
 ---
 
-<Layout title={c.metaTitle} description={c.metaDescription} schema={schema}>
-  <PageHero crumbs={crumbs} eyebrow={`Updated ${year}`} title={c.h1} image={`/images/collections/${c.slug}.jpg`}>
-    {c.intro.map((p) => <p class="lead" set:html={inline(p)} />)}
-    <div class="hero-chips"><CategoryChips current={c.category} glass /></div>
-  </PageHero>
-  <div class="wrap">
-
-    <section class="section">
-      <div class="section-head">
-        <h2>{list.length} {c.label.toLowerCase() === 'where to stay' ? 'stays' : c.label.toLowerCase()} on the map</h2>
-        <a class="link-arrow" href="/map/">Open full map <Icon name="arrowRight" size={16} /></a>
-      </div>
-      <StayMap stays={list} height="380px" />
-    </section>
-
-    <section>
-      <div class="grid">
-        {list.map((s) => <StayCard stay={s} showMonthly={c.category === 'long-stays'} />)}
-      </div>
-    </section>
-
-    <Faq items={c.faq} />
-
-    {
-      guides.length > 0 && (
-        <section class="related">
-          <h2>Plan your trip</h2>
-          <ul>
-            {guides.map((g) => (
-              <li>
-                <a href={`/guides/${g.id}/`}>{g.data.title} →</a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    <section class="related">
-      <h2>More ways to stay in Hiriketiya</h2>
-      <ul class="others">
-        {
-          others.map((o) => (
-            <li>
-              <a href={`/${o.slug}/`}>{o.h1}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-  </div>
-</Layout>
-
-<style>
-  .hero-chips {
-    margin-top: 20px;
-  }
-  .section {
-    padding-top: 32px;
-  }
-  .related ul {
-    padding-left: 20px;
-  }
-  .others {
-    columns: 2 260px;
-  }
-  .related {
-    margin-top: 40px;
-  }
-</style>
+{c && <StayCollectionPage c={c} />}
+{t && <TopicPage t={t} />}

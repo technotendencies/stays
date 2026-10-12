@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  name: string;
+  checked?: string;
+}
+const { name, checked } = Astro.props;
+const subject = encodeURIComponent(`Update for ${name}`);
+const body = encodeURIComponent(`What has changed at ${name}?\n\n`);
+---
+
+<div class="report">
+  <p>
+    {checked ? `Last checked ${checked}.` : 'Not yet checked on the ground.'} Hiriketiya changes fast. Spot something outdated?
+  </p>
+  <a href={`mailto:${site.email}?subject=${subject}&body=${body}`} class="link-arrow">
+    <Icon name="flag" size={15} /> Tell us
+  </a>
+</div>
+
+<style>
+  .report {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 14px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--sand-100);
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .report p {
+    margin: 0;
+  }
+</style>

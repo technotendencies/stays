@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TonightList from '../components/TonightList.astro';
+import Icon from '../components/Icon.astro';
+import type { IconName } from '../lib/icons';
+
+/** Landing page for the QR signs in stays, cafés and tuk tuks. */
+const quick: { href: string; label: string; icon: IconName }[] = [
+  { href: '/best-breakfast-hiriketiya/', label: 'Breakfast', icon: 'sun' },
+  { href: '/best-coffee-hiriketiya/', label: 'Coffee', icon: 'coffee' },
+  { href: '/cheap-food-hiriketiya/', label: 'Cheap eats', icon: 'wallet' },
+  { href: '/best-restaurants-hiriketiya/', label: 'Dinner', icon: 'utensils' },
+  { href: '/hiriketiya-sunset/', label: 'Sunset', icon: 'sunset' },
+  { href: '/hiriketiya-nightlife/', label: 'Nightlife', icon: 'music' },
+  { href: '/hiriketiya-coworking/', label: 'Work', icon: 'laptop' },
+  { href: '/hiriketiya-massage/', label: 'Massage', icon: 'hand' },
+  { href: '/things-to-do-near-hiriketiya/', label: 'Explore', icon: 'compass' },
+  { href: '/hiriketiya-practical/', label: 'Laundry', icon: 'shirt' },
+  { href: '/map/', label: 'Map', icon: 'map' },
+  { href: '/guides/one-day-in-hiriketiya/', label: 'One day plan', icon: 'calendar' },
+];
+---
+
+<Layout title="You're in Hiriketiya: Today's Local Guide" description="Today in Hiriketiya: what is on tonight, where to eat, sunset spots and the local map." noindex>
+  <section class="today dark">
+    <div class="wrap">
+      <p class="eyebrow">You're in Hiri</p>
+      <h1>Today in Hiriketiya</h1>
+      <p class="lead">Food, sunset, nights out and everything else, from people who live here.</p>
+      <div class="quick">
+        {
+          quick.map((q) => (
+            <a href={q.href}>
+              <Icon name={q.icon} size={22} />
+              <span>{q.label}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <div class="wrap narrow">
+    <h2>Tonight</h2>
+    <TonightList todayOnly />
+    <p><a class="link-arrow" href="/tonight/">The whole week <Icon name="arrowRight" size={16} /></a></p>
+  </div>
+</Layout>
+
+<style>
+  .today {
+    padding: 110px 0 48px;
+  }
+  .today h1 {
+    margin: 0 0 8px;
+  }
+  .quick {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .quick a {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    padding: 16px 8px;
+    border-radius: var(--radius-sm);
+    background: rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(69 201 198 / 0.25);
+    color: #fff !important;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .quick a :global(svg) {
+    color: var(--lagoon);
+  }
+  .narrow {
+    max-width: 820px;
+    padding-top: 32px;
+  }
+</style>

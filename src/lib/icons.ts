@@ -19,6 +19,21 @@ import map from 'lucide-static/icons/map.svg?raw';
 import thermometer from 'lucide-static/icons/thermometer-sun.svg?raw';
 import plane from 'lucide-static/icons/plane-landing.svg?raw';
 import footprints from 'lucide-static/icons/footprints.svg?raw';
+import coffee from 'lucide-static/icons/coffee.svg?raw';
+import wine from 'lucide-static/icons/wine.svg?raw';
+import music from 'lucide-static/icons/music.svg?raw';
+import sunset from 'lucide-static/icons/sunset.svg?raw';
+import mountain from 'lucide-static/icons/mountain.svg?raw';
+import fish from 'lucide-static/icons/fish.svg?raw';
+import laptop from 'lucide-static/icons/laptop.svg?raw';
+import hand from 'lucide-static/icons/hand.svg?raw';
+import heart from 'lucide-static/icons/heart.svg?raw';
+import tv from 'lucide-static/icons/tv.svg?raw';
+import shirt from 'lucide-static/icons/shirt.svg?raw';
+import bookmark from 'lucide-static/icons/bookmark.svg?raw';
+import circleCheck from 'lucide-static/icons/circle-check.svg?raw';
+import flag from 'lucide-static/icons/flag.svg?raw';
+import compass from 'lucide-static/icons/compass.svg?raw';
 
 const raw = {
   umbrella,
@@ -41,6 +56,21 @@ const raw = {
   thermometer,
   plane,
   footprints,
+  coffee,
+  wine,
+  music,
+  sunset,
+  mountain,
+  fish,
+  laptop,
+  hand,
+  heart,
+  tv,
+  shirt,
+  bookmark,
+  circleCheck,
+  flag,
+  compass,
 };
 
 export type IconName = keyof typeof raw;

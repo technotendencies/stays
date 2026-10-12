@@ -1,26 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import StayMap from '../components/StayMap.astro';
+import LocalMap from '../components/LocalMap.astro';
 import { breadcrumbSchema } from '../lib/schema';
 import PageHero from '../components/PageHero.astro';
 
-const crumbs = [{ name: 'Stay map', href: '/map/' }];
+const crumbs = [{ name: 'Local map', href: '/map/' }];
 ---
 
 <Layout
-  title="Hiriketiya Map: Every Stay, Beach, Surf Break & Café"
-  description="Interactive map of Hiriketiya, Sri Lanka: every hotel, villa and guesthouse with price and distance to the beach, plus surf spots and restaurants."
+  title="Hiriketiya Map: Stays, Food, Sunset, Nightlife and More"
+  description="The Hiriketiya local map: every stay plus our recommended places for breakfast, coffee, work, cheap eats, sunset, nightlife, massage and more."
   schema={[breadcrumbSchema(crumbs)]}
 >
   <PageHero
     crumbs={crumbs}
     eyebrow="Interactive map"
-    title="The Hiriketiya <em>Stay Map</em>"
-    lead="Tap a price to see the stay. Toggle beaches, surf breaks and restaurants, or narrow down to villas, hotels, budget or luxury."
+    title="The Hiriketiya <em>Local Map</em>"
+    lead="Pick what you are after. Filters combine, so Work and Coffee shows only places good for both. Coral pins are local picks."
     hue={200}
   />
   <div class="wrap map-wrap">
-    <StayMap filters list height="min(72vh, 680px)" />
+    <LocalMap filters list height="min(72vh, 680px)" zoom={16} />
   </div>
 </Layout>
 
